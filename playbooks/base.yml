@@ -1,0 +1,5 @@
+---
+- hosts: "{{ filter }}:&dc_{{ dc }}"
+  become: true
+  roles:
+    - system_base

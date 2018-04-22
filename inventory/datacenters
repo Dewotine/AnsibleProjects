@@ -1,0 +1,6 @@
+---
+[dc_ovh]
+vps528223.ovh.net ansible_ssh_user=cbleschet ansible_ssh_port=2022
+
+[dc_vagrant]
+testserver ansible_ssh_host=127.0.0.1 ansible_ssh_port=2222
