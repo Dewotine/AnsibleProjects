@@ -1,0 +1,11 @@
+---
+fail2ban_config_bantime: 600
+fail2ban_config_maxretry: 4
+fail2ban_config_destemail: root@localhost
+
+# Jails
+fail2ban_config_jail_ssh_enabled: yes
+fail2ban_config_jail_sshddos_enabled: yes
+
+# Ports configuration
+fail2ban_config_ssh_port: "{{ dc_fail2ban_config_ssh_port | default(2022)}}"

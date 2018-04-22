@@ -1,0 +1,2 @@
+---
+fail2ban_config_ssh_port: 2022
