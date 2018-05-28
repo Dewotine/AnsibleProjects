@@ -1,0 +1,16 @@
+---
+- name: "Refresh apt cache"
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  tags:
+    - packages
+
+- name: "Install Packages"
+  package:
+    name: "{{ item.name }}"
+    state: "{{ item.state | default(absent) }}"
+  with_items: "{{ system_base_packages }}"
+  register: packages_changed
+  tags:
+    - packages

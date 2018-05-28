@@ -1,0 +1,8 @@
+---
+nginx_configuration_folder: "/etc/nginx"
+nginx_application_file: "default"
+nginx_certificates_folder: "../../inventory/group_vars/app_"
+nginx_server_name: "localhost"
+nginx_ssl: false
+nginx_cert_file: "/etc/nginx/ssl/nginx.crt"
+nginx_key_file: "/etc/nginx/ssl/nginx.key"

@@ -2,4 +2,4 @@
 - hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_fail2ban"
   become: true
   roles:
-    - resmo.fail2ban
+    - fail2ban

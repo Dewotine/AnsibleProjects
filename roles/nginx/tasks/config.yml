@@ -1,0 +1,26 @@
+---
+- name: "Copy of nginx configuration file"
+  template:
+    src: "templates/nginx.conf"
+    dest: "{{ nginx_configuration_folder }}/sites-available/{{ nginx_application_file }}"
+    mode: 0644
+    owner: root
+    group: root
+  notify: "restart nginx"
+
+- name: "Enable configuration"
+  file:
+    dest: "{{ nginx_configuration_folder }}/sites-enabled/{{ nginx_application_file }}"
+    src:  "{{ nginx_configuration_folder }}/sites-available/{{ nginx_application_file }}"
+    state: link
+  notify: "restart nginx"
+
+- name: "Copy index.html"
+  template:
+    src: "templates/index.html"
+    dest: "/usr/share/nginx/html/index.html"
+    mode: 0644
+    owner: root
+    group: root
+  notify: "restart nginx"
+

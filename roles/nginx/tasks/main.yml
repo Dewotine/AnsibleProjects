@@ -1,0 +1,7 @@
+---
+- import_tasks: install.yml
+
+- import_tasks: config.yml
+
+- import_tasks: config_ssl.yml
+  when: nginx_ssl

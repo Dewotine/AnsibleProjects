@@ -1,1 +1,4 @@
 ---
+- import_tasks: packages.yml
+  tags:
+    - packages

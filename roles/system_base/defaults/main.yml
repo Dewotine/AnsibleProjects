@@ -1,1 +1,37 @@
 ---
+system_base_timezone: "Europe/Paris"
+system_base_packages:
+# Packages installed
+  - { name: at,                       state: present }
+  - { name: bash,                     state: present }
+  - { name: bash-completion,          state: present }
+  - { name: bc,                       state: present }
+  - { name: bind9-host,               state: present }
+  - { name: bwm-ng,                   state: present }
+  - { name: bzip2,                    state: present }
+  - { name: colordiff,                state: present }
+  - { name: curl,                     state: present }
+  - { name: dbus,                     state: present } # Required for timedatectl
+  - { name: dnsutils,                 state: present }
+  - { name: htop,                     state: present }
+  - { name: iftop,                    state: present }
+  - { name: ifupdown-extra,           state: present }
+  - { name: iotop,                    state: present }
+  - { name: less,                     state: present }
+  - { name: lsof,                     state: present }
+  - { name: lvm2,                     state: present }
+  - { name: mlocate,                  state: present }
+  - { name: molly-guard,              state: present }
+  - { name: mutt,                     state: present }
+  - { name: ncdu,                     state: present }
+  - { name: ntpdate,                  state: present }
+  - { name: psmisc,                   state: present }
+  - { name: rsync,                    state: present }
+  - { name: sysstat,                  state: present }
+  - { name: tmux,                     state: present }
+  - { name: tree,                     state: present }
+  - { name: vim,                      state: present }
+  - { name: zsh,                      state: present }
+# Packages to remove
+  - { name: laptop-detect,            state: absent }
+  - { name: nano,                     state: absent }

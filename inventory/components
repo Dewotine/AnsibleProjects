@@ -1,3 +1,6 @@
 ---
 [cmp_fail2ban]
 vps528223.ovh.net
+
+[cmp_nginx]
+vps528223.ovh.net
