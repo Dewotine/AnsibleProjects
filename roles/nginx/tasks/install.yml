@@ -1,6 +1,25 @@
 ---
+- name: "Download Nginx key"
+  apt_key:
+    url: "{{ nginx_apt_key_url }}"
+    state: present
+
+- name: "Add Nginx official repository"
+  apt_repository:
+    repo: "deb {{ nginx_repo_url }} {{ ansible_distribution_release }} nginx"
+    state: present
+
+- name: "Set a higher priority for nginx official repository"
+  template:
+    src: "templates/nginx_apt_preferences"
+    dest: "/etc/apt/preferences.d/nginx"
+    owner: root
+    group: root
+    mode: 0644
+
 - name: "Install nginx"
   apt:
-    name: "nginx"
+    name: "nginx-full"
     update_cache: true
+    state: "latest"
   notify: "restart nginx"
