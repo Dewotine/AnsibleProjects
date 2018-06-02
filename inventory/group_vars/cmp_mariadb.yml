@@ -8,7 +8,7 @@ mysql_log_dir: "/var/log/mysql"
 
 mysql_expire_logs_days: "{{ mysql_profile.expire_logs_days | default(5)}}"
 mysql_fork: 'mariadb'
-mysql_server_id: "{{ ansible_eth0.ipv4.address | crc32 }}"
+mysql_server_id: "{{ ansible_default_ipv4.address | crc32 | default(0) }}"
 mysql_log_warnings: "{{ mysql_profile.log_warnings | default(2)}}"
 mysql_root_password: !vault-encrypted |
   $ANSIBLE_VAULT;1.1;AES256
