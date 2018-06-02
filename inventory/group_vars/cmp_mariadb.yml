@@ -1,0 +1,59 @@
+---
+mysql_multi_instances: "{{ mysql_profile.multi_instances | default(false) }}"
+mysql_instances: "{{ mysql_profile.instances | default({}) }}"
+mysql_datadir: "/srv/mysql"
+mysql_tmpdir: "/srv/mysql-tmp"
+mysql_root_tmpdir: "/srv/mysql-tmp"
+mysql_log_dir: "/var/log/mysql"
+
+mysql_expire_logs_days: "{{ mysql_profile.expire_logs_days | default(5)}}"
+mysql_fork: 'mariadb'
+mysql_server_id: "{{ ansible_eth0.ipv4.address | crc32 }}"
+mysql_log_warnings: "{{ mysql_profile.log_warnings | default(2)}}"
+mysql_root_password: !vault-encrypted |
+  $ANSIBLE_VAULT;1.1;AES256
+  336436393863316433626130636663343439633866323461643866336564623262623431623537313561346433623139323132383737333565313230663164390a633865316363613433396135306634656330313062656437326365616534363533633262616138666163396361666637323666306431646166333535636132310a6636303865373633336166613764373366376435356439643461636132663361
+mysql_key_buffer_size: "{{ mysql_profile.key_buffer_size | default('256M') }}"
+mysql_key_cache_segments: "{{ mysql_profile.key_cache_segments | default(0) }}"
+mysql_max_allowed_packet: "{{ mysql_profile.max_allowed_packet | default('128M') }}"
+mysql_net_buffer_length: "{{ mysql_profile.net_buffer_length | default('16384') }}"
+mysql_table_open_cache: "{{ mysql_profile.table_open_cache | default('256') }}"
+mysql_table_definition_cache: "{{ mysql_profile.table_definition_cache | default('400')}}"
+mysql_sort_buffer_size: "{{ mysql_profile.sort_buffer_size | default('2M') }}"
+mysql_read_buffer_size: "{{ mysql_profile.read_buffer_size | default('2M') }}"
+mysql_read_rnd_buffer_size: "{{ mysql_profile.read_rnd_buffer_size | default('8M') }}"
+mysql_myisam_sort_buffer_size: "{{ mysql_profile.myisam_sort_buffer_size | default('64M') }}"
+mysql_thread_cache_size: "{{ mysql_profile.thread_cache_size | default(8) }}"
+mysql_query_cache_size: "{{ mysql_profile.query_cache_size | default('16M') }}"
+mysql_query_cache_type: "{{ mysql_profile.query_cache_type | default(1) }}"
+mysql_query_cache_limit: "{{ mysql_profile.query_cache_limit | default('1M') }}"
+mysql_max_connections: "{{ mysql_profile.max_connections | default(151) }}"
+mysql_open_files_limit: "{{ mysql_profile.open_files_limit | default(5000) }}"
+mysql_tmp_table_size: "{{ mysql_profile.tmp_table_size | default('16M') }}"
+mysql_max_heap_table_size: "{{ mysql_profile.max_heap_table_size | default('16M') }}"
+mysql_wait_timeout: "{{ mysql_profile.wait_timeout | default(28800) }}"
+mysql_connect_timeout: "{{ mysql_profile.connect_timeout | default(2)}}"
+mysql_interactive_timeout: "{{ mysql_profile.interactive_timeout | default('28800')}}"
+mysql_innodb_buffer_pool_size: "{{ mysql_profile.innodb_buffer_pool_size | default('256M') }}"
+mysql_innodb_log_file_size: "{{ mysql_profile.innodb_log_file_size | default('64M') }}"
+mysql_innodb_thread_concurrency: "{{ mysql_profile.innodb_thread_concurrency | default(0) }}"
+mysql_innodb_thread_sleep_delay: "{{ mysql_profile.innodb_thread_sleep_delay | default(10000) }}"
+mysql_join_buffer_size: "{{ mysql_profile.join_buffer_size | default('256K') }}"
+mysql_join_buffer_space_limit: "{{ mysql_profile.join_buffer_space_limit | default('2M') }}"
+mysql_slow_query_log_enabled: "{{ mysql_profile.slow_query_log_enabled | default(true) }}"
+mysql_slow_query_time: "{{ mysql_profile.slow_query_time | default('2') }}"
+mysql_log_slow_verbosity: "{{ mysql_profile.log_slow_verbosity | default('query_plan') }}"
+mysql_log_queries_not_using_indexes : "{{ mysql_profile.log_queries_not_using_indexes | default('1') }}"
+mysql_log_throttle_queries_not_using_indexes : "{{ mysql_profile.log_throttle_queries_not_using_indexes | default('5') }}"
+mysql_concurrent_insert: "{{ mysql_profile.concurrent_insert| default(1) }}"
+mysql_users: "{{ mysql_profile.users | default([]) }}"
+mysql_databases: "{{ mysql_profile.databases | default([]) }}"
+
+#mysql_monitoring_user:
+#  - name: "{{ env_mysql_monitoring_user }}"
+#    host: "{{ env_mysql_monitoring_hosts }}"
+#    hostgroup: yes
+#    password: "{{ env_mysql_monitoring_password }}"
+#    priv: "*.*:SELECT,REPLICATION CLIENT"
+
+
