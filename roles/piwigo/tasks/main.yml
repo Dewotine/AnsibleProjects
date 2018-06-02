@@ -1,0 +1,6 @@
+---
+- name: "Download piwigo.zip"
+  get_url:
+    url: "{{ piwigo_src_url }}"
+    dest: /tmp/piwigo.zip
+    mode: 0644

@@ -1,27 +1,20 @@
 ---
-- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_nginx:&app_piwigo"
-  vars:
-    application_name: "piwigo"
+#- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_nginx:&app_piwigo"
+#  vars:
+#    application_name: "piwigo"
+#  become: true
+#  roles:
+#    - nginx
+
+#- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_mariadb:&app_piwigo"
+#  become: true
+#  vars:
+#    mysql_profile: "{{ mariadb_piwigo_profile }}"
+#  roles:
+#    - mysql
+
+- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_php:&app_piwigo"
   become: true
   roles:
-    - nginx
+    - piwigo
 
-- hosts: "{{ filter }}:&dc_{{ dc }}:&env_{{ env }}:&cmp_mariadb"
-  become: true
-  roles:
-    - mysql
-
-## Database setup and configuration management
-#- include: ../../configuration_mgmt/databases/mariadb.yml
-#  vars:
-#    filter: 'app_sim'
-#    mysql_profile: "{{ mariadb_sim_profile | combine(env_mariadb_sim_profile | default({})) }}"
-#  when: configuration_mgmt is defined and configuration_mgmt | bool
-
-## Database initial data load (fresh install)
-#- include: ../../data_mgmt/mysql_sql_script.yml
-#  vars:
-#    filter: 'app_sim'
-#    sql_script: 'sim/db_schema.sql'
-#    db_name: "sim"
-#  when: db_init is defined and db_init | bool
