@@ -1,4 +1,12 @@
 ---
+- name: "Ensure /etc/nginx/ssl is present"
+  file:
+    path: "/etc/nginx/ssl"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
 - name: "Copy TLS key"
   template:
     src: "{{ nginx_certificates_folder }}{{ application_name }}/{{ application_name }}_nginx.key"

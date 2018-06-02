@@ -1,7 +1,13 @@
 ---
-- name: "Copy of nginx configuration file"
+- name: "Remove default site configuration file for nginx"
+  file:
+    path: "/etc/nginx/sites-available/default"
+    state: absent
+  notify: "restart nginx"
+
+- name: "Copy of {{ nginx_application_file }} configuration file for nginx"
   template:
-    src: "templates/nginx.conf"
+    src: "templates/piwigo.conf"
     dest: "{{ nginx_configuration_folder }}/sites-available/{{ nginx_application_file }}"
     mode: 0644
     owner: root
