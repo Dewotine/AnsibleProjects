@@ -1,0 +1,21 @@
+---
+mariadb_piwigo_profile:
+  key_buffer_size: "32M"
+  key_cache_segments: 64
+  table_open_cache: 64
+  join_buffer_size: "2M"
+  join_buffer_space_limit: "64M"
+  myisam_sort_buffer_size: "8M"
+  query_cache_size: 0
+  query_cache_type: 0
+  query_cache_limit: "1M"
+  max_connections: 256
+  tmp_table_size: "128M"
+  max_heap_table_size: "128M"
+  wait_timeout: 86400
+  innodb_buffer_pool_size: "1G"
+  innodb_thread_concurrency: 0
+  innodb_thread_sleep_delay: 0
+  databases:
+    - name: "piwigo"
+  users: ""
