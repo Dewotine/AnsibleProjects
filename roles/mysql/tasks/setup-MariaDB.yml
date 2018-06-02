@@ -1,0 +1,30 @@
+---
+- name: "Deploy MariaDB apt key"
+  apt_key:
+    data: "{{ lookup('file', 'mariadb.gpg') }}"
+    state: present
+  environment: "{{ system_env }}"
+
+- name: "Configure MariaDB repository ({{ mariadb_repo }})"
+  apt_repository:
+    repo: "deb http://{{ mariadb_repo }}/MariaDB/repo/{{ mariadb_version }}/debian {{ ansible_distribution_release }} main"
+
+- name: "Add MariaDB repository preferences"
+  template:
+    src: mariadb.j2
+    dest: /etc/apt/preferences.d/mariadb
+  when: mariadb_apt_pin_priority
+
+- name: "Update apt cache if MySQL is not yet installed."
+  apt:
+    update_cache: yes
+  when: not mysql_installed.stat.exists
+
+- name: "Ensure MariaDB packages are installed"
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - mariadb-client-{{ mariadb_version }}
+    - mariadb-server-{{ mariadb_version }}
+  register: deb_mariadb_install_packages

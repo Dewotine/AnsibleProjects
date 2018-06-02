@@ -1,0 +1,25 @@
+---
+# ==============================================
+#   Load a SQL Script into a MySQL Database
+# ==============================================
+# Requires the following arguments :
+#   - sql_script : path of the SQL script to run, relative to config_bucket
+#   - db_name : name of the database to load data into
+#   - any other argument used in the sql script template.
+
+- set_fact:
+    config_bucket_dir: '{{ role_path }}/../../config_bucket/'
+
+- name: "Transfer SQL Script"
+  template:
+    src: '{{ config_bucket_dir }}/{{ sql_script }}'
+    dest: "/tmp/{{ ansible_date_time.date }}_sql_script.sql"
+    mode: 0644
+
+- name: "Load Database"
+  shell: mysql -v {{ db_name }} < /tmp/{{ ansible_date_time.date }}_sql_script.sql
+
+- name: "Remove SQL statements"
+  file:
+    path: "/tmp/{{ ansible_date_time.date }}_sql_script.sql"
+    state: absent

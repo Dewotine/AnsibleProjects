@@ -1,0 +1,32 @@
+---
+# Variable configuration.
+- name: Include OS-specific variables.
+  include_vars: "{{ ansible_os_family }}.yml"
+  tags:
+    - always
+
+- name: Define mysql_packages.
+  set_fact:
+    mysql_packages: "{{ __mysql_packages | list }}"
+  when: mysql_packages is not defined
+  tags:
+    - always
+
+- import_tasks: setup.yml
+
+# Configure directly instance when not in multi instance
+# There is not special handling for inventory variables.
+- import_tasks: instance.yml
+  when: not mysql_multi_instances
+  tags:
+    - mysqlusers
+
+# Configure each single instance in multi instances mode
+- include_tasks: single_multi_instance.yml
+  vars:
+    instance_name: "{{ instance.key }}"
+    instance_vars: "{{ instance.value }}"
+  with_dict: "{{ mysql_instances }}"
+  loop_control:
+    loop_var: instance
+  when: mysql_multi_instances

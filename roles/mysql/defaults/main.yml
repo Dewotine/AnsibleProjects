@@ -1,0 +1,140 @@
+---
+mysql_fork: ''
+mariadb_repo: "mariadb.mirrors.ovh.net"
+mariadb_version: '10.1'
+mariadb_apt_pin_priority: "900"
+
+mysql_daemon: mysql
+
+mysql_user_home: "/root"
+mysql_config_dir: "/etc/mysql"
+mysql_config_file: "{{ mysql_config_dir }}/my.cnf"
+mysql_config_include_dir: "{{ mysql_config_dir }}/conf.d"
+
+mysql_root_username: root
+mysql_root_password: root
+
+mysql_multi_instances: no
+mysql_instances: {}
+
+# Set this to `yes` to forcibly update the root password.
+mysql_root_password_update: no
+
+mysql_enabled_on_startup: yes
+
+# update my.cnf. each time role is run? yes | no
+overwrite_global_mycnf: yes
+
+# Define a custom list of packages to install; if none provided, the default
+# package list from vars/[OS-family].yml will be used.
+# mysql_packages:
+#   - mysql
+#   - mysql-server
+#   - MySQL-python
+
+# MySQL connection settings.
+mysql_port: "3306"
+mysql_bind_address: '0.0.0.0'
+mysql_datadir: /var/lib/mysql
+mysql_root_datadir: /srv/mysql
+mysql_pid_file: /var/run/mysqld/mysqld.pid
+mysql_skip_name_resolve: yes
+mysql_tmpdir: /tmp
+mysql_root_tmpdir: /tmp
+mysql_socket: /var/run/mysqld/mysqld.sock
+
+# Slow query log settings.
+mysql_slow_query_log_enabled: no
+mysql_slow_query_log_file: "{{ mysql_log_dir }}/mysql-slow.log"
+mysql_slow_query_time: "2"
+mysql_log_slow_verbosity: "query_plan"
+mysql_log_queries_not_using_indexes : 1
+mysql_log_throttle_queries_not_using_indexes : 5
+
+
+# Memory settings (default values optimized ~512MB RAM).
+mysql_key_buffer_size: "256M"
+mysql_key_cache_segments: "0"
+mysql_max_allowed_packet: "64M"
+mysql_net_buffer_length : "16384"
+mysql_table_open_cache: "256"
+mysql_table_definition_cache: "400"
+mysql_sort_buffer_size: "1M"
+mysql_read_buffer_size: "1M"
+mysql_read_rnd_buffer_size: "4M"
+mysql_myisam_sort_buffer_size: "64M"
+mysql_thread_cache_size: "8"
+mysql_query_cache_size: "16M"
+mysql_query_cache_type: 1
+mysql_query_cache_limit: "1M"
+mysql_max_connections: 151
+mysql_open_files_limit: 5000
+mysql_tmp_table_size: "16M"
+mysql_max_heap_table_size: "16M"
+mysql_join_buffer_size: "256K"
+mysql_join_buffer_space_limit: "2M"
+mysql_bulk_insert_buffer_size: "8M"
+
+# Other settings.
+mysql_lower_case_table_names: "0"
+mysql_wait_timeout: "28800"
+mysql_connect_timeout: 2
+mysql_interactive_timeout : "28800"
+mysql_concurrent_insert : 1
+mysql_performance_schema: yes
+mysql_thread_pool_size: 4
+
+# InnoDB settings.
+mysql_innodb_file_per_table: "1"
+# Set .._buffer_pool_size up to 80% of RAM but beware of setting too high.
+mysql_innodb_buffer_pool_size: "256M"
+# Set .._log_file_size to 25% of buffer pool size.
+mysql_innodb_log_file_size: "64M"
+mysql_innodb_log_buffer_size: "8M"
+mysql_innodb_flush_log_at_trx_commit: "2"
+mysql_innodb_lock_wait_timeout: "50"
+mysql_innodb_thread_concurrency: 0
+mysql_innodb_flush_method: "O_DIRECT"
+mysql_innodb_thread_sleep_delay: 10000
+
+# These settings require MySQL > 5.5.
+mysql_innodb_large_prefix: "1"
+mysql_innodb_file_format: "barracuda"
+
+# mysqldump settings.
+mysql_mysqldump_max_allowed_packet: "64M"
+
+# Logging settings.
+mysql_log_dir: "/var/log/mysql"
+mysql_log: ""
+mysql_log_error: "{{ mysql_log_dir }}/mysql.err"
+mysql_syslog_tag: mysql
+
+mysql_config_include_files: []
+#  - src: path/relative/to/playbook/file.cnf
+#  - { src: path/relative/to/playbook/anotherfile.cnf, force: yes }
+
+# Databases.
+mysql_databases: []
+#   - name: example
+#     collation: utf8_general_ci
+#     encoding: utf8
+#     replicate: 1
+
+# Users.
+mysql_users: []
+#   - name: example
+#     host: 127.0.0.1
+#     password: secret
+#     priv: *.*:USAGE
+
+# Replication settings (replication is only enabled if master/user have values).
+mysql_server_id: "1"
+mysql_max_binlog_size: "100M"
+mysql_binlog_format: "ROW"
+mysql_expire_logs_days: "10"
+mysql_log_warnings: 1
+mysql_replication_role: 'master'
+mysql_replication_master: ''
+# Same keys as `mysql_users` above.
+mysql_replication_user: []

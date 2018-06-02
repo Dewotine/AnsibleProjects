@@ -1,0 +1,84 @@
+{{ ansible_managed | comment }}
+#
+# /etc/systemd/system/mysql@.service
+#
+
+[Unit]
+Description=MySQL database server
+After=network.target
+After=syslog.target
+ConditionPathExists=/etc/mysql_%I/my.cnf
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+
+##############################################################################
+## Core requirements
+##
+
+Type=notify
+
+# Setting this to true can break replication and the Type=notify settings
+# See also bind-address mysqld option.
+PrivateNetwork=false
+
+##############################################################################
+## Package maintainers
+##
+
+User=mysql
+Group=mysql
+
+# To allow memlock to be used as non-root user if set in configuration
+CapabilityBoundingSet=CAP_IPC_LOCK
+
+# Prevent writes to /usr, /boot, and /etc
+ProtectSystem=full
+
+# Doesn't yet work properly with SELinux enabled
+# NoNewPrivileges=true
+
+PrivateDevices=true
+
+# Prevent accessing /home, /root and /run/user
+ProtectHome=true
+
+# Execute pre and post scripts as root, otherwise it does it as User=
+PermissionsStartOnly=true
+
+ExecStartPre=/usr/bin/install -m 755 -o mysql -g root -d /var/run/mysqld_%I
+
+# Note: we set --basedir to prevent probes that might trigger SELinux alarms,
+# https://bugzilla.redhat.com/show_bug.cgi?id=547485
+ExecStart=/usr/sbin/mysqld --defaults-file=/etc/mysql_%I/my.cnf --basedir=/usr
+#ExecStartPost=/etc/mysql/debian-start
+
+KillMode=process
+KillSignal=SIGTERM
+
+# Don't want to see an automated SIGKILL ever
+SendSIGKILL=no
+
+# Restart crashed server only, on-failure would also restart, for example, when
+# my.cnf contains unknown option
+Restart=on-abort
+RestartSec=5s
+
+UMask=007
+
+# Give a reasonable amount of time for the server to start up/shut down
+TimeoutSec=300
+
+# Place temp files in a secure directory, not /tmp
+PrivateTmp=true
+
+##
+## Options previously available to be set via [mysqld_safe]
+## that now needs to be set by systemd config files as mysqld_safe
+## isn't executed.
+##
+
+# Number of files limit. previously [mysqld_safe] open-file-limit
+LimitNOFILE=16364

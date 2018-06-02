@@ -1,0 +1,35 @@
+---
+- name: Ensure MySQL users are present.
+  mysql_user:
+    login_unix_socket: "{{ mysql_socket }}"
+    name: "{{ item.name }}"
+    host: "{{ item.host | default('localhost') }}"
+    password: "{{ item.password | default(omit) }}"
+    priv: "{{ item.priv | default('*.*:USAGE') }}"
+    state: "{{ item.state | default('present') }}"
+    append_privs: "{{ item.append_privs | default('no') }}"
+  with_items: "{{ mysql_users }}"
+  when:
+    - item.hostgroup is not defined or not item.hostgroup
+  no_log: true
+  tags:
+    - mysqlusers
+
+- name: Ensure MySQL users are present.
+  mysql_user:
+    login_unix_socket: "{{ mysql_socket }}"
+    name: "{{ item.0.name }}"
+    host: "{{ item.1 }}"
+    password: "{{ item.0.password | default(omit) }}"
+    priv: "{{ item.0.priv | default('*.*:USAGE') }}"
+    state: "{{ item.0.state | default('present') }}"
+    append_privs: "{{ item.0.append_privs | default('no') }}"
+  with_subelements:
+    - "{{ mysql_users }}"
+    - host
+  when:
+    - item.0.hostgroup is defined
+    - item.0.hostgroup
+  no_log: true
+  tags:
+  - mysqlusers

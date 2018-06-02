@@ -1,0 +1,66 @@
+---
+- name: Check if MySQL is already installed.
+  stat:
+    path: /etc/init.d/mysql
+  register: mysql_installed
+
+- name: "MariaDB installation"
+  include_tasks: setup-MariaDB.yml
+  when: mysql_fork == 'mariadb'
+
+- name: "MySQL installation"
+  include_tasks: setup-MySQL.yml
+  when: mysql_fork == ''
+
+- name: Ensure MySQL Python libraries are installed.
+  apt:
+    name: python-mysqldb
+    state: present
+
+# Because Debian starts MySQL as part of the install process, we need to stop
+# mysql and remove the logfiles in case the user set a custom log file size.
+- name: Ensure MySQL is stopped after initial install.
+  service:
+    name: "{{ mysql_daemon }}"
+    state: stopped
+  when: not mysql_installed.stat.exists
+
+- name: Delete innodb log files created by apt package after initial install.
+  file:
+    path: "{{ mysql_datadir }}/{{ item }}"
+    state: absent
+  with_items:
+    - "ib_logfile0"
+    - "ib_logfile1"
+  when: not mysql_installed.stat.exists
+
+- name: "Install multi-instance systemd unit"
+  template:
+    src: "mysql@.service"
+    dest: "/lib/systemd/system/mysql@.service"
+    owner: root
+    group: root
+    mode: 0644
+  when:
+    - mysql_multi_instances
+  register: mysql_template_unit_modified
+
+- name: "Reload systemd"
+  systemd:
+    name: "mysql@.service"
+    daemon_reload: yes
+  when:
+    - mysql_multi_instances
+    - mysql_template_unit_modified is changed
+
+- name: "Mask classical instance when in multi-instance mode"
+  systemd:
+    name: "{{ item }}"
+    enabled: no
+    state: stopped
+    masked: yes
+  with_items:
+    - "mysql.service"
+    - "mariadb.service"
+  when:
+    - mysql_multi_instances

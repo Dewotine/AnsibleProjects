@@ -1,0 +1,28 @@
+---
+- name: "Verify some parameters"
+  assert:
+    that:
+      - mysql_replication_role is defined
+      - mysql_replication_role in ['master', 'slave']
+      - mysql_replication_master is defined
+      - mysql_replication_role == 'slave' and mysql_replication_user.name is defined or mysql_replication_role == 'master'
+  tags:
+    - always
+
+- name: Define mysql_slow_query_log_file.
+  set_fact:
+    mysql_slow_query_log_file: "{{ __mysql_slow_query_log_file }}"
+  when: mysql_slow_query_log_file is not defined
+
+- name: Check if MySQL packages were installed.
+  set_fact:
+    mysql_install_packages: "{{ (deb_mysql_install_packages is defined and deb_mysql_install_packages.changed) or (deb_mariadb_install_packages is defined and deb_mariadb_install_packages.changed) }}"
+
+# Configure MySQL.
+- import_tasks: configure.yml
+- import_tasks: secure-installation.yml
+- import_tasks: databases.yml
+- import_tasks: users.yml
+  tags:
+    - mysqlusers
+- include_tasks: replication.yml
