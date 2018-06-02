@@ -1,13 +1,16 @@
 ---
-- name: "Deploy MariaDB apt key"
+# Install packages
+- name: Add official MariaDB apt key
   apt_key:
-    data: "{{ lookup('file', 'mariadb.gpg') }}"
+    id: "{{ mariadb_id }}"
+    keyserver: "{{ mariadb_keyserver }}"
     state: present
-  environment: "{{ system_env }}"
 
 - name: "Configure MariaDB repository ({{ mariadb_repo }})"
   apt_repository:
     repo: "deb http://{{ mariadb_repo }}/MariaDB/repo/{{ mariadb_version }}/debian {{ ansible_distribution_release }} main"
+    state: present
+    update_cache: yes
 
 - name: "Add MariaDB repository preferences"
   template:
