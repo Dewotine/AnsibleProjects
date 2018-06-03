@@ -1,0 +1,48 @@
+---
+- name: "Verify some variables"
+  assert:
+    that:
+      - apache_vhosts is defined
+      - ansible_os_family is defined
+      - role_path is defined
+      - apache_service_name is defined
+
+# Prerequisite for template files
+- set_fact:
+    config_bucket_dir: "{{ role_path }}/../../config_bucket/"
+    vhosts: "{{ apache_vhosts }}"
+    apache_custom_configdir: "{% if (ansible_lsb.major_release | int) >= 8 %}conf-available{% else %}conf.d{% endif %}"
+
+- name: "Include {{ ansible_os_family }} specific variables"
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: "{{ ansible_os_family }} specific installation"
+  include_tasks: "install-{{ ansible_os_family }}.yml"
+
+# Custom config
+- name: "custom configurations"
+  import_tasks: customconfig.yml
+
+- name: "SSL certificates & key management"
+  import_tasks: certificates.yml
+
+- name: "Modules management"
+  import_tasks: modules.yml
+
+# Security
+- name: "{{ ansible_os_family }} specific security"
+  include_tasks: "security-{{ ansible_os_family }}.yml"
+
+# Configure virtualhosts
+- include: virtualhost.yml
+  with_items: "{{ vhosts | default([]) }}"
+  loop_control:
+    loop_var: virtualhost
+
+# Service
+- name: "Service state management"
+  service:
+    name: "{{ apache_service_name }}"
+    state: started
+    enabled: "{{ apache_service_enable }}"
+  when: apache_manage_service

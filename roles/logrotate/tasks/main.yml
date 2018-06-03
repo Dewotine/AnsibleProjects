@@ -1,0 +1,22 @@
+---
+- assert:
+    that:
+      - logrotate_scripts is defined
+  tags:
+    - logrotate
+
+- name: Install logrotate
+  package:
+    name: logrotate
+    state: present
+  tags:
+    - logrotate
+
+- include: single.yml
+  vars:
+    lr_name: "{{ item.key }}"
+    lr_obj: "{{ item.value }}"
+  with_dict: "{{ logrotate_scripts }}"
+  when: logrotate_scripts is defined
+  tags:
+    - logrotate

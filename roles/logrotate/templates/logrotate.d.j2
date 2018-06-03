@@ -1,0 +1,21 @@
+{{ ansible_managed | comment }}
+
+{{ lr_obj.paths | join(' ') }} {
+{% if lr_obj.options is defined %}
+{% for option in lr_obj.options %}
+{# Ignore commands starting with rotate #}
+{% if not (option | match("^rotate")) %}
+    {{ option }}
+{% endif %}{% endfor %}{% endif %}
+{% if lr_obj.scripts is defined %}
+{% for name, script in lr_obj.scripts.iteritems() %}
+    {{ name }}
+      {{ script }}
+    endscript
+{% endfor %}{% endif %}
+    rotate {{ lr_obj.rotate_number | default(logrotate_rotation_days) }}
+    {{ lr_obj.rotate_period }}
+{% if lr_obj.create is defined %}
+    create {{ lr_obj.create.mode }} {{ lr_obj.create.user | default('root') }} {{ lr_obj.create.group | default('root') }}
+{% endif %}
+}

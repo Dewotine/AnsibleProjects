@@ -1,0 +1,9 @@
+---
+apache_module_path: /usr/lib/apache2/modules
+apache_module_names:
+  auth_pgsql: libapache2-mod-auth-pgsql
+  jk: libapache2-mod-jk
+
+root_group: root
+www_user: www-data
+www_group: www-data

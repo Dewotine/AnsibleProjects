@@ -1,0 +1,28 @@
+---
+- import_tasks: mod_jk.yml
+
+- name: "mod_auth_pgsql installation"
+  apt:
+    name: "{{ apache_module_names.auth_pgsql }}"
+    state: present
+  when: "item.state == 'present'"
+  with_items: "{{ apache_modules | selectattr('name', 'match', '^auth_pgsql$') | list }}"
+  notify: restart apache
+
+- name: "mpm_worker Configuration"
+  template:
+    src: "mpm_worker.conf"
+    dest: "{{ apache_config_path }}/mods-available/mpm_worker.conf"
+    owner: root
+    group: "{{ root_group }}"
+  when: "item.state == 'present'"
+  with_items: "{{ apache_modules | selectattr('name', 'match', '^mpm_worker$') | list }}"
+  notify: reload apache
+
+- import_tasks: mod_dav_svn.yml
+
+- import_tasks: mod_php.yml
+
+- name: "{{ ansible_os_family }} specific configuration"
+  include_tasks: "modules-{{ ansible_os_family }}.yml"
+

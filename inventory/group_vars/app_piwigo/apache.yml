@@ -1,0 +1,26 @@
+---
+app_apache_listening_port: 80
+app_apache_listening_ip: "*"
+
+app_apache_mpm: 'prefork'
+
+app_apache_vhosts:
+  - name: "piwigo"
+    server_name: "piwigo.bleschet.fr"
+    keepalive: true
+    document_root: "/var/www/html/piwigo"
+
+# PHP Settings
+apache_mod_php_enable: yes
+
+app_php_version: 7.0
+app_php_extra_modules:
+  - 'php{{ app_php_version }}-mysql'
+  - 'php{{ app_php_version }}-curl'
+  - 'php{{ app_php_version }}-gd'
+  - 'php{{ app_php_version }}-gmp'
+  - 'php{{ app_php_version }}-imagick'
+  - 'php{{ app_php_version }}-intl'
+  - 'php{{ app_php_version }}-mcrypt'
+  - 'php{{ app_php_version }}-xsl'
+

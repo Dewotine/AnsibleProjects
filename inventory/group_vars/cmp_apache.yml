@@ -1,0 +1,71 @@
+---
+apache_listening_port: "{{ app_apache_listening_port }}"
+apache_listening_ip: "{{ app_apache_listening_ip }}"
+
+apache_default_mpm_worker_config:
+  start_servers: 2
+  min_spare_threads: 25
+  max_spare_threads: 75
+  thread_limit: 64
+  threads_per_child: 25
+  max_connections_per_child: 0
+
+apache_default_mpm_config:
+  server_limit: 8
+  max_request_workers: 150
+  listen_backlog: 511
+
+apache_default_mpm: 'worker'
+apache_mpm_module: "{{ app_apache_mpm | default(apache_default_mpm) }}"
+
+apache_manage_service: yes
+apache_service_enable: yes
+
+apache_server_admin: cedric@bleschet.fr
+
+apache_modules:
+  - {name: cgid,            state: absent}
+  - {name: mpm_event,       state: "{{ 'present' if apache_mpm_module == 'event' else 'absent' }}" }
+  - {name: mpm_worker,      state: "{{ 'present' if apache_mpm_module == 'worker' else 'absent' }}" }
+  - {name: mpm_prefork,     state: "{{ 'present' if apache_mpm_module == 'prefork' else 'absent' }}" }
+  - {name: access_compat,   state: present}
+  - {name: alias,           state: present}
+  - {name: auth_basic,      state: present}
+  - {name: authn_core,      state: present}
+  - {name: authn_file,      state: present}
+  - {name: authz_core,      state: present}
+  - {name: authz_groupfile, state: present}
+  - {name: authz_host,      state: present}
+  - {name: authz_user,      state: present}
+  - {name: autoindex,       state: present}
+  - {name: cache,           state: present}
+  - {name: deflate,         state: present}
+  - {name: dir,             state: present}
+  - {name: env,             state: present}
+  - {name: expires,         state: present}
+  - {name: filter,          state: present}
+  - {name: headers,         state: present}
+  - {name: mime,            state: present}
+  - {name: negotiation,     state: present}
+  - {name: proxy,           state: present}
+  - {name: proxy_http,      state: present}
+  - {name: reqtimeout,      state: present}
+  - {name: rewrite,         state: present}
+  - {name: setenvif,        state: present}
+  - {name: status,          state: present}
+
+apache_vhosts: "{{ app_apache_vhosts | default([]) }}"
+apache_certificates: "{{ app_apache_certificates | default([]) }}"
+apache_private_keys: "{{ app_apache_private_keys | default([]) }}"
+
+apache_mpm: "{{ app_apache_mpm_config | default(apache_default_mpm_config) }}"
+apache_mpm_worker: "{{ app_apache_mpm_worker_config | default(apache_default_mpm_worker_config) }}"
+
+apache_log_formats:
+  complete: "%h %l %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\" \\\"%{User-Agent}i\\\" \\\"%{Host}i\\\" %D %I %O"
+
+apache_catchall_virtualhost: yes
+apache_catchall_virtualhost_logformat: "complete"
+apache_enable_localhost_virtualhost: yes
+collectd_plugin_apache: yes
+telegraf_input_apache: yes

@@ -1,0 +1,7 @@
+---
+apache_module_path: libexec/apache24
+apache_package_name: apache24
+apache_service_name: apache24
+root_group: wheel
+www_user: www
+www_group: www

@@ -1,0 +1,62 @@
+---
+- name: "Include {{ ansible_os_family }} specific variables"
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: "Web Sites Root Directory creation ({{ virtualhost.name }})"
+  file:
+    name: "{{ virtualhost.document_root | default('/var/www/' + virtualhost.name) }}"
+    owner: "{{ www_user }}"
+    group: "{{ www_group }}"
+    state: directory
+    mode: 0755
+
+- name: "Virtualhost log directory ({{ virtualhost.name }})"
+  file:
+    path: "{{ virtualhost.log_path | default(apache_log_path) }}"
+    state: directory
+    owner: root
+    group: "{{ root_group }}"
+  when: virtualhost.log_path is defined
+
+- name: "Virtualhost standard deployment ({{ virtualhost.name }})"
+  template:
+    src: virtualhost.conf
+    dest: "{{ apache_config_path }}/sites-available/{{ virtualhost.name }}.conf"
+    owner: root
+    group: "{{ root_group }}"
+    mode: 0644
+  when: virtualhost.custom_template is not defined
+  register: vsdeploy
+  notify: reload apache
+
+- name: "Virtualhost template deployment ({{ virtualhost.name }})"
+  template:
+    src: "{{ config_bucket_dir }}/apache2/{{ virtualhost.custom_template }}"
+    dest: "{{ apache_config_path }}/sites-available/{{ virtualhost.name }}.conf"
+    owner: 'root'
+    group: "{{ root_group }}"
+    mode: '0644'
+  when: virtualhost.custom_template is defined
+  register: vtdeploy
+  notify: reload apache
+
+- name: "Virtualhost activation ({{ virtualhost.name }})"
+  file:
+    src: "{{ apache_config_path }}/sites-available/{{ virtualhost.name }}.conf"
+    dest: "{{ apache_config_path }}/sites-enabled/{{ virtualhost.name }}.conf"
+    state: link
+  register: lnkdeploy
+  notify: reload apache
+
+- name: "Ensure SSL module is enabled"
+  apache2_module:
+    name: "ssl"
+    state: "present"
+  when: virtualhost.ssl | default(False)
+  notify: restart apache
+
+- name: "Reload apache"
+  service:
+    name: "{{ apache_service_name }}"
+    state: reloaded
+  when: (early_reload | default(false)) and ((vsdeploy is changed) or (vtdeploy is changed) or (lnkdeploy is changed))

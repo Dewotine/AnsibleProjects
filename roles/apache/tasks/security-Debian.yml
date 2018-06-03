@@ -1,0 +1,20 @@
+---
+- name: "Security configuration"
+  template:
+    src: security.conf
+    dest: "{{ apache_config_path }}/{{ apache_custom_configdir }}/security.conf"
+    owner: root
+    group: "{{ root_group }}"
+    mode: 0644
+    validate: "echo '%s' && apache2ctl configtest"
+  notify: reload apache
+
+- name: "Enable Security Configuration"
+  file:
+    src: "{{ apache_config_path }}/conf-available/security.conf"
+    dest: "{{ apache_config_path }}/conf-enabled/security.conf"
+    state: link
+    validate: "echo '%s' && apache2ctl configtest"
+  when:
+    - apache_custom_configdir == "conf-available"
+  notify: reload apache

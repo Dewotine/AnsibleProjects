@@ -1,0 +1,54 @@
+---
+- set_fact:
+    modsvn_package_name: "{% if (ansible_lsb.major_release | int) >= 8 %}libapache2-mod-svn{% else %}libapache2-svn{% endif %}"
+
+- name: "mod_dav_svn installation"
+  apt:
+    name: "{{ modsvn_package_name }}"
+    state: present
+  when: apache_mod_svn_enable
+
+- name: "enable mod_dav_svn"
+  apache2_module:
+    name: dav_svn
+    state: "{% if apache_mod_svn_enable %}present{% else %}absent{% endif %}"
+
+- name: "configure SVN acls"
+  template:
+    src: svn_auth_access.conf
+    dest: "{{ item.svn_auth_access_file }}"
+    owner: root
+    group: root
+    mode: 0644
+  when: apache_mod_svn_enable and item.svn_auth_access_file is defined
+  with_items: "{{ vhosts }}"
+  notify: reload apache
+
+- name: "install python-passlib"
+  apt:
+    name: "python-passlib"
+    state: present
+  when: apache_mod_svn_enable
+
+- name: "configure SVN auth"
+  htpasswd:
+    path: "{{ item.0.svn_auth_user_file }}"
+    create: yes
+    name: "{{ item.1.name }}"
+    password: "{{ item.1.password }}"
+  when: apache_mod_svn_enable and item.0.svn_auth_user_file is defined
+  with_subelements:
+    - "{{ vhosts }}"
+    - svn_auth_userlist
+    - skip_missing: yes
+  notify: reload apache
+
+- name: "create SVN root directory"
+  file:
+    path: "{{ item.svn_data_dir }}"
+    state: directory
+    owner: www-data
+    group: www-data
+    recurse: yes
+  when: apache_mod_svn_enable and item.svn_auth_access_file is defined
+  with_items: "{{ vhosts }}"

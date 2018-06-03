@@ -1,0 +1,68 @@
+---
+# Paths
+apache_config_path: /etc/apache2
+apache_log_path: /var/log/apache2
+
+apache_package_name: apache2
+
+# Service
+apache_manage_service: yes
+apache_service_name: apache2
+apache_service_enable: yes
+
+apache_server_admin: admin@example.org
+
+# Network options
+apache_listening_ip: "*"
+apache_listening_port: 80
+
+# Security options
+apache_server_tokens: 'Prod'
+apache_server_signature: 'Off'
+apache_trace_enable: 'Off'
+apache_protect_vcs_directories: true
+apache_prevent_clickjacking: false
+
+# MPM configurations
+apache_mpm_worker:
+  start_servers: 2
+  min_spare_threads: 25
+  max_spare_threads: 75
+  thread_limit: 64
+  threads_per_child: 25
+  max_connections_per_child: 0
+apache_mpm:
+  server_limit: 16
+  max_request_workers: 150
+  listen_backlog: 511
+
+# Modules
+apache_modules: []
+
+apache_jk_method: 'Busyness'
+apache_jk_workers: {}
+
+apache_mod_svn_enable: no
+
+apache_mod_php_enable: no
+apache_mod_php_version: 5
+apache_mod_php_base_modules:
+  - 'libapache2-mod-php{{ app_php_version | default(apache_mod_php_version) }}'
+  - 'php{{ app_php_version | default(apache_mod_php_version) }}'
+  - 'php{{ app_php_version | default(apache_mod_php_version) }}-cli'
+  - 'php{{ app_php_version | default(apache_mod_php_version) }}-common'
+apache_mod_php_extra_modules: '{{ app_php_extra_modules | default([]) }}'
+
+# Virtualhosts
+apache_vhosts: []
+apache_log_formats: {}
+apache_log_formats_default: "combined"
+apache_catchall_virtualhost: no
+apache_catchall_virtualhost_httpcode: 404
+apache_catchall_virtualhost_logformat: "combined"
+apache_enable_localhost_virtualhost: no
+
+# SSL certificates management
+apache_certificates: []
+apache_private_keys: []
+apache_ssl_protocols: "all -SSLv2 -SSLv3 -TLSv1"
