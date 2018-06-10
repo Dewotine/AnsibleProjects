@@ -30,6 +30,7 @@ system_base_packages:
   - { name: sysstat,                  state: present }
   - { name: tmux,                     state: present }
   - { name: tree,                     state: present }
+  - { name: unzip,                    state: present }
   - { name: vim,                      state: present }
   - { name: zsh,                      state: present }
 # Packages to remove
