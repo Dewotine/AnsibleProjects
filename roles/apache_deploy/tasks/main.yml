@@ -1,6 +1,3 @@
 ---
-- name: "Download piwigo.zip"
-  get_url:
-    url: "{{ piwigo_src_url }}"
-    dest: /tmp/piwigo.zip
-    mode: 0644
+- import_tasks: install_zip_source.yml
+  when: apache_zip_source

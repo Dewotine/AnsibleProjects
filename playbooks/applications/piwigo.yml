@@ -13,14 +13,14 @@
 #  roles:
 #    - mysql
 
+#- hosts: "{{ filter }}:&cmp_apache:&dc_{{ dc }}:&app_piwigo"
+#  become: true
+#  roles:
+#    - apache
+
+
 - hosts: "{{ filter }}:&cmp_apache:&dc_{{ dc }}:&app_piwigo"
   become: true
   roles:
-    - apache
-
-
-#- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_php:&app_piwigo"
-#  become: true
-#  roles:
-#    - piwigo
+    - apache_deploy
 

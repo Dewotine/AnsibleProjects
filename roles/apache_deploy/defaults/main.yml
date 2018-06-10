@@ -1,2 +1,4 @@
 ---
-piwigo_src_url: "http://piwigo.org/download/dlcounter.php?code=latest"
+apache_src_url: "http://piwigo.org/download/dlcounter.php?code=latest"
+apache_zip_source: true
+apache_git_source: false
