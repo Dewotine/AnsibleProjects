@@ -1,4 +1,16 @@
 ---
+# Declare Mariadb Users
+mariadb_piwigo_installation_users:
+  name: "piwigouser"
+  host: "['localhost']"
+  hostgroup: yes
+  password: !vault-encrypted |
+        $ANSIBLE_VAULT;1.1;AES256
+        663163636366613762343230356465346430633939663961383261393036666333316166396232646134316134356434323733353664663630353936636362630a396630373631383834636266386331613562326232343138623431656361363464643135323566346434313962356435303732396233613432343839396464640a3338393439626136303231616333306166383064333932636538376433316631
+  priv: "piwigo%.*:ALL"
+
+
+# Configure MariaDB database
 mariadb_piwigo_profile:
   key_buffer_size: "32M"
   key_cache_segments: 64
@@ -19,10 +31,8 @@ mariadb_piwigo_profile:
   databases:
     - name: "piwigo"
   users:
-    - name: "piwigouser"
-      host: ['localhost']
-      hostgroup: yes
-      password: !vault-encrypted |
-        $ANSIBLE_VAULT;1.1;AES256
-        663163636366613762343230356465346430633939663961383261393036666333316166396232646134316134356434323733353664663630353936636362630a396630373631383834636266386331613562326232343138623431656361363464643135323566346434313962356435303732396233613432343839396464640a3338393439626136303231616333306166383064333932636538376433316631
-      priv: "piwigo%.*:ALL"
+    - name: "{{ mariadb_piwigo_installation_users.name }}"
+      host: "{{ mariadb_piwigo_installation_users.host }}"
+      hostgroup: "{{ mariadb_piwigo_installation_users.hostgroup }}"
+      password: "{{ mariadb_piwigo_installation_users.password }}"
+      priv: "{{ mariadb_piwigo_installation_users.priv }}"
