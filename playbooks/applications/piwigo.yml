@@ -21,6 +21,9 @@
 
 - hosts: "{{ filter }}:&cmp_apache:&dc_{{ dc }}:&app_piwigo"
   become: true
+  vars:
+    appname: "app_piwigo"
+    app_src_dir: "{{ role_path }}/../../inventory/group_vars/{{ appname }}"
   roles:
     - apache_deploy
 

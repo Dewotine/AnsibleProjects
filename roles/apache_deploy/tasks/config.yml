@@ -1,0 +1,9 @@
+---
+- name: "Deploy PHP template configs"
+  template:
+    src: "{{ app_src_dir }}/{{ item.src }}"
+    dest: "/var/www/html/piwigo/{{ item.dst }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ apache_php_files.config_templates }}"

@@ -1,3 +1,6 @@
 ---
 - import_tasks: install_zip_source.yml
   when: apache_zip_source
+
+- import_tasks: config.yml
+  when: apachedeploy_config

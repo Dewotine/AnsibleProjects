@@ -9,7 +9,7 @@ app_apache_vhosts:
     server_name: "piwigo.bleschet.fr"
     keepalive: true
     document_root: "/var/www/html/piwigo"
-    document_root_fragment: '<IfModule dir_module>DirectoryIndex index.html index.php</IfModule>'
+#    document_root_fragment: '<IfModule dir_module>DirectoryIndex index.html index.php</IfModule>'
 
 
 # PHP Settings
@@ -27,5 +27,8 @@ app_php_extra_modules:
   - 'php{{ app_php_version }}-xsl'
 
 
-
 apache_src_url:  "http://piwigo.org/download/dlcounter.php?code=latest"
+
+apache_php_files:
+  config_templates:
+    - { src: "database.inc.php", dst: "local/config/database.inc.php" }
