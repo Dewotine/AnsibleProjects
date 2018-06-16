@@ -1,10 +1,10 @@
 ---
-#- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_nginx:&app_piwigo"
-#  vars:
-#    application_name: "piwigo"
-#  become: true
-#  roles:
-#    - nginx
+- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_nginx:&app_piwigo"
+  vars:
+    application_name: "piwigo"
+  become: true
+  roles:
+    - nginx
 
 #- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_mariadb:&app_piwigo"
 #  become: true

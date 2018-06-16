@@ -1,0 +1,10 @@
+---
+- name: "Custom configurations"
+  template:
+    src: ports.conf
+    dest: "{{ apache_config_path }}/ports.conf"
+    owner: root
+    group: "root"
+    mode: 0644
+    validate: "echo '%s' && apache2ctl configtest"
+  notify: reload apache

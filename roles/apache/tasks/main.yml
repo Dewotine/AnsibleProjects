@@ -20,6 +20,10 @@
   include_tasks: "install-{{ ansible_os_family }}.yml"
 
 # Custom config
+- name: "Add configuration"
+  import_tasks: config.yml
+
+# Custom config
 - name: "custom configurations"
   import_tasks: customconfig.yml
 
