@@ -1,14 +1,13 @@
 ---
-# ==============================================
 # Shell customizations
-#- name: "Configure common shell aliases"
-#  template:
-#    src: common_shell_aliases.sh
-#    dest: /usr/local/share/common_shell_aliases.sh
-#    owner: root
-#    group: root
-#    mode: 0644
-#  tags: [bash,zsh]
+- name: "Configure common shell aliases"
+  template:
+    src: common_shell_aliases.sh
+    dest: /usr/local/share/common_shell_aliases.sh
+    owner: root
+    group: root
+    mode: 0644
+  tags: [bash,zsh]
 
 - name: "Configure bash"
   template:
