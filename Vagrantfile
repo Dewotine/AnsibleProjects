@@ -12,8 +12,8 @@ Vagrant.configure("2") do |config|
 	piwigo.disksize.size = '15GB'
 	piwigo.vm.network "public_network", ip: "192.168.1.200", bridge: "enp3s0"
 	piwigo.vm.hostname = "piwigo"
-	piwigo.vm.network "forwarded_port", guest: 80, host: 8080
-	piwigo.vm.network "forwarded_port", guest: 443, host: 8443
+	#piwigo.vm.network "forwarded_port", guest: 8080, host: 80
+	#piwigo.vm.network "forwarded_port", guest: 443, host: 8443
 	end
 
   # Disable automatic box update checking. If you disable this, then
