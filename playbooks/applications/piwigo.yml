@@ -6,20 +6,20 @@
   roles:
     - nginx
 
-#- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_mariadb:&app_piwigo"
-#  become: true
-#  vars:
-#    mysql_profile: "{{ mariadb_piwigo_profile }}"
-#  roles:
-#    - mysql
+- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_mariadb:&app_piwigo"
+  become: true
+  vars:
+    mysql_profile: "{{ mariadb_piwigo_profile }}"
+  roles:
+    - mysql
 
 - hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_mariadb:&app_piwigo"
   become: true
   vars:
-    db_name: "piwigo"
-    sql_script: "{{ role_path }}/../../inventory/group_vars/app_{{ db_name }}/piwigo.sql"
+    mysql_script_db_name: "piwigo"
+    mysql_script_script: "{{ role_path }}/../../inventory/group_vars/app_{{ mysql_script_db_name }}/piwigo.sql"
   roles:
-    - { role: mysql_sql_script, when: db_init is defined and db_init | bool }
+    - { role: mysql_script, when: db_init is defined and db_init | bool }
 
 - hosts: "{{ filter }}:&cmp_apache:&dc_{{ dc }}:&app_piwigo"
   become: true

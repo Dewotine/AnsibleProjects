@@ -10,12 +10,12 @@
 
 - name: "Transfer SQL Script"
   template:
-    src: '{{ sql_script }}'
+    src: '{{ mysql_script_script }}'
     dest: "/tmp/{{ ansible_date_time.date }}_sql_script.sql"
     mode: 0644
 
 - name: "Load Database"
-  shell: mysql -v {{ db_name }} < /tmp/{{ ansible_date_time.date }}_sql_script.sql
+  shell: mysql -v {{ mysql_script_db_name }} < /tmp/{{ ansible_date_time.date }}_sql_script.sql
 
 - name: "Remove SQL statements"
   file:
