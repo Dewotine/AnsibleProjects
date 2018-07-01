@@ -76,18 +76,13 @@ class PiwigoUserManagement:
         my_url = "http://piwigo.bleschet.fr:8080/ws.php?format=rest&method=pwg.session.login"
         my_header = {"Authorization": "Basic %s" % base64.b64encode("piwigo_admin:H€2cumzv")}
         login_credentials = {
-            'login': {
-
-                'username': 'piwigo_admin',
-                'password': 'H€2cumzv',
-            }
+            'username': 'piwigo_admin',
+            'password': 'H€2cumzv',
         }
-        data = 'object=\n%s' % self.module.jsonify(login_credentials)
-
 
         rsp, info = fetch_url(self.module,
                               my_url,
-                              data=data,
+                              data=json.dumps(login_credentials),
                               method="POST")
 
         if info["status"] != 200:
@@ -100,6 +95,8 @@ class PiwigoUserManagement:
             else:
                 # data = {"response": {"status": "fail", "err": {"msg": content}}}
                 self.module.fail_json(msg=content)
+
+        # fatal: [piwigo]: FAILED! => {"changed": false, "msg": "<?xml version=\"1.0\"?>\n<rsp stat=\"fail\">\n\t<err code=\"1002\" msg=\"Missing parameters: username,password\" />\n</rsp>"}
 
 
         # rsp_json = json.loads(rsp.read())
