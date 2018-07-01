@@ -1,11 +1,12 @@
 ---
-#- hosts: "{{ filter }}:&dc_{{ dc }}"
-- hosts: "vps528223.ovh.net"
+- hosts: "{{ filter }}:&dc_{{ dc }}"
+# - hosts: "vps528223.ovh.net"
+#- hosts: "piwigo"
   become: true
   tasks:
     - name: "Un petit essai de module"
       piwigo_user:
         username: "test"
-        admin_user: "piwigo_admin"
-        admin_password: "H€2cumzvcwxcwcwx"
+        url_username: "piwigo_admin"
+        url_password: "H€2cumzvcwxcwcwx"
         url: "http://piwigo.bleschet.fr:8080/ws.php?format=json"
