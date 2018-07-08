@@ -43,7 +43,7 @@ class PiwigoUserManagement:
         server_name = self.module.params["url"]
         api_endpoint = "/ws.php?format=json"
         my_url = server_name + api_endpoint
-        my_header = { 'Content-Type': 'application/json',}
+        my_header = { 'Content-Type': 'application/x-www-form-urlencoded',}
         session = {}
         values = { 'method': 'pwg.session.login',
                    'username': self.module.params["url_username"], 'password': self.module.params["url_password"] }
@@ -61,27 +61,33 @@ class PiwigoUserManagement:
         else:
             content = json.loads(rsp.read())
             if content['stat'] == "ok":
-                # self.module.exit_json(changed=True, results=info['cookies']['pwg_id'])
-                self.module.exit_json(changed=True, results=info)
+                #self.module.exit_json(changed=True, results=info)
+                # self.module.exit_json(changed=True, results=info)
                 data = {"response": {"status": "Login OK"}}
             else:
                 # data = {"response": {"status": "fail", "err": {"msg": content}}}
                 self.module.fail_json(msg=content)
 
+        my_updated_header = {
+            'Cookie': info['cookies']['pwg_id']
+        }
 
-        # # Get Token
-        # url_method = "&method=pwg.session.getStatus"
-        # rsp2, info2 = fetch_url(self.module,
-        #                       my_url + url_method,
-        #                       method="GET")
-        #
-        # if info2["status"] != 200:
-        #     self.module.fail_json(msg="Failed to get session information from piwigo", response=rsp2, info=info2)
-        # else:
-        #     session=json.loads(rsp2.read())
-        #     self.module.exit_json(changed=True, results=session)
-        #
-        # return info['cookies']['pwg_id']
+        # Get Token
+        url_method = "&method=pwg.session.getStatus"
+        rsp2, info2 = fetch_url(self.module,
+                              my_url + url_method,
+                              headers=my_updated_header,
+                              method="GET")
+
+        if info2["status"] != 200:
+            self.module.fail_json(msg="Failed to get session information from piwigo", response=rsp2, info=info2)
+        else:
+            session=json.loads(rsp2.read())
+            self.module.exit_json(changed=False, results=session)
+
+        return info['cookies']['pwg_id']
+
+    # http://piwigo.org/forum/viewtopic.php?id=22089
 
     def create_user(self, token):
         server_name = self.module.params["url"]
