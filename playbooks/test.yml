@@ -8,5 +8,6 @@
       piwigo_user:
         username: "test"
         url_username: "piwigo_admin"
-        url_password: "H€2cumzvcwxcwcwx"
-        url: "http://piwigo.bleschet.fr:8080/ws.php?format=json"
+        url_password: "H€2cumzv"
+        url: "http://piwigo.bleschet.fr:8080"
+        state: "present"

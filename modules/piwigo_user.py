@@ -27,8 +27,11 @@ results:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.urls import open_url
 from ansible.module_utils.urls import fetch_url
 import json
+import urllib
+import urllib2
 import base64
 
 
@@ -36,74 +39,85 @@ class PiwigoUserManagement:
     def __init__(self, module):
         self.module = module
 
-    # def request_piwigo_login(self):
-        # rsp, info = fetch_url(module=self.module, url=self.module.params["url"], data=None)
-        # if not rsp or info['status'] >= 400:
-        #     self.module.fail_json(msg="failed to connect (status code %s), error was %s" % (
-        #     info['status'], info.get('msg', 'no error given')))
-        #
-        # my_data = { "method": "pwg.session.login", "username": "piwigo_admin", "password": "H€2cumzv" }
-        # my_header = {
-        #     'Content-Type': 'application/json',
-        # }
-        #
-        # my_url = "http://piwigo.bleschet.fr:8080/ws.php?format=json&method=pwg.session.login"
-        # rsp, info = fetch_url(module=self.module,
-        #                       url=my_url,
-        #                       data=self.module.jsonify(my_data),
-        #                       headers=my_header,
-        #                       method="POST")
-        #
-        # if info["status"] != 200:
-        #     self.module.fail_json(msg="Failed to  connect to piwigo", response=rsp, info=info)
-        # # else:
-        # #     self.module.fail_json(msg="Failed to  connect to piwigo", info=info)
-        #
-        # # my_url2 = "http://piwigo.bleschet.fr:8080/ws.php?format=json&method=pwg.session.getStatus"
-        # # rsp2, info2 = fetch_url(module=self.module,
-        # #                       url=my_url2,
-        # #                      method="POST")
-        #
-        # # if info2["status"]:
-        # #     self.module.fail_json(msg="Failed to  connect to piwigo", response=rsp, info=info)
-        #
-        # # https://fossies.org/linux/ansible/lib/ansible/module_utils/urls.py
-        # # https://www.programcreek.com/python/example/99757/ansible.module_utils.urls.fetch_url
-        # # https://github.com/fraoustin/piwigo
-
     def request_piwigo_login(self):
-        # /ws.php?format=json&method=pwg.users.add
-        my_url = "http://piwigo.bleschet.fr:8080/ws.php?format=rest&method=pwg.session.login"
-        my_header = {"Authorization": "Basic %s" % base64.b64encode("piwigo_admin:H€2cumzv")}
-        login_credentials = {
-            'username': 'piwigo_admin',
-            'password': 'H€2cumzv',
-        }
+        server_name = self.module.params["url"]
+        api_endpoint = "/ws.php?format=json"
+        my_url = server_name + api_endpoint
+        my_header = { 'Content-Type': 'application/json',}
+        session = {}
+        values = { 'method': 'pwg.session.login',
+                   'username': self.module.params["url_username"], 'password': self.module.params["url_password"] }
+        my_data = urllib.urlencode(values)
 
+
+        # Get connnexion
         rsp, info = fetch_url(self.module,
                               my_url,
-                              data=json.dumps(login_credentials),
+                              data=my_data,
                               method="POST")
 
         if info["status"] != 200:
             self.module.fail_json(msg="Failed to connect to piwigo", response=rsp, info=info)
         else:
-            content = rsp.read()
-            if 'stat = "ok"' in content.lower():
-                data = {"response": {"status": "OK"}}
-                self.module.exit_json(msg=data)
+            content = json.loads(rsp.read())
+            if content['stat'] == "ok":
+                # self.module.exit_json(changed=True, results=info['cookies']['pwg_id'])
+                self.module.exit_json(changed=True, results=info)
+                data = {"response": {"status": "Login OK"}}
             else:
                 # data = {"response": {"status": "fail", "err": {"msg": content}}}
                 self.module.fail_json(msg=content)
 
-        # fatal: [piwigo]: FAILED! => {"changed": false, "msg": "<?xml version=\"1.0\"?>\n<rsp stat=\"fail\">\n\t<err code=\"1002\" msg=\"Missing parameters: username,password\" />\n</rsp>"}
 
+        # # Get Token
+        # url_method = "&method=pwg.session.getStatus"
+        # rsp2, info2 = fetch_url(self.module,
+        #                       my_url + url_method,
+        #                       method="GET")
+        #
+        # if info2["status"] != 200:
+        #     self.module.fail_json(msg="Failed to get session information from piwigo", response=rsp2, info=info2)
+        # else:
+        #     session=json.loads(rsp2.read())
+        #     self.module.exit_json(changed=True, results=session)
+        #
+        # return info['cookies']['pwg_id']
 
-        # rsp_json = json.loads(rsp.read())
-        # if rsp_json["total"] == 0:
-        #     module.fail_json(msg="Environment %s not found." % env_name)
+    def create_user(self, token):
+        server_name = self.module.params["url"]
+        api_endpoint = "/ws.php"
+        my_url = server_name + api_endpoint
+        my_header = {'Content-Type': 'application/json', }
+        values = {'method': 'pwg.users.add',
+                  'username': 'test', ''
+                  'password': 'retest',
+                  'password_confirm': 'retest',
+                  'email': '',
+                  'send_password_by_mail': False,
+                  'pwg_token': token }
+
+        my_data = urllib.urlencode(values)
+
+        # # Add User
+        # rsp, info = fetch_url(self.module,
+        #                       my_url,
+        #                       data=my_data,
+        #                       method="POST")
+        #
+        # if info["status"] != 200:
+        #     self.module.fail_json(msg="Failed to connect to piwigo in order to add user", response=rsp, info=info)
+        # else:
+        #     content = rsp.read()
+        #     if 'stat=\"ok\"' in content.lower():
+        #         data = {"response": {"status": "Login OK"}}
+        #     else:
+        #         # data = {"response": {"status": "fail", "err": {"msg": content}}}
+        #         self.module.fail_json(msg=content)
+
+        self.module.exit_json(changed=False, results=token)
 
 def main():
+    token = ""
     module = AnsibleModule (
         argument_spec=dict(
             state=dict(type='str', choices=['present', 'absent'], default='present'),
@@ -124,14 +138,12 @@ def main():
     )
 
     piwigouser = PiwigoUserManagement(module)
-    piwigouser.request_piwigo_login()
-    # if module.params['state'] == 'present':
-    #     piwigouser.create_user()
+    token = piwigouser.request_piwigo_login()
+
+    if module.params['state'] == 'present':
+        piwigouser.create_user(token)
     # elif module.params['state'] == 'absent':
     #     piwigouser.delete_user()
-
-
-    module.exit_json(changed=False, results="test de module")
 
 
 if __name__ == '__main__':
