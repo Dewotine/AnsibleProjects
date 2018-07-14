@@ -14,7 +14,6 @@
     src: "{{ apache_config_path }}/conf-available/custom.conf"
     dest: "{{ apache_config_path }}/conf-enabled/custom.conf"
     state: link
-    validate: "echo '%s' && apache2ctl configtest"
   when:
     - apache_custom_configdir == "conf-available"
   notify: reload apache
