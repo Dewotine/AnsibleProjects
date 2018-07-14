@@ -44,7 +44,6 @@
     src: "{{ apache_config_path }}/sites-available/000-default.conf"
     dest: "{{ apache_config_path }}/sites-enabled/000-default.conf"
     state: link
-    validate: "echo '%s' && apache2ctl configtest"
   when: apache_catchall_virtualhost
   notify: reload apache
 
@@ -64,6 +63,5 @@
     src: "{{ apache_config_path }}/sites-available/localhost.conf"
     dest: "{{ apache_config_path }}/sites-enabled/localhost.conf"
     state: link
-    validate: "echo '%s' && apache2ctl configtest"
   when: apache_enable_localhost_virtualhost
   notify: reload apache
