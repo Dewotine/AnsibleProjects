@@ -46,8 +46,10 @@ class PiwigoUserManagement:
         my_header = { 'Content-Type': 'application/x-www-form-urlencoded',}
         session = {}
         values = { 'method': 'pwg.session.login',
-                   'username': self.module.params["url_username"], 'password': self.module.params["url_password"] }
+                   'username': self.module.params["url_username"],
+                   'password': self.module.params["url_password"] }
         my_data = urllib.urlencode(values)
+        token=""
 
 
         # Get connnexion
@@ -68,58 +70,88 @@ class PiwigoUserManagement:
                 # data = {"response": {"status": "fail", "err": {"msg": content}}}
                 self.module.fail_json(msg=content)
 
-        my_updated_header = {
-            'Cookie': info['cookies']['pwg_id']
+        my_header = {
+            'Cookie': info['set-cookie']
         }
 
-        # Get Token
+        # Get Status
         url_method = "&method=pwg.session.getStatus"
         rsp2, info2 = fetch_url(self.module,
-                              my_url + url_method,
-                              headers=my_updated_header,
-                              method="GET")
+                                my_url + url_method,
+                                headers=my_header,
+                                method="GET")
 
         if info2["status"] != 200:
             self.module.fail_json(msg="Failed to get session information from piwigo", response=rsp2, info=info2)
         else:
-            session=json.loads(rsp2.read())
-            self.module.exit_json(changed=False, results=session)
+            content = json.loads(rsp2.read())
+            token = content['result']['pwg_token']
 
+        # Add User
+        api_endpoint = "/ws.php?format=json&method=pwg.users.add"
+        my_url = server_name + api_endpoint
+        values = {'username': 'test',
+                  'password': 'retest',
+                  'password_confirm': 'retest',
+                  'email': '',
+                  'send_password_by_mail': False,
+                  'pwg_token': token
+                  }
+
+        my_data = urllib.urlencode(values)
+        rsp, info = fetch_url(self.module,
+                              my_url,
+                              data=my_data,
+                              headers=my_header,
+                              method="POST")
+
+        if info["status"] != 200:
+            self.module.fail_json(msg="Failed to connect to piwigo in order to add user", response=rsp, info=info)
+        else:
+            content = json.loads(rsp.read())
+            if content['stat'] == "ok":
+                #self.module.exit_json(changed=True, results=info)
+                # self.module.exit_json(changed=True, results=info)
+                data = {"response": {"status": "Login OK"}}
+                self.module.fail_json(msg=content)
+            else:
+                # data = {"response": {"status": "fail", "err": {"msg": content}}}
+                self.module.fail_json(msg=content)
+
+        self.module.exit_json(changed=False, results=token)
         return info['cookies']['pwg_id']
 
     # http://piwigo.org/forum/viewtopic.php?id=22089
 
     def create_user(self, token):
         server_name = self.module.params["url"]
-        api_endpoint = "/ws.php"
+        api_endpoint = "/ws.php?format=json&method=pwg.users.add"
         my_url = server_name + api_endpoint
-        my_header = {'Content-Type': 'application/json', }
-        values = {'method': 'pwg.users.add',
-                  'username': 'test', ''
+        my_header = {'cookies': token}
+        values = {'username': 'test',
                   'password': 'retest',
                   'password_confirm': 'retest',
                   'email': '',
-                  'send_password_by_mail': False,
-                  'pwg_token': token }
+                  'send_password_by_mail': False
+                  }
 
         my_data = urllib.urlencode(values)
 
-        # # Add User
-        # rsp, info = fetch_url(self.module,
-        #                       my_url,
-        #                       data=my_data,
-        #                       method="POST")
-        #
-        # if info["status"] != 200:
-        #     self.module.fail_json(msg="Failed to connect to piwigo in order to add user", response=rsp, info=info)
-        # else:
-        #     content = rsp.read()
-        #     if 'stat=\"ok\"' in content.lower():
-        #         data = {"response": {"status": "Login OK"}}
-        #     else:
-        #         # data = {"response": {"status": "fail", "err": {"msg": content}}}
-        #         self.module.fail_json(msg=content)
+        rsp, info = fetch_url(self.module,
+                               my_url,
+                               data=my_data,
+                               headers=my_header,
+                               method="POST")
 
+        if info["status"] != 200:
+             self.module.fail_json(msg="Failed to connect to piwigo in order to add user", response=rsp, info=info)
+        else:
+             content = rsp.read()
+             if 'stat=\"ok\"' in content.lower():
+                 data = {"response": {"status": "Login OK"}}
+             else:
+                 # data = {"response": {"status": "fail", "err": {"msg": content}}}
+                 self.module.fail_json(msg=content)
         self.module.exit_json(changed=False, results=token)
 
 def main():
