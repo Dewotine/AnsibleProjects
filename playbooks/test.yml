@@ -6,7 +6,8 @@
   tasks:
     - name: "Un petit essai de module"
       piwigo_user:
-        username: "test"
+        username: "testonze"
+        email: "test10@gmail.com"
         url_username: "piwigo_admin"
         url_password: "H€2cumzv"
         url: "http://piwigo.bleschet.fr:8080"

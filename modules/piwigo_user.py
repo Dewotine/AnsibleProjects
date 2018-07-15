@@ -35,10 +35,11 @@ import urllib2
 import base64
 
 class PiwigoUserManagement:
-    def __init__(self, module, token, header):
+    def __init__(self, module, token, header, ansible_status):
         self.module = module
         self.token = token
         self.header = header
+        self.ansible_status = ansible_status
 
     def request_piwigo_login(self):
         server_name = self.module.params["url"]
@@ -88,50 +89,67 @@ class PiwigoUserManagement:
 
         return my_token
 
+    def finish_request(self):
+        api_endpoint = "/ws.php?format=json&method=pwg.session.logout"
+        my_url = self.module.params["url"] + api_endpoint
+
+        fetch_url(self.module, my_url, headers=self.header, method="GET")
+
+        if self.ansible_status['result'] == 'Changed':
+            self.module.exit_json(changed=True, msg=self.ansible_status['message'])
+        elif self.ansible_status['result'] == 'Unchanged':
+            self.module.exit_json(changed=False, msg=self.ansible_status['message'])
+        else:
+            self.module.fail_json(msg=self.ansible_status['message'])
+
+
+
     def create_user(self):
-        server_name = self.module.params["url"]
         api_endpoint = "/ws.php?format=json&method=pwg.users.add"
-        my_url = server_name + api_endpoint
+        my_url = self.module.params["url"] + api_endpoint
         values = {'username': self.module.params["username"],
-                  'password': 'test',
-                  'password_confirm': 'test',
-                  'email': '',
-                  'send_password_by_mail': False,
+                  'password': self.module.params["password"],
+                  'password_confirm': self.module.params["password_confirm"],
+                  'email': self.module.params["email"],
+                  'send_password_by_mail':  self.module.params["send_password_by_mail"],
                   'pwg_token': self.token
                   }
         my_data = urllib.urlencode(values)
 
         rsp, info = fetch_url(self.module,
-                               my_url,
-                               data=my_data,
-                               headers=self.header,
-                               method="POST")
+                              my_url,
+                              data=my_data,
+                              headers=self.header,
+                              method="POST")
 
         if info["status"] != 200:
              self.module.fail_json(msg="Failed to connect to piwigo in order to add user", response=rsp, info=info)
         else:
             content = json.loads(rsp.read())
             if content['stat'] == "ok":
-                self.module.exit_json(changed=True, msg="User {0} succesfully added".format(self.module.params["username"]))
+                setattr(self, 'ansible_status', {'result': 'Changed', 'message':
+                        "User {0} succesfully added".format(self.module.params["username"])})
             elif content['stat'] == "fail" and content['err'] == 1003:
-                self.module.exit_json(changed=False, msg="User {0} already exists".format(self.module.params["username"]))
+                if 'e-mail' in content['message']:
+                    setattr(self, 'ansible_status', {'result': 'Failed', 'message': content})
+                else:
+                    setattr(self, 'ansible_status', {'result': 'Unchanged', 'message':
+                        "User {0} already exists".format(self.module.params["username"])})
 
 
 
 def main():
-    token = ""
-    header = {'Content-Type': 'application/x-www-form-urlencoded'}
     module = AnsibleModule(
         argument_spec=dict(
             state=dict(type='str', choices=['present', 'absent'], default='present'),
             username=dict(required=True, type='str'),
-            password=dict(required=False, type='str'),
-            password_confirm=dict(required=False, type='str'),
-            email = dict(required=False, type='str'),
+            password=dict(required=False, type='str', no_log=True),
+            password_confirm=dict(required=False, type='str', no_log=True),
+            email=dict(default='', type='str'),
             send_password_by_mail=dict(required=False, default=False, type='bool'),
             url=dict(required=True, type='str'),
             url_username=dict(required=True, type='str'),
-            url_password=dict(required=True, type='str'),
+            url_password=dict(required=True, type='str', no_log=True),
         ),
         supports_check_mode=True,
         required_together=[
@@ -140,7 +158,12 @@ def main():
         ]
     )
 
-    piwigouser = PiwigoUserManagement(module, token, header)
+    piwigouser = PiwigoUserManagement(module,
+                                      token="",
+                                      header={'Content-Type': 'application/x-www-form-urlencoded'},
+                                      ansible_status={'result': 'Fail',
+                                                      'message': 'Could not get status of PiwigoUserManagement module'}
+                                      )
 
     # Get cookie
     my_header = piwigouser.request_piwigo_login()
@@ -155,6 +178,7 @@ def main():
     # elif module.params['state'] == 'absent':
     #     piwigouser.delete_user()
 
+    piwigouser.finish_request()
 
 if __name__ == '__main__':
     main()
