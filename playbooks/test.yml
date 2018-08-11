@@ -4,11 +4,19 @@
 #- hosts: "piwigo"
   become: true
   tasks:
-    - name: "Un petit essai de module"
-      piwigo_user:
-        username: "testonze"
-        email: "test10@gmail.com"
+    - name: "Un petit essai de creatioçn de categorie"
+      piwigo_category:
+        name: "ma categorie test"
         url_username: "piwigo_admin"
         url_password: "H€2cumzv"
         url: "http://piwigo.bleschet.fr:8080"
         state: "present"
+
+#    - name: "Un petit essai de création d'utilisateure"
+#      piwigo_user:
+#        username: "testonze"
+#        email: "test10@gmail.com"
+#        url_username: "piwigo_admin"
+#        url_password: "H€2cumzv"
+#        url: "http://piwigo.bleschet.fr:8080"
+#        state: "present"
