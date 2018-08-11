@@ -35,16 +35,16 @@ import urllib2
 import base64
 
 class PiwigoUserManagement:
-    def __init__(self, module, token, header, ansible_status):
+    def __init__(self, module, token, header, ansible_status, api_endpoint):
         self.module = module
         self.token = token
         self.header = header
         self.ansible_status = ansible_status
+        self.api_endpoint = api_endpoint
 
     def request_piwigo_login(self):
         server_name = self.module.params["url"]
-        api_endpoint = "/ws.php?format=json"
-        my_url = server_name + api_endpoint
+        my_url = server_name + self.api_endpoint
         my_header = {}
         values = {'method': 'pwg.session.login',
                   'username': self.module.params["url_username"],
@@ -73,8 +73,7 @@ class PiwigoUserManagement:
     def get_admin_status(self):
         my_token = ""
         server_name = self.module.params["url"]
-        api_endpoint = "/ws.php?format=json"
-        my_url = server_name + api_endpoint
+        my_url = server_name + self.api_endpoint
         url_method = "&method=pwg.session.getStatus"
 
         rsp, info = fetch_url(self.module,
@@ -90,10 +89,13 @@ class PiwigoUserManagement:
         return my_token
 
     def finish_request(self):
-        api_endpoint = "/ws.php?format=json&method=pwg.session.logout"
-        my_url = self.module.params["url"] + api_endpoint
+        my_url = self.module.params["url"] + self.api_endpoint
+        url_method = "&method=pwg.session.logout"
 
-        fetch_url(self.module, my_url, headers=self.header, method="GET")
+        fetch_url(self.module,
+                  my_url + url_method,
+                  headers=self.header,
+                  method="GET")
 
         if self.ansible_status['result'] == 'Changed':
             self.module.exit_json(changed=True, msg=self.ansible_status['message'])
@@ -105,9 +107,9 @@ class PiwigoUserManagement:
 
 
     def create_user(self):
-        api_endpoint = "/ws.php?format=json&method=pwg.users.add"
-        my_url = self.module.params["url"] + api_endpoint
-        values = {'username': self.module.params["username"],
+        my_url = self.module.params["url"] + self.api_endpoint
+        values = {'method': 'pwg.users.add',
+                  'username': self.module.params["username"],
                   'password': self.module.params["password"],
                   'password_confirm': self.module.params["password_confirm"],
                   'email': self.module.params["email"],
@@ -162,7 +164,8 @@ def main():
                                       token="",
                                       header={'Content-Type': 'application/x-www-form-urlencoded'},
                                       ansible_status={'result': 'Fail',
-                                                      'message': 'Could not get status of PiwigoUserManagement module'}
+                                                      'message': 'Could not get status of PiwigoUserManagement module'},
+                                      api_endpoint="/ws.php?format=json"
                                       )
 
     # Get cookie
