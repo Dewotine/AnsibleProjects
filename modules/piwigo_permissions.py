@@ -34,7 +34,7 @@ import urllib
 import urllib2
 import base64
 
-class PiwigoUserManagement:
+class PiwigoPermissionsManagement:
     def __init__(self, module, token, header, ansible_status, api_endpoint):
         self.module = module
         self.token = token
@@ -106,16 +106,16 @@ class PiwigoUserManagement:
 
 
 
-    def create_user(self):
+    def manage_permissions(self):
         my_url = self.module.params["url"] + self.api_endpoint
-        values = {'method': 'pwg.users.add',
-                  'username': self.module.params["username"],
-                  'password': self.module.params["password"],
-                  'password_confirm': self.module.params["password_confirm"],
-                  'email': self.module.params["email"],
-                  'send_password_by_mail':  self.module.params["send_password_by_mail"],
+        values = {'method': 'pwg.permissions.add',
+                  'cat_id' : self.module.params["cat_id"],
+                  'group_id': self.module.params["group_id"],
+                  'user_id ': self.module.params["user_id"],
+                  'recursive': self.module.params["recursive"],
                   'pwg_token': self.token
                   }
+        
         my_data = urllib.urlencode(values)
 
         rsp, info = fetch_url(self.module,
@@ -125,63 +125,59 @@ class PiwigoUserManagement:
                               method="POST")
 
         if info["status"] != 200:
-             self.module.fail_json(msg="Failed to connect to piwigo in order to add user", response=rsp, info=info)
+             self.module.fail_json(msg="Failed to connect to piwigo to set album permissions", response=rsp, info=info)
         else:
             content = json.loads(rsp.read())
+            self.module.exit_json(changed=False, msg=content)
             if content['stat'] == "ok":
                 setattr(self, 'ansible_status', {'result': 'Changed', 'message':
                         "User {0} succesfully added".format(self.module.params["username"])})
-            elif content['stat'] == "fail" and content['err'] == 1003:
-                if 'e-mail' in content['message']:
-                    setattr(self, 'ansible_status', {'result': 'Failed', 'message': content})
-                else:
-                    setattr(self, 'ansible_status', {'result': 'Unchanged', 'message':
-                        "User {0} already exists".format(self.module.params["username"])})
-
+            else:
+                self.module.fail_json(msg="Failed to set permissions", response=rsp, info=info)
 
 
 def main():
     module = AnsibleModule(
         argument_spec=dict(
-            state=dict(type='str', choices=['present', 'absent'], default='present'),
-            username=dict(required=True, type='str'),
-            password=dict(required=False, type='str', no_log=True),
-            password_confirm=dict(required=False, type='str', no_log=True),
-            email=dict(default='', type='str'),
-            send_password_by_mail=dict(required=False, default=False, type='bool'),
+            cat_id=dict(required=True, type='list'),
+            group_id=dict(required=False, type='list'),
+            user_id=dict(required=False, type='list'),
+            recursive=dict(required=False, default=False, type='bool'),
             url=dict(required=True, type='str'),
             url_username=dict(required=True, type='str'),
             url_password=dict(required=True, type='str', no_log=True),
         ),
         supports_check_mode=True,
         required_together=[
-            ["password", "password_confirm"],
             ["url_username", "url_password"],
         ]
     )
 
-    piwigouser = PiwigoUserManagement(module,
+    piwigopermission = PiwigoPermissionsManagement(module,
                                       token="",
                                       header={'Content-Type': 'application/x-www-form-urlencoded'},
                                       ansible_status={'result': 'Fail',
-                                                      'message': 'Could not get status of PiwigoUserManagement module'},
+                                                      'message': 'Could not get status of PiwigoPermissionsManagement module'},
                                       api_endpoint="/ws.php?format=json"
                                       )
 
     # Get cookie
-    my_header = piwigouser.request_piwigo_login()
-    setattr(piwigouser, 'header', my_header)
+    my_header = piwigopermission.request_piwigo_login()
+    setattr(piwigopermission, 'header', my_header)
 
     # Get token for admin user
-    my_token = piwigouser.get_admin_status()
-    setattr(piwigouser, 'token', my_token)
+    my_token = piwigopermission.get_admin_status()
+    setattr(piwigopermission, 'token', my_token)
 
-    if module.params['state'] == 'present':
-        piwigouser.create_user()
-    # elif module.params['state'] == 'absent':
-    #     piwigouser.delete_user()
+    #Get cat id
 
-    piwigouser.finish_request()
+    #Get User id
+
+    #Get Group Id
+
+
+    piwigopermission.manage_permissions()
+    piwigopermission.finish_request()
 
 if __name__ == '__main__':
     main()
