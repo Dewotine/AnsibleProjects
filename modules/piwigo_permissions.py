@@ -37,7 +37,7 @@ class PiwigoPermissionsManagement(PiwigoManagement):
         values = {'method': 'pwg.permissions.add',
                   'cat_id': self._get_piwigo_list(self.module.params["cat_id"]),
                   'group_id': self._get_piwigo_list(self.module.params["group_id"]),
-                  'user_id ': self._get_piwigo_list(self.module.params["user_id"]),
+                  'user_id': self._get_piwigo_list(self.module.params["user_id"]),
                   'recursive': self.module.params["recursive"],
                   'pwg_token': self.token
                   }
