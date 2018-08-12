@@ -24,7 +24,6 @@ EXAMPLES='''
 - name: "Insert Piwigo user"
   pywigo_user:
     username: "test"
-    pwg_token: "gdgjdklfjgmfld"
 '''
 
 RETURN = '''
