@@ -70,6 +70,9 @@ def main():
             cat_id=dict(required=True, type='list'),
             group_id=dict(required=False, type='list', default=[]),
             user_id=dict(required=False, type='list', default=[]),
+            cat_name=dict(required=False, type='str'),
+            group_name=dict(required=False, type='str', default=""),
+            user_name=dict(required=False, type='list', default=[]),
             recursive=dict(required=False, default=False, type='bool'),
             url=dict(required=True, type='str'),
             url_username=dict(required=True, type='str'),
@@ -101,6 +104,7 @@ def main():
     #Get cat id
 
     #Get User id
+    piwigopermission.get_userid_dict(module.params['user_name'])
 
     #Get Group Id
 

@@ -88,6 +88,35 @@ class PiwigoManagement:
 
         return my_token
 
+    def get_userid(self, username):
+        user_id = ""
+        server_name = self.module.params["url"]
+        my_url = server_name + self.api_endpoint
+        url_method = "&method=pwg.users.getList&username=" + username + "&display=none"
+
+        rsp, info = fetch_url(self.module,
+                              my_url + url_method,
+                              headers=self.header,
+                              method="GET")
+        if info["status"] != 200:
+            self.module.fail_json(msg="Failed to get user information from Piwigo", response=rsp, info=info)
+        else:
+            content = json.loads(rsp.read())
+
+            user_id = content['result']['users'][0]['id']
+
+        return user_id
+
+    def get_userid_dict(self, username_list):
+        user_id_dict = {}
+        user_id = ""
+        for username in username_list:
+            user_id = self.get_userid(username)
+            user_id_dict[user_id] = username
+
+        self.module.exit_json(changed=True, msg=user_id_dict)
+        return user_id_dict
+
     def finish_request(self):
         my_url = self.module.params["url"] + self.api_endpoint
         url_method = "&method=pwg.session.logout"
