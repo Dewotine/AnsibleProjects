@@ -34,13 +34,21 @@
 #        url_username: "piwigo_admin"
 #        url_password: "H€2cumzv"
 #        url: "http://piwigo.bleschet.fr:8080"
-    - name: "Test autorisation"
-      piwigo_permissions:
-        cat_id:
-          - "6"
-        user_name:
-          - "test"
-          - "user"
+#    - name: "Test autorisation"
+#      piwigo_permissions:
+#        cat_id:
+#          - "6"
+#        user_name:
+#          - "test"
+#          - "user"
+#        url_username: "piwigo_admin"
+#        url_password: "H€2cumzv"
+#        url: "http://piwigo.bleschet.fr:8080"
+
+    - name: "Test de création de groupe"
+      piwigo_group:
+        name: "testgroup"
+        state: "present"
         url_username: "piwigo_admin"
         url_password: "H€2cumzv"
         url: "http://piwigo.bleschet.fr:8080"

@@ -114,7 +114,6 @@ class PiwigoManagement:
             user_id = self.get_userid(username)
             user_id_dict[user_id] = username
 
-        self.module.exit_json(changed=True, msg=user_id_dict)
         return user_id_dict
 
     def finish_request(self):
