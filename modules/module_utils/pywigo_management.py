@@ -103,7 +103,15 @@ class PiwigoManagement:
             self.module.fail_json(msg="Failed to get user information from Piwigo", response=rsp, info=info)
         else:
             content = json.loads(rsp.read())
-            user_id = content['result']['users'][0]['id']
+            # If no user can be found just exit with unchanged status
+            if content['result']['paging']['count'] == 0:
+                self.module.exit_json(changed=False, msg="No user {0} found".format(username))
+            # Store the userid if exactly one answer is found
+            elif content['result']['paging']['count'] == 1:
+                user_id = content['result']['users'][0]['id']
+            # Failed otherwise
+            else:
+                self.module.fail_json(msg="An error occured while researching {0}".format(username))
 
         return user_id
 
