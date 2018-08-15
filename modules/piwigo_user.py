@@ -12,7 +12,7 @@ module: piwigo_user
 author: Cédric Bleschet
 description: Module to declare users in piwigo
 options:
-  username:
+  name:
     description: User name
     required: yes
   password:
@@ -23,7 +23,7 @@ options:
 EXAMPLES='''
 - name: "Insert Piwigo user"
   pywigo_user:
-    username: "test"
+    name: "test"
 '''
 
 RETURN = '''
@@ -35,7 +35,7 @@ class PiwigoUserManagement(PiwigoManagement):
      def create_user(self):
         my_url = self.module.params["url"] + self.api_endpoint
         values = {'method': 'pwg.users.add',
-                  'username': self.module.params["username"],
+                  'username': self.module.params["name"],
                   'password': self.module.params["password"],
                   'password_confirm': self.module.params["password_confirm"],
                   'email': self.module.params["email"],
@@ -56,20 +56,44 @@ class PiwigoUserManagement(PiwigoManagement):
             content = json.loads(rsp.read())
             if content['stat'] == "ok":
                 setattr(self, 'ansible_status', {'result': 'Changed', 'message':
-                        "User {0} succesfully added".format(self.module.params["username"])})
+                        "User {0} succesfully added".format(self.module.params["name"])})
             elif content['stat'] == "fail" and content['err'] == 1003:
                 if 'e-mail' in content['message']:
                     setattr(self, 'ansible_status', {'result': 'Failed', 'message': content})
                 else:
                     setattr(self, 'ansible_status', {'result': 'Unchanged', 'message':
-                        "User {0} already exists".format(self.module.params["username"])})
+                        "User {0} already exists".format(self.module.params["name"])})
+
+     def delete_user(self, user_id):
+        my_url = self.module.params["url"] + self.api_endpoint
+        values = {'method': 'pwg.users.delete',
+                  'user_id': user_id,
+                  'pwg_token': self.token
+                  }
+        my_data = urllib.urlencode(values)
+
+        rsp, info = fetch_url(self.module,
+                              my_url,
+                              data=my_data,
+                              headers=self.header,
+                              method="POST")
+
+        if info["status"] != 200:
+             self.module.fail_json(msg="Failed to connect to piwigo in order to delete user", response=rsp, info=info)
+        else:
+            content = json.loads(rsp.read())
+            if content['stat'] == "ok":
+                setattr(self, 'ansible_status', {'result': 'Changed', 'message':
+                        "User {0} succesfully deleted".format(self.module.params["name"])})
+            else:
+                self.module.fail_json(msg="An error occured while deleting user {0}".format(module.params["name"]))
 
 
 def main():
     module = AnsibleModule(
         argument_spec=dict(
             state=dict(type='str', choices=['present', 'absent'], default='present'),
-            username=dict(required=True, type='str'),
+            name=dict(required=True, type='str'),
             password=dict(required=False, type='str', no_log=True),
             password_confirm=dict(required=False, type='str', no_log=True),
             email=dict(default='', type='str'),
@@ -103,8 +127,9 @@ def main():
 
     if module.params['state'] == 'present':
         piwigouser.create_user()
-    # elif module.params['state'] == 'absent':
-    #     piwigouser.delete_user()
+    elif module.params['state'] == 'absent':
+        my_user_id = piwigouser.get_userid(module.params['name'])
+        piwigouser.delete_user(my_user_id)
 
     piwigouser.finish_request()
 
