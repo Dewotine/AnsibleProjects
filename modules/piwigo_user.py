@@ -127,7 +127,10 @@ def main():
         piwigouser.create_user()
     elif module.params['state'] == 'absent':
         my_user_id = piwigouser.get_userid(module.params['name'])
-        piwigouser.delete_user(my_user_id)
+        if my_user_id < 0:
+            piwigouser.module.exit_json(changed=False, msg="No user {0} found".format(module.params['name']))
+        else:
+            piwigouser.delete_user(my_user_id)
 
     piwigouser.finish_request()
 

@@ -89,8 +89,37 @@ class PiwigoManagement:
 
         return my_token
 
+    def get_group_id(self, groupname):
+        group_id = ""
+        server_name = self.module.params["url"]
+        my_url = server_name + self.api_endpoint
+        url_method = "&method=pwg.groups.getList&name=" + groupname
+
+        rsp, info = fetch_url(self.module,
+                              my_url + url_method,
+                              headers=self.header,
+                              method="GET")
+
+        if info["status"] != 200:
+            self.module.fail_json(msg="Failed to get group information from Piwigo", response=rsp, info=info)
+        else:
+            content = json.loads(rsp.read())
+            # If no group can be found set user_id to -1
+            if content['result']['paging']['count'] == 0:
+                group_id = -1
+            # Store the group_id if exactly one answer is found
+            elif content['result']['paging']['count'] == 1:
+                group_id = content['result']['groups'][0]['id']
+            # Failed otherwise
+            else:
+                self.module.fail_json(msg="An error occured while researching {0}".format(groupname))
+
+
+        return group_id
+
+
     def get_userid(self, username):
-        user_id = ""
+        user_id = 0
         server_name = self.module.params["url"]
         my_url = server_name + self.api_endpoint
         url_method = "&method=pwg.users.getList&username=" + username + "&display=none"
@@ -103,9 +132,9 @@ class PiwigoManagement:
             self.module.fail_json(msg="Failed to get user information from Piwigo", response=rsp, info=info)
         else:
             content = json.loads(rsp.read())
-            # If no user can be found just exit with unchanged status
+            # If no user can be found set user_id to -1
             if content['result']['paging']['count'] == 0:
-                self.module.exit_json(changed=False, msg="No user {0} found".format(username))
+                user_id = -1
             # Store the userid if exactly one answer is found
             elif content['result']['paging']['count'] == 1:
                 user_id = content['result']['users'][0]['id']
@@ -120,7 +149,12 @@ class PiwigoManagement:
         user_id = ""
         for username in username_list:
             user_id = self.get_userid(username)
-            user_id_dict[user_id] = username
+            # Add to dictionnary only if user_id is valid (>0) <=> User has been found
+            if user_id > 0:
+                user_id_dict[user_id] = username
+            # Used by piwigo_permission, the dictionnary returns must not contain  invalid user_id
+            else:
+                self.module.fail_json(msg="Can not continue as user {0} does not exist".format(username))
 
         return user_id_dict
 

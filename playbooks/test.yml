@@ -15,16 +15,16 @@
         password: "password3"
         email: "essai30@gmail.com"
   tasks:
-    - name: "Un petit essai de création d'utilisateur"
-      piwigo_user:
-        name: "{{ item.key }}"
-        password: "{{ item.value.password }}"
-        email: "{{ item.value.email }}"
-        url_username: "piwigo_admin"
-        url_password: "H€2cumzv"
-        url: "http://piwigo.bleschet.fr:8080"
-        state: "present"
-      with_dict: "{{ my_piwigo_user }}"
+#    - name: "Un petit essai de création d'utilisateur"
+#      piwigo_user:
+#        name: "{{ item.key }}"
+#        password: "{{ item.value.password }}"
+#        email: "{{ item.value.email }}"
+#        url_username: "piwigo_admin"
+#        url_password: "H€2cumzv"
+#        url: "http://piwigo.bleschet.fr:8080"
+#        state: "present"
+#      with_dict: "{{ my_piwigo_user }}"
 #    - name: "Un petit essai de creation de categorie"
 #      piwigo_category:
 #        name: "ma categorie test supplémentaire"
@@ -55,16 +55,7 @@
 #        url_username: "piwigo_admin"
 #        url_password: "H€2cumzv"
 #        url: "http://piwigo.bleschet.fr:8080"
-#    - name: "Test autorisation"
-#      piwigo_permissions:
-#        cat_id:
-#          - "6"
-#        user_name:
-#          - "test"
-#          - "user"
-#        url_username: "piwigo_admin"
-#        url_password: "H€2cumzv"
-#        url: "http://piwigo.bleschet.fr:8080"
+
 #
 #    - name: "Test de création de groupe"
 #      piwigo_group:
@@ -73,11 +64,24 @@
 #        url_username: "piwigo_admin"
 #        url_password: "H€2cumzv"
 #        url: "http://piwigo.bleschet.fr:8080"
-
-    - name: "Test de suppression d'utilisateurs"
-      piwigo_user:
-        name: "montest"
-        state: "absent"
+#
+#    - name: "Test de suppression d'utilisateurs"
+#      piwigo_user:
+#        name: "user1"
+#        state: "absent"
+#        url_username: "piwigo_admin"
+#        url_password: "H€2cumzv"
+#        url: "http://piwigo.bleschet.fr:8080"
+#
+    - name: "Test autorisation"
+      piwigo_permissions:
+        cat_id:
+          - "6"
+        user_name:
+          - "testonze"
+          - "essai3"
+        group_name:
+          - "testgroup"
         url_username: "piwigo_admin"
         url_password: "H€2cumzv"
         url: "http://piwigo.bleschet.fr:8080"

@@ -71,7 +71,7 @@ def main():
             group_id=dict(required=False, type='list', default=[]),
             user_id=dict(required=False, type='list', default=[]),
             cat_name=dict(required=False, type='str'),
-            group_name=dict(required=False, type='str', default=""),
+            group_name=dict(required=False, type='list', default=[]),
             user_name=dict(required=False, type='list', default=[]),
             recursive=dict(required=False, default=False, type='bool'),
             url=dict(required=True, type='str'),
@@ -107,6 +107,7 @@ def main():
     piwigopermission.get_userid_dict(module.params['user_name'])
 
     #Get Group Id
+    piwigopermission.get_group_id(module.params['group_name'][0])
 
 
     piwigopermission.manage_permissions()
