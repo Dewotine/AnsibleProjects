@@ -3,7 +3,28 @@
 # - hosts: "vps528223.ovh.net"
 #- hosts: "piwigo"
   become: true
+  vars:
+    my_piwigo_user:
+      user1:
+        password: "password1"
+        email: "essai10@gmail.com"
+      user2:
+        password: "password2"
+        email: "essai20@gmail.com"
+        name: "essai3"
+        password: "password3"
+        email: "essai30@gmail.com"
   tasks:
+    - name: "Un petit essai de création d'utilisateur"
+      piwigo_user:
+        name: "{{ item.key }}"
+        password: "{{ item.value.password }}"
+        email: "{{ item.value.email }}"
+        url_username: "piwigo_admin"
+        url_password: "H€2cumzv"
+        url: "http://piwigo.bleschet.fr:8080"
+        state: "present"
+      with_dict: "{{ my_piwigo_user }}"
 #    - name: "Un petit essai de creation de categorie"
 #      piwigo_category:
 #        name: "ma categorie test supplémentaire"
@@ -14,7 +35,7 @@
 #
 #    - name: "Un petit essai de création d'utilisateur"
 #      piwigo_user:
-#        username: "user2"
+#        name: "user2"
 #        password: "password"
 #        password_confirm: "password"
 #        email: "user2@gmail.com"
@@ -44,11 +65,19 @@
 #        url_username: "piwigo_admin"
 #        url_password: "H€2cumzv"
 #        url: "http://piwigo.bleschet.fr:8080"
+#
+#    - name: "Test de création de groupe"
+#      piwigo_group:
+#        name: "testgroup"
+#        state: "present"
+#        url_username: "piwigo_admin"
+#        url_password: "H€2cumzv"
+#        url: "http://piwigo.bleschet.fr:8080"
 
-    - name: "Test de création de groupe"
-      piwigo_group:
-        name: "testgroup"
-        state: "present"
+    - name: "Test de suppression d'utilisateurs"
+      piwigo_user:
+        name: "montest"
+        state: "absent"
         url_username: "piwigo_admin"
         url_password: "H€2cumzv"
         url: "http://piwigo.bleschet.fr:8080"

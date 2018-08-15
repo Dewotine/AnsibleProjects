@@ -31,6 +31,7 @@ results:
     description: user status
 '''
 
+
 class PiwigoManagement:
     def __init__(self, module, token, header, ansible_status, api_endpoint):
         self.module = module
@@ -102,7 +103,6 @@ class PiwigoManagement:
             self.module.fail_json(msg="Failed to get user information from Piwigo", response=rsp, info=info)
         else:
             content = json.loads(rsp.read())
-
             user_id = content['result']['users'][0]['id']
 
         return user_id

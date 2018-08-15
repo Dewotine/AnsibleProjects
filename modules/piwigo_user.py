@@ -37,7 +37,7 @@ class PiwigoUserManagement(PiwigoManagement):
         values = {'method': 'pwg.users.add',
                   'username': self.module.params["name"],
                   'password': self.module.params["password"],
-                  'password_confirm': self.module.params["password_confirm"],
+                  'password_confirm': self.module.params["password"],
                   'email': self.module.params["email"],
                   'send_password_by_mail':  self.module.params["send_password_by_mail"],
                   'pwg_token': self.token
@@ -95,7 +95,6 @@ def main():
             state=dict(type='str', choices=['present', 'absent'], default='present'),
             name=dict(required=True, type='str'),
             password=dict(required=False, type='str', no_log=True),
-            password_confirm=dict(required=False, type='str', no_log=True),
             email=dict(default='', type='str'),
             send_password_by_mail=dict(required=False, default=False, type='bool'),
             url=dict(required=True, type='str'),
@@ -104,7 +103,6 @@ def main():
         ),
         supports_check_mode=True,
         required_together=[
-            ["password", "password_confirm"],
             ["url_username", "url_password"],
         ]
     )
