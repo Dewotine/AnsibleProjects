@@ -9,7 +9,7 @@ import urllib
 DOCUMENTATION='''
 module: piwigo_user
 author: Cédric Bleschet
-description: Module to declare users in piwigo
+description: Module to declare udsers in piwigo
 options:
   username:
     description: User name
@@ -89,7 +89,7 @@ class PiwigoManagement:
 
         return my_token
 
-    def get_group_id(self, groupname):
+    def get_groupid(self, groupname):
         group_id = ""
         server_name = self.module.params["url"]
         my_url = server_name + self.api_endpoint
@@ -114,9 +114,7 @@ class PiwigoManagement:
             else:
                 self.module.fail_json(msg="An error occured while researching {0}".format(groupname))
 
-
         return group_id
-
 
     def get_userid(self, username):
         user_id = 0
@@ -144,19 +142,31 @@ class PiwigoManagement:
 
         return user_id
 
-    def get_userid_dict(self, username_list):
-        user_id_dict = {}
-        user_id = ""
-        for username in username_list:
-            user_id = self.get_userid(username)
-            # Add to dictionnary only if user_id is valid (>0) <=> User has been found
-            if user_id > 0:
-                user_id_dict[user_id] = username
-            # Used by piwigo_permission, the dictionnary returns must not contain  invalid user_id
-            else:
-                self.module.fail_json(msg="Can not continue as user {0} does not exist".format(username))
+    # Return a list to the piwigo format api
+    def get_id_list(self, name_list, type):
+        id_list = []
+        type_id = ""
+        assert (type in ["username", "group","category"])
 
-        return user_id_dict
+        if type == "username":
+            for name in name_list:
+                type_id = self.get_userid(name)
+                # Add to dictionnary only if user_id is valid (>0) <=> User has been found
+                if type_id > 0:
+                    id_list.append(type_id)
+                # Used by piwigo_permission, the dictionnary returns must not contain  invalid user_id
+                else:
+                    self.module.fail_json(msg="Can not continue as name {0} of type {1} does not exist".format(name, type))
+        elif type == "group":
+            for name in name_list:
+                type_id = self.get_groupid(name)
+                if type_id > 0:
+                    id_list.append(type_id)
+                else:
+                    self.module.fail_json(msg="Can not continue as name {0} of type {1} does not exist".format(name, type))
+
+        # self.module.exit_json(changed=False, msg=user_id_list)
+        return(id_list)
 
     def finish_request(self):
         my_url = self.module.params["url"] + self.api_endpoint

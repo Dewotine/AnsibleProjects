@@ -32,7 +32,30 @@ results:
 '''
 
 class PiwigoGroupManagement(PiwigoManagement):
-     def create_group(self):
+    def add_user_to_group(self):
+        my_url = self.module.params["url"] + self.api_endpoint
+        values = {'method': 'pwg.groups.addUser',
+                  'group_id': self.get_group_id(self.module.params["name"]),
+                  'user_id': self.get_userid_list(self.module.params['user_list'])
+                  }
+
+        my_data = urllib.urlencode(values)
+
+        rsp, info = fetch_url(self.module,
+                              my_url,
+                              data=my_data,
+                              headers=self.header,
+                              method="POST")
+
+        if info["status"] != 200:
+             self.module.fail_json(msg="Failed to connect to piwigo in order to add group", response=rsp, info=info)
+        else:
+            content = json.loads(rsp.read())
+            self.module.exit_json(changed=False, msg=content)
+            if content['stat'] == "ok":
+                self.module.exit_json(changed=False, msg=content)
+
+    def create_group(self):
         my_url = self.module.params["url"] + self.api_endpoint
         values = {'method': 'pwg.groups.add',
                   'name': self.module.params["name"],
@@ -68,6 +91,7 @@ def main():
         argument_spec=dict(
             state=dict(type='str', choices=['present', 'absent'], default='present'),
             name=dict(required=True, type='str'),
+            user_list=dict(required=False, type='list', default=""),
             is_default=dict(required=False, default=False, type='bool'),
             url=dict(required=True, type='str'),
             url_username=dict(required=True, type='str'),
@@ -75,7 +99,6 @@ def main():
         ),
         supports_check_mode=True,
         required_together=[
-            ["password", "password_confirm"],
             ["url_username", "url_password"],
         ]
     )
@@ -98,6 +121,8 @@ def main():
 
     if module.params['state'] == 'present':
         piwigogroup.create_group()
+        if len(module.params['user_list']) != 0:
+            piwigogroup.add_user_to_group()
     # elif module.params['state'] == 'absent':
     #     piwigogroup.delete_group()
 

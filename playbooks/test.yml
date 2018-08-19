@@ -75,13 +75,28 @@
 #
     - name: "Test autorisation"
       piwigo_permissions:
-        cat_id:
-          - "6"
+        cat_name:
+          - 6
         user_name:
+          - "essai2"
           - "testonze"
           - "essai3"
+          - "essai1"
         group_name:
           - "testgroup"
+          - "testgroup2"
         url_username: "piwigo_admin"
         url_password: "H€2cumzv"
         url: "http://piwigo.bleschet.fr:8080"
+#
+#    - name: "Test de création de groupe"
+#      piwigo_group:
+#        name: "testgroup"
+#        state: "present"
+#        user_list:
+#          - "user"
+#          - "user2"
+#          - "user3"
+#        url_username: "piwigo_admin"
+#        url_password: "H€2cumzv"
+#        url: "http://piwigo.bleschet.fr:8080"
