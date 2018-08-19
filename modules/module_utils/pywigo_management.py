@@ -90,7 +90,7 @@ class PiwigoManagement:
         return my_token
 
     def get_categoryid(self, category):
-        category_id = ""
+        category_id = 0
         category_found = False
         server_name = self.module.params["url"]
         my_url = server_name + self.api_endpoint
@@ -115,12 +115,12 @@ class PiwigoManagement:
                 self.module.fail_json(msg="An error occured while researching {0}".format(category))
 
         if not category_found:
-            self.module.fail_json(msg="Category {0} not found".format(category))
+            category_id = -1
 
         return category_id
 
     def get_groupid(self, groupname):
-        group_id = ""
+        group_id = 0
         server_name = self.module.params["url"]
         my_url = server_name + self.api_endpoint
         url_method = "&method=pwg.groups.getList&name=" + groupname
@@ -135,11 +135,11 @@ class PiwigoManagement:
         else:
             content = json.loads(rsp.read())
             # If no group can be found set user_id to -1
-            if content['result']['paging']['count'] == 0:
+            if int(content['result']['paging']['count']) == 0:
                 group_id = -1
             # Store the group_id if exactly one answer is found
-            elif content['result']['paging']['count'] == 1:
-                group_id = content['result']['groups'][0]['id']
+            elif int(content['result']['paging']['count']) == 1:
+                group_id = int(content['result']['groups'][0]['id'])
             # Failed otherwise
             else:
                 self.module.fail_json(msg="An error occured while researching {0}".format(groupname))
@@ -161,10 +161,10 @@ class PiwigoManagement:
         else:
             content = json.loads(rsp.read())
             # If no user can be found set user_id to -1
-            if content['result']['paging']['count'] == 0:
+            if int(content['result']['paging']['count']) == 0:
                 user_id = -1
             # Store the userid if exactly one answer is found
-            elif content['result']['paging']['count'] == 1:
+            elif int(content['result']['paging']['count']) == 1:
                 user_id = content['result']['users'][0]['id']
             # Failed otherwise
             else:

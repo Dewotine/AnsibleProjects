@@ -35,11 +35,12 @@ class PiwigoGroupManagement(PiwigoManagement):
     def add_user_to_group(self):
         my_url = self.module.params["url"] + self.api_endpoint
         values = {'method': 'pwg.groups.addUser',
-                  'group_id': self.get_group_id(self.module.params["name"]),
-                  'user_id': self.get_userid_list(self.module.params['user_list'])
+                  'group_id': self.get_groupid(self.module.params["name"]),
+                  'user_id[]': self.get_id_list(self.module.params['user_list'], "username"),
+                  'pwg_token': self.token
                   }
 
-        my_data = urllib.urlencode(values)
+        my_data = urllib.urlencode(values, True)
 
         rsp, info = fetch_url(self.module,
                               my_url,
@@ -51,9 +52,10 @@ class PiwigoGroupManagement(PiwigoManagement):
              self.module.fail_json(msg="Failed to connect to piwigo in order to add group", response=rsp, info=info)
         else:
             content = json.loads(rsp.read())
-            self.module.exit_json(changed=False, msg=content)
             if content['stat'] == "ok":
-                self.module.exit_json(changed=False, msg=content)
+                setattr(self, 'ansible_status', {'result': 'Changed', 'message':
+                        "group {0} succesfully added with user(s) {1}".format(self.module.params["name"],
+                                                                              self.module.params['user_list'])})
 
     def create_group(self):
         my_url = self.module.params["url"] + self.api_endpoint
@@ -78,12 +80,35 @@ class PiwigoGroupManagement(PiwigoManagement):
             if content['stat'] == "ok":
                 setattr(self, 'ansible_status', {'result': 'Changed', 'message':
                         "group {0} succesfully added".format(self.module.params["name"])})
-            elif content['stat'] == "fail" and content['err'] == 1003:
-                if 'e-mail' in content['message']:
-                    setattr(self, 'ansible_status', {'result': 'Failed', 'message': content})
-                else:
-                    setattr(self, 'ansible_status', {'result': 'Unchanged', 'message':
-                        "group {0} already exists".format(self.module.params["name"])})
+            elif (content['stat'] == "fail") and (content['message'] == "This name is already used by another group."):
+                setattr(self, 'ansible_status', {'result': 'Unchanged', 'message':
+                        "group {0} already existing".format(self.module.params["name"])})
+            else:
+                self.module.fail_json(msg="An error occured while creating group {0}".format(self.module.params["name"]))
+
+    def delete_group(self, group_id):
+        my_url = self.module.params["url"] + self.api_endpoint
+        values = {'method': 'pwg.groups.delete',
+                  'group_id': group_id,
+                  'pwg_token': self.token
+                  }
+        my_data = urllib.urlencode(values)
+
+        rsp, info = fetch_url(self.module,
+                              my_url,
+                              data=my_data,
+                              headers=self.header,
+                              method="POST")
+
+        if info["status"] != 200:
+             self.module.fail_json(msg="Failed to connect to piwigo in order to add group", response=rsp, info=info)
+        else:
+            content = json.loads(rsp.read())
+            if content['stat'] == "ok":
+                setattr(self, 'ansible_status', {'result': 'Changed', 'message':
+                        "group {0} succesfully deleted".format(self.module.params["name"])})
+            else:
+                self.module.fail_json(msg="An error occured while deleting group {0}".format(self.module.params["name"]))
 
 
 def main():
@@ -119,14 +144,21 @@ def main():
     my_token = piwigogroup.get_admin_status()
     setattr(piwigogroup, 'token', my_token)
 
+    group_id = piwigogroup.get_groupid(piwigogroup.module.params["name"])
+
     if module.params['state'] == 'present':
-        piwigogroup.create_group()
+        if group_id < 0:
+            piwigogroup.create_group()
         if len(module.params['user_list']) != 0:
             piwigogroup.add_user_to_group()
-    # elif module.params['state'] == 'absent':
-    #     piwigogroup.delete_group()
+    else:
+        if group_id > 0:
+            piwigogroup.delete_group(group_id)
+        else:
+            piwigogroup.module.exit_json(changed=False, msg="No group {0} found".format(module.params['name']))
 
     piwigogroup.finish_request()
+
 
 if __name__ == '__main__':
     main()

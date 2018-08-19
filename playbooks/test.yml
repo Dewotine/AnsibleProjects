@@ -44,17 +44,7 @@
 #        url: "http://piwigo.bleschet.fr:8080"
 #        state: "present"
 #
-#    - name: "Test autorisation"
-#      piwigo_permissions:
-#        cat_id:
-#          - "6"
-#        user_id:
-#          - "13"
-##        group_id:
-##          - "200"
-#        url_username: "piwigo_admin"
-#        url_password: "H€2cumzv"
-#        url: "http://piwigo.bleschet.fr:8080"
+
 
 #
 #    - name: "Test de création de groupe"
@@ -73,30 +63,47 @@
 #        url_password: "H€2cumzv"
 #        url: "http://piwigo.bleschet.fr:8080"
 #
-    - name: "Test autorisation"
-      piwigo_permissions:
-        cat_name:
-          - "ma categorie test"
-        user_name:
-          - "essai2"
-          - "testonze"
-          - "essai3"
-          - "essai1"
-        group_name:
-          - "testgroup"
-          - "testgroup2"
-        url_username: "piwigo_admin"
-        url_password: "H€2cumzv"
-        url: "http://piwigo.bleschet.fr:8080"
-#
-#    - name: "Test de création de groupe"
-#      piwigo_group:
-#        name: "testgroup"
-#        state: "present"
-#        user_list:
-#          - "user"
-#          - "user2"
-#          - "user3"
+#    - name: "Test autorisation"
+#      piwigo_permissions:
+#        cat_name:
+#          - "ma categorie test"
+#        user_name:
+#          - "essai2"
+#          - "testonze"
+#          - "essai3"
+#          - "essai1"
+#        group_name:
+#          - "testgroup"
+#          - "testgroup2"
 #        url_username: "piwigo_admin"
 #        url_password: "H€2cumzv"
 #        url: "http://piwigo.bleschet.fr:8080"
+#
+    - name: "Test de création de groupe"
+      piwigo_group:
+        name: "testgroup"
+        state: "present"
+        user_list:
+          - "user"
+          - "user2"
+          - "user3"
+        url_username: "piwigo_admin"
+        url_password: "H€2cumzv"
+        url: "http://piwigo.bleschet.fr:8080"
+
+    - name: "Test de suppression de groupe"
+      piwigo_group:
+        name: "testgroup"
+        state: "absent"
+        url_username: "piwigo_admin"
+        url_password: "H€2cumzv"
+        url: "http://piwigo.bleschet.fr:8080"
+
+
+#    - name: "Un petit essai de creation de categorie"
+#      piwigo_category:
+#        name: "ma categorie test supplémentaire"
+#        url_username: "piwigo_admin"
+#        url_password: "H€2cumzv"
+#        url: "http://piwigo.bleschet.fr:8080"
+#        state: "present"
