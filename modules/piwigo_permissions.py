@@ -10,20 +10,33 @@ import urllib
 DOCUMENTATION='''
 module: piwigo_user
 author: Cédric Bleschet
-description: Module to declare users in piwigo
+description: Module to grant access to category to user and group. The category must exist. It the category is found
+the status will always be changed even the no change is really done (no information given by the API) 
 options:
   username:
-    description: User name
+    cat_name: The category (photo album) name
     required: yes
   password:
     description:User Password
     required: false
 '''
 
-EXAMPLES='''
-- name: "Insert Piwigo user"
-  pywigo_user:
-    username: "test"
+EXAMPLES = '''
+- name: "Grant access "
+  piwigo_permissions:
+    cat_name:
+      - "my album"
+    user_name:
+      - "user1"
+      - "user2"
+      - "user3"
+      - "user4"
+    group_name:
+      - "testgroup"
+      - "testgroup2"
+    url_username: "piwigo_admin"
+    url_password: "password"
+    url: "http://piwigo.essai.fr:8080"
 '''
 
 RETURN = '''
@@ -32,11 +45,11 @@ results:
 '''
 
 class PiwigoPermissionsManagement(PiwigoManagement):
-    def manage_permissions(self, group_id, user_id):
+    def manage_permissions(self, cat_id, group_id, user_id):
         my_url = self.module.params["url"] + self.api_endpoint
         values = {'method': 'pwg.permissions.add',
                   'user_id[]': user_id,
-                  'cat_id[]': 6,
+                  'cat_id[]': cat_id,
                   'group_id[]': group_id ,
                   'recursive': self.module.params["recursive"],
                   'pwg_token': self.token
@@ -56,9 +69,10 @@ class PiwigoPermissionsManagement(PiwigoManagement):
             content = json.loads(rsp.read())
             if content['stat'] == "ok":
                 setattr(self, 'ansible_status', {'result': 'Changed', 'message':
-                        "Access to {0} succesfully granted to user {1} and group {2}".format(self.module.params["cat_name"],
-                                                                                             self.module.params["user_name"],
-                                                                                             self.module.params['group_name'])})
+                        "Access to {0} succesfully granted to user(s) {1} and group(s) {2}".format(
+                            self.module.params["cat_name"],
+                            self.module.params["user_name"],
+                            self.module.params['group_name'])})
             else:
                 self.module.fail_json(msg="Failed to set permissions", response=rsp, info=info)
 
@@ -66,7 +80,7 @@ class PiwigoPermissionsManagement(PiwigoManagement):
 def main():
     module = AnsibleModule(
         argument_spec=dict(
-            cat_name=dict(required=False, type='str'),
+            cat_name=dict(required=True, type='list'),
             group_name=dict(required=False, type='list', default=[]),
             user_name=dict(required=False, type='list', default=[]),
             recursive=dict(required=False, default=False, type='bool'),
@@ -98,6 +112,7 @@ def main():
 
 
     #Get cat id
+    cat_id = piwigopermission.get_id_list(module.params['cat_name'], "category")
 
     #Get User id
     user_id = piwigopermission.get_id_list(module.params['user_name'], "username")
@@ -106,7 +121,7 @@ def main():
     group_id = piwigopermission.get_id_list(module.params['group_name'], "group")
 
 
-    piwigopermission.manage_permissions(group_id, user_id )
+    piwigopermission.manage_permissions(cat_id, group_id, user_id)
     piwigopermission.finish_request()
 
 if __name__ == '__main__':

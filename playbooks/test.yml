@@ -76,7 +76,7 @@
     - name: "Test autorisation"
       piwigo_permissions:
         cat_name:
-          - 6
+          - "ma categorie test"
         user_name:
           - "essai2"
           - "testonze"

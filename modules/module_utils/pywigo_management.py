@@ -89,6 +89,36 @@ class PiwigoManagement:
 
         return my_token
 
+    def get_categoryid(self, category):
+        category_id = ""
+        category_found = False
+        server_name = self.module.params["url"]
+        my_url = server_name + self.api_endpoint
+        url_method = "&method=pwg.categories.getAdminList"
+
+        rsp, info = fetch_url(self.module,
+                              my_url + url_method,
+                              headers=self.header,
+                              method="GET")
+
+        if info["status"] != 200:
+            self.module.fail_json(msg="Failed to get group information from Piwigo", response=rsp, info=info)
+        else:
+            content = json.loads(rsp.read())
+            if content['stat'] == "ok":
+                for my_category in content['result']['categories']:
+                    if my_category['name'] == category:
+                        category_id = my_category['id']
+                        category_found = True
+            # Failed otherwise
+            else:
+                self.module.fail_json(msg="An error occured while researching {0}".format(category))
+
+        if not category_found:
+            self.module.fail_json(msg="Category {0} not found".format(category))
+
+        return category_id
+
     def get_groupid(self, groupname):
         group_id = ""
         server_name = self.module.params["url"]
@@ -146,7 +176,7 @@ class PiwigoManagement:
     def get_id_list(self, name_list, type):
         id_list = []
         type_id = ""
-        assert (type in ["username", "group","category"])
+        assert (type in ["username", "group", "category"])
 
         if type == "username":
             for name in name_list:
@@ -160,6 +190,13 @@ class PiwigoManagement:
         elif type == "group":
             for name in name_list:
                 type_id = self.get_groupid(name)
+                if type_id > 0:
+                    id_list.append(type_id)
+                else:
+                    self.module.fail_json(msg="Can not continue as name {0} of type {1} does not exist".format(name, type))
+        else:
+            for name in name_list:
+                type_id = self.get_categoryid(name)
                 if type_id > 0:
                     id_list.append(type_id)
                 else:
