@@ -107,13 +107,22 @@
 #        url_password: "H€2cumzv"
 #        url: "http://piwigo.bleschet.fr:8080"
 #        state: "present"
+#
+#    - name: "Modificaion de catégorie de categorie"
+#      piwigo_category:
+#        name: "Categorie2"
+#        comment: "Test Ansible3"
+#        status: "private"
+#        url_username: "piwigo_admin"
+#        url_password: "H€2cumzv"
+#        url: "http://piwigo.bleschet.fr:8080"
+#        state: "present"
 
-    - name: "Modificaion de catégorie de categorie"
+    - name: "Un petit essai de suppression  de categorie"
       piwigo_category:
         name: "Categorie2"
-        comment: "Test Ansible"
-        status: "private"
         url_username: "piwigo_admin"
         url_password: "H€2cumzv"
         url: "http://piwigo.bleschet.fr:8080"
-        state: "present"
+        state: "absent"
+

@@ -60,6 +60,26 @@ class PiwigoCategoryManagement(PiwigoManagement):
             else:
                 self.module.fail_json(msg="Failed to create Category", response=rsp, info=info)
 
+    def delete_category(self, category_id):
+        my_url = self.module.params["url"] + self.api_endpoint
+        values = {'method': 'pwg.categories.delete',
+                  'category_id': category_id,
+                  'pwg_token': self.token
+                  }
+        my_data = urllib.urlencode(values)
+
+        rsp, info = fetch_url(self.module,
+                              my_url,
+                              data=my_data,
+                              headers=self.header,
+                              method="POST")
+
+        if info["status"] != 200:
+             self.module.fail_json(msg="Failed to connect to piwigo in order to create a category", response=rsp, info=info)
+        else:
+            content = json.loads(rsp.read())
+            self.module.exit_json(changed=False, msg=content)
+
     def set_category_info(self, category_id):
         my_url = self.module.params["url"] + self.api_endpoint
         values = {'method': 'pwg.categories.setInfo',
@@ -78,10 +98,6 @@ class PiwigoCategoryManagement(PiwigoManagement):
 
         if info["status"] != 200:
              self.module.fail_json(msg="Failed to connect to piwigo in order to create a category", response=rsp, info=info)
-        else:
-            content = json.loads(rsp.read())
-            self.module.exit_json(changed=False, msg=content)
-
 
 
 def main():
@@ -121,25 +137,36 @@ def main():
     setattr(piwigocategory, 'token', my_token)
 
     my_previous_category = piwigocategory.get_categorydict(piwigocategory.module.params["name"])
+    my_new_category = {}
+    my_diff_category = {}
 
     if module.params['state'] == 'present':
         if my_previous_category['category_id'] < 0:
             piwigocategory.create_group()
         else:
             piwigocategory.set_category_info(my_previous_category['category_id'])
+            my_new_category = piwigocategory.get_categorydict(piwigocategory.module.params["name"])
+            my_diff_category = piwigocategory._dictdiff(my_previous_category, my_new_category)
+            if len(my_diff_category.keys()) == 0:
+                setattr(piwigocategory, 'ansible_status',
+                        {'result': 'Unchanged',
+                         'message': 'No change in category {0} detected'.format(piwigocategory.module.params["name"])})
+            else:
+                setattr(piwigocategory, 'ansible_status',
+                        {'result': 'Changed',
+                         'message': 'Change in category {0} detected : {1}'.format(piwigocategory.module.params["name"],
+                                                                                   my_diff_category)})
 
-
-
-    # else:
-    #     if category_id > 0:
-    #         piwigocategory.delete_group(group_id)
-    #     else:
-    #         piwigocategory.module.exit_json(changed=False, msg="No group {0} found".format(module.params['name']))
-
-    # elif module.params['state'] == 'absent':
-    #     piwigocategory.delete_user()
+    else:
+        if my_previous_category['category_id'] > 0:
+            piwigocategory.delete_category(my_previous_category['category_id'])
+        else:
+            setattr(piwigocategory, 'ansible_status',
+                    {'result': 'Unchanged',
+                     'message': 'No Category {0} found'.format(module.params['name'])})
 
     piwigocategory.finish_request()
+
 
 if __name__ == '__main__':
     main()
