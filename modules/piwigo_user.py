@@ -92,11 +92,14 @@ class PiwigoUserManagement(PiwigoManagement):
 def main():
     module = AnsibleModule(
         argument_spec=dict(
-            state=dict(type='str', choices=['present', 'absent'], default='present'),
+            state=dict(required=True, type='str', choices=['present', 'absent'], default='present'),
             name=dict(required=True, type='str'),
             password=dict(required=False, type='str', no_log=True),
-            email=dict(default='', type='str'),
+            email=dict(required=False, type='str'),
+            group_name=dict(required=False, type='list', default=[]),
+            level=dict(required=False, type='int', default=0),
             send_password_by_mail=dict(required=False, default=False, type='bool'),
+            status=dict(type='str', choices=['guest', 'generic', 'normal', 'admin', 'webmaster'], default='guest'),
             url=dict(required=True, type='str'),
             url_username=dict(required=True, type='str'),
             url_password=dict(required=True, type='str', no_log=True),
