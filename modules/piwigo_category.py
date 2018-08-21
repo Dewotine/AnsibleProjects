@@ -60,6 +60,29 @@ class PiwigoCategoryManagement(PiwigoManagement):
             else:
                 self.module.fail_json(msg="Failed to create Category", response=rsp, info=info)
 
+    def set_category_info(self, category_id):
+        my_url = self.module.params["url"] + self.api_endpoint
+        values = {'method': 'pwg.categories.setInfo',
+                  'category_id': category_id,
+                  'name': self.module.params["name"],
+                  'comment': self.module.params["comment"],
+                  'status':  self.module.params["status"],
+                  }
+        my_data = urllib.urlencode(values)
+
+        rsp, info = fetch_url(self.module,
+                              my_url,
+                              data=my_data,
+                              headers=self.header,
+                              method="POST")
+
+        if info["status"] != 200:
+             self.module.fail_json(msg="Failed to connect to piwigo in order to create a category", response=rsp, info=info)
+        else:
+            content = json.loads(rsp.read())
+            self.module.exit_json(changed=False, msg=content)
+
+
 
 def main():
     module = AnsibleModule(
@@ -97,8 +120,22 @@ def main():
     my_token = piwigocategory.get_admin_status()
     setattr(piwigocategory, 'token', my_token)
 
+    my_previous_category = piwigocategory.get_categorydict(piwigocategory.module.params["name"])
+
     if module.params['state'] == 'present':
-        piwigocategory.create_category()
+        if my_previous_category['category_id'] < 0:
+            piwigocategory.create_group()
+        else:
+            piwigocategory.set_category_info(my_previous_category['category_id'])
+
+
+
+    # else:
+    #     if category_id > 0:
+    #         piwigocategory.delete_group(group_id)
+    #     else:
+    #         piwigocategory.module.exit_json(changed=False, msg="No group {0} found".format(module.params['name']))
+
     # elif module.params['state'] == 'absent':
     #     piwigocategory.delete_user()
 

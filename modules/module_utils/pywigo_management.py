@@ -40,8 +40,15 @@ class PiwigoManagement:
         self.ansible_status = ansible_status
         self.api_endpoint = api_endpoint
 
-    def _get_piwigo_list(self, ansible_list):
-        return "|".join(ansible_list)
+    def _dictdiff(self, d1, d2):
+        output = {}
+        all_keys = set(d1.keys() + d2.keys())
+
+        for key in all_keys:
+            if d1.get(key) != d2.get(key):
+                output[key] = [d1.get(key), d2.get(key)]
+
+        return output
 
     def request_piwigo_login(self):
         server_name = self.module.params["url"]
@@ -89,8 +96,8 @@ class PiwigoManagement:
 
         return my_token
 
-    def get_categoryid(self, category):
-        category_id = 0
+    def get_categorydict(self, category):
+        category_dict = {}
         category_found = False
         server_name = self.module.params["url"]
         my_url = server_name + self.api_endpoint
@@ -108,16 +115,19 @@ class PiwigoManagement:
             if content['stat'] == "ok":
                 for my_category in content['result']['categories']:
                     if my_category['name'] == category:
-                        category_id = my_category['id']
+                        category_dict['category_id'] = int(my_category['id'])
+                        category_dict['name'] = category
+                        category_dict['comment'] = my_category['comment']
+                        category_dict['status'] = my_category['status']
                         category_found = True
             # Failed otherwise
             else:
                 self.module.fail_json(msg="An error occured while researching {0}".format(category))
 
         if not category_found:
-            category_id = -1
+            category_dict['category_id'] = -1
 
-        return category_id
+        return category_dict
 
     def get_groupid(self, groupname):
         group_id = 0
@@ -165,7 +175,7 @@ class PiwigoManagement:
                 user_id = -1
             # Store the userid if exactly one answer is found
             elif int(content['result']['paging']['count']) == 1:
-                user_id = content['result']['users'][0]['id']
+                user_id = int (content['result']['users'][0]['id'])
             # Failed otherwise
             else:
                 self.module.fail_json(msg="An error occured while researching {0}".format(username))
@@ -196,7 +206,7 @@ class PiwigoManagement:
                     self.module.fail_json(msg="Can not continue as name {0} of type {1} does not exist".format(name, type))
         else:
             for name in name_list:
-                type_id = self.get_categoryid(name)
+                type_id = self.get_categorydict(name)['category_id']
                 if type_id > 0:
                     id_list.append(type_id)
                 else:
