@@ -156,8 +156,8 @@ class PiwigoManagement:
 
         return group_id
 
-    def get_userid(self, username):
-        user_id = 0
+    def get_userdict(self, username):
+        user_dict = {}
         server_name = self.module.params["url"]
         my_url = server_name + self.api_endpoint
         url_method = "&method=pwg.users.getList&username=" + username + "&display=none"
@@ -172,15 +172,15 @@ class PiwigoManagement:
             content = json.loads(rsp.read())
             # If no user can be found set user_id to -1
             if int(content['result']['paging']['count']) == 0:
-                user_id = -1
+                user_dict['user_id'] = -1
             # Store the userid if exactly one answer is found
             elif int(content['result']['paging']['count']) == 1:
-                user_id = int (content['result']['users'][0]['id'])
+                user_dict['user_id'] = int (content['result']['users'][0]['id'])
             # Failed otherwise
             else:
                 self.module.fail_json(msg="An error occured while researching {0}".format(username))
 
-        return user_id
+        return user_dict
 
     # Return a list to the piwigo format api
     def get_id_list(self, name_list, type):
@@ -190,7 +190,7 @@ class PiwigoManagement:
 
         if type == "username":
             for name in name_list:
-                type_id = self.get_userid(name)
+                type_id = self.get_userdict(name)['user_id']
                 # Add to dictionnary only if user_id is valid (>0) <=> User has been found
                 if type_id > 0:
                     id_list.append(type_id)

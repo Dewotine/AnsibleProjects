@@ -123,10 +123,11 @@ def main():
     my_token = piwigouser.get_admin_status()
     setattr(piwigouser, 'token', my_token)
 
+    my_user_id = piwigouser.get_userdict(module.params['name'])['user_id']
+
     if module.params['state'] == 'present':
         piwigouser.create_user()
     elif module.params['state'] == 'absent':
-        my_user_id = piwigouser.get_userid(module.params['name'])
         if my_user_id < 0:
             piwigouser.module.exit_json(changed=False, msg="No user {0} found".format(module.params['name']))
         else:
