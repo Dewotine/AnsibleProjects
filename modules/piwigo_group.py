@@ -155,7 +155,9 @@ def main():
         if group_id > 0:
             piwigogroup.delete_group(group_id)
         else:
-            piwigogroup.module.exit_json(changed=False, msg="No group {0} found".format(module.params['name']))
+            setattr(piwigogroup, 'ansible_status',
+                    {'result': 'Unchanged',
+                     'message': 'No group {0} found'.format(module.params['name'])})
 
     piwigogroup.finish_request()
 
