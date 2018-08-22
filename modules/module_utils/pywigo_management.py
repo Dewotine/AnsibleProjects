@@ -160,7 +160,7 @@ class PiwigoManagement:
         user_dict = {}
         server_name = self.module.params["url"]
         my_url = server_name + self.api_endpoint
-        url_method = "&method=pwg.users.getList&username=" + username + "&display=none"
+        url_method = "&method=pwg.users.getList&username=" + username + "&display=basics"
 
         rsp, info = fetch_url(self.module,
                               my_url + url_method,
@@ -176,6 +176,12 @@ class PiwigoManagement:
             # Store the userid if exactly one answer is found
             elif int(content['result']['paging']['count']) == 1:
                 user_dict['user_id'] = int (content['result']['users'][0]['id'])
+                user_dict['username'] = content['result']['users'][0]['username']
+                user_dict['email'] = content['result']['users'][0]['email']
+                user_dict['status'] = content['result']['users'][0]['status']
+                user_dict['level'] = content['result']['users'][0]['level']
+                user_dict['groups'] = content['result']['users'][0]['groups']
+
             # Failed otherwise
             else:
                 self.module.fail_json(msg="An error occured while researching {0}".format(username))
