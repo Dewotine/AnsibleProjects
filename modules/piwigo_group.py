@@ -21,9 +21,34 @@ options:
 '''
 
 EXAMPLES='''
-- name: "Insert Piwigo group"
-  pywigo_group:
-    name: "test"
+- hosts: "localhost"
+  become: true
+    - name: "Test of group creation without associated user"
+      piwigo_group:
+        name: "testgroupwithoutuser"
+        state: "present"
+        url_username: "piwigo_admin"
+        url_password: "xxx"
+        url: "http://localhost:8080"
+
+    - name: "Test of group creation with associated users"
+      piwigo_group:
+        name: "testgroupwithusers"
+        state: "present"
+        user_list:
+          - "user1"
+          - "user3"
+        url_username: "piwigo_admin"
+        url_password: "xxx"
+        url: "http://localhost:8080"
+
+    - name: "Test of group deletion"
+      piwigo_group:
+        name: "testgroupwithoutuser"
+        state: "absent"
+        url_username: "piwigo_admin"
+        url_password: "xxx"
+        url: "http://localhost:8080"
 '''
 
 RETURN = '''
