@@ -51,7 +51,8 @@ class PiwigoCategoryManagement(PiwigoManagement):
                               method="POST")
 
         if info["status"] != 200:
-             self.module.fail_json(msg="Failed to connect to piwigo in order to create a category", response=rsp, info=info)
+             self.module.fail_json(msg="Failed to connect to piwigo in order to create a category",
+                                   response=rsp, info=info)
         else:
             content = json.loads(rsp.read())
             if content['stat'] == "ok":
@@ -75,10 +76,17 @@ class PiwigoCategoryManagement(PiwigoManagement):
                               method="POST")
 
         if info["status"] != 200:
-             self.module.fail_json(msg="Failed to connect to piwigo in order to create a category", response=rsp, info=info)
+             self.module.fail_json(msg="Failed to connect to piwigo in order to create a category",
+                                   response=rsp, info=info)
         else:
             content = json.loads(rsp.read())
-            self.module.exit_json(changed=False, msg=content)
+            if content['stat'] == "ok":
+                setattr(self, 'ansible_status', {'result': 'Changed', 'message':
+                        "Category {0} succesfully deleted".format(self.module.params["name"])})
+            else:
+                self.module.fail_json(msg="An error occured while deleting category {0}"
+                                      .format(self.module.params["name"]))
+
 
     def set_category_info(self, category_id):
         my_url = self.module.params["url"] + self.api_endpoint
@@ -97,7 +105,8 @@ class PiwigoCategoryManagement(PiwigoManagement):
                               method="POST")
 
         if info["status"] != 200:
-             self.module.fail_json(msg="Failed to connect to piwigo in order to create a category", response=rsp, info=info)
+             self.module.fail_json(msg="Failed to connect to piwigo in order to create a category",
+                                   response=rsp, info=info)
 
 
 def main():
@@ -124,7 +133,8 @@ def main():
                                       token="",
                                       header={'Content-Type': 'application/x-www-form-urlencoded'},
                                       ansible_status={'result': 'Fail',
-                                                      'message': 'Could not get status of PiwigoCategoryManagement module'},
+                                                      'message': 'Could not get status of '
+                                                                 'PiwigoCategoryManagement module'},
                                       api_endpoint="/ws.php?format=json"
                                       )
 
@@ -142,7 +152,7 @@ def main():
 
     if module.params['state'] == 'present':
         if my_previous_category['category_id'] < 0:
-            piwigocategory.create_group()
+            piwigocategory.create_category()
         else:
             piwigocategory.set_category_info(my_previous_category['category_id'])
             my_new_category = piwigocategory.get_categorydict(piwigocategory.module.params["name"])

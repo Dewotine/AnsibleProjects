@@ -57,91 +57,79 @@
         url: "http://piwigo.bleschet.fr:8080"
 
 
-#    - name: "Un petit essai de creation de categorie"
-#      piwigo_category:
-#        name: "ma categorie test supplémentaire"
-#        url_username: "piwigo_admin"
-#        url_password: "H€2cumzv"
-#        url: "http://piwigo.bleschet.fr:8080"
-#        state: "present"
-#
+    - name: "Test of group creation without associated user"
+      piwigo_group:
+        name: "testgroupwithoutuser"
+        state: "present"
+        url_username: "piwigo_admin"
+        url_password: "H€2cumzv"
+        url: "http://piwigo.bleschet.fr:8080"
 
-#    - name: "Test de création de groupe"
-#      piwigo_group:
-#        name: "testgroup"
-#        state: "present"
-#        url_username: "piwigo_admin"
-#        url_password: "H€2cumzv"
-#        url: "http://piwigo.bleschet.fr:8080"
-#
-#    - name: "Test de suppression d'utilisateurs"
-#      piwigo_user:
-#        name: "user1"
-#        state: "absent"
-#        url_username: "piwigo_admin"
-#        url_password: "H€2cumzv"
-#        url: "http://piwigo.bleschet.fr:8080"
-#
-#    - name: "Test autorisation"
-#      piwigo_permissions:
-#        cat_name:
-#          - "ma categorie test"
-#        user_name:
-#          - "essai2"
-#          - "testonze"
-#          - "essai3"
-#          - "essai1"
-#        group_name:
-#          - "testgroup"
-#          - "testgroup2"
-#        url_username: "piwigo_admin"
-#        url_password: "H€2cumzv"
-#        url: "http://piwigo.bleschet.fr:8080"
-#
-#    - name: "Test de création de groupe"
-#      piwigo_group:
-#        name: "testgroup"
-#        state: "present"
-#        user_list:
-#          - "user"
-#          - "user2"
-#          - "user3"
-#        url_username: "piwigo_admin"
-#        url_password: "H€2cumzv"
-#        url: "http://piwigo.bleschet.fr:8080"
-#
-#    - name: "Test de suppression de groupe"
-#      piwigo_group:
-#        name: "testgroup"
-#        state: "absent"
-#        url_username: "piwigo_admin"
-#        url_password: "H€2cumzv"
-#        url: "http://piwigo.bleschet.fr:8080"
+    - name: "Test of group creation with associated users"
+      piwigo_group:
+        name: "testgroupwithusers"
+        state: "present"
+        user_list:
+          - "user1"
+          - "user3"
+        url_username: "piwigo_admin"
+        url_password: "H€2cumzv"
+        url: "http://piwigo.bleschet.fr:8080"
 
+    - name: "Test of group deletion"
+      piwigo_group:
+        name: "testgroupwithoutuser"
+        state: "absent"
+        url_username: "piwigo_admin"
+        url_password: "H€2cumzv"
+        url: "http://piwigo.bleschet.fr:8080"
 
-#    - name: "Un petit essai de creation de categorie"
-#      piwigo_category:
-#        name: "Categorie2"
-#        url_username: "piwigo_admin"
-#        url_password: "H€2cumzv"
-#        url: "http://piwigo.bleschet.fr:8080"
-#        state: "present"
-#
-#    - name: "Modificaion de catégorie de categorie"
-#      piwigo_category:
-#        name: "Categorie2"
-#        comment: "Test Ansible3"
-#        status: "private"
-#        url_username: "piwigo_admin"
-#        url_password: "H€2cumzv"
-#        url: "http://piwigo.bleschet.fr:8080"
-#        state: "present"
+    - name: "Un petit essai de creation de categorie"
+      piwigo_category:
+        name: "Categorie3"
+        url_username: "piwigo_admin"
+        url_password: "H€2cumzv"
+        url: "http://piwigo.bleschet.fr:8080"
+        state: "present"
 
-#    - name: "Un petit essai de suppression  de categorie"
-#      piwigo_category:
-#        name: "Categorie2"
-#        url_username: "piwigo_admin"
-#        url_password: "H€2cumzv"
-#        url: "http://piwigo.bleschet.fr:8080"
-#        state: "absent"
+    - name: "Un petit essai de creation de categorie"
+      piwigo_category:
+        name: "ma categorie test"
+        url_username: "piwigo_admin"
+        url_password: "H€2cumzv"
+        url: "http://piwigo.bleschet.fr:8080"
+        state: "present"
 
+    - name: "Update status of a category"
+      piwigo_category:
+        name: "Categorie3"
+        comment: "Test Ansible3"
+        status: "private"
+        url_username: "piwigo_admin"
+        url_password: "H€2cumzv"
+        url: "http://piwigo.bleschet.fr:8080"
+        state: "present"
+
+    - name: "Delete a category"
+      piwigo_category:
+        name: "Categorie3"
+        url_username: "piwigo_admin"
+        url_password: "H€2cumzv"
+        url: "http://piwigo.bleschet.fr:8080"
+        state: "absent"
+
+    - name: "Test autorisation"
+      piwigo_permissions:
+        cat_name:
+          - "ma categorie test"
+        user_name:
+          - "essai2"
+          - "testonze"
+          - "essai3"
+          - "essai1"
+        group_name:
+          - "testgroup"
+          - "testgroup2"
+        url_username: "piwigo_admin"
+        url_password: "H€2cumzv"
+        url: "http://piwigo.bleschet.fr:8080"
