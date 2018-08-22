@@ -898,7 +898,7 @@ CREATE TABLE `piwigo_users` (
 
 LOCK TABLES `piwigo_users` WRITE;
 /*!40000 ALTER TABLE `piwigo_users` DISABLE KEYS */;
-INSERT INTO `piwigo_users` VALUES (1,'piwigo_admin','a630b432ffa0039624477f29db1e0001','cedric@bleschet.fr'),(2,'guest',NULL,NULL);
+INSERT INTO `piwigo_users` VALUES (1,'piwigo_admin','$P$GyNgTfAlXQ2YjBEmjLLF/VtEt/pYoW0','cedric@bleschet.fr'),(2,'guest',NULL,NULL);
 /*!40000 ALTER TABLE `piwigo_users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
