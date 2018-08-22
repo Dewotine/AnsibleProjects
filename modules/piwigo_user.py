@@ -244,7 +244,9 @@ def main():
                                                                                    my_diff_user)})
     elif module.params['state'] == 'absent':
         if my_user_id < 0:
-            piwigouser.module.exit_json(changed=False, msg="No user {0} found".format(module.params['name']))
+            setattr(piwigouser, 'ansible_status',
+                    {'result': 'Unchanged',
+                     'message': 'No user {0} found'.format(piwigouser.module.params["name"])})
         else:
             piwigouser.delete_user(my_user_id)
 
