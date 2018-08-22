@@ -53,6 +53,7 @@ class PiwigoGroupManagement(PiwigoManagement):
         else:
             content = json.loads(rsp.read())
             if content['stat'] == "ok":
+                # Always changed, can't get the list of users to compare before and after....
                 setattr(self, 'ansible_status', {'result': 'Changed', 'message':
                         "group {0} succesfully added with user(s) {1}".format(self.module.params["name"],
                                                                               self.module.params['user_list'])})
@@ -116,7 +117,7 @@ def main():
         argument_spec=dict(
             state=dict(type='str', choices=['present', 'absent'], default='present'),
             name=dict(required=True, type='str'),
-            user_list=dict(required=False, type='list', default=""),
+            user_list=dict(required=False, type='list', default=[]),
             is_default=dict(required=False, default=False, type='bool'),
             url=dict(required=True, type='str'),
             url_username=dict(required=True, type='str'),
@@ -149,6 +150,10 @@ def main():
     if module.params['state'] == 'present':
         if group_id < 0:
             piwigogroup.create_group()
+        else:
+            setattr(piwigogroup, 'ansible_status',
+                    {'result': 'Unchanged',
+                     'message': 'Group {0} already existing'.format(module.params['name'])})
         if len(module.params['user_list']) != 0:
             piwigogroup.add_user_to_group()
     else:
