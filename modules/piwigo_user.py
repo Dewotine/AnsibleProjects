@@ -222,7 +222,7 @@ def main():
     if module.params['state'] == 'present':
         if my_user_id < 0:
             piwigouser.create_user()
-            if len(module.params['group']) != 0 or module.params['level'] != 0 or module.params['status'] != "guest":
+            if len(module.params['group']) != 0 or module.params['level'] != 0 or module.params['status'] != "normal":
                 if len(module.params['group']) != 0:
                     my_group_id_list = piwigouser.get_id_list(module.params['group'], "group")
                 my_new_user_id = piwigouser.get_userdict(module.params['name'])['user_id']

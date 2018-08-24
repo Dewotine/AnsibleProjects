@@ -8,22 +8,67 @@ import json
 import urllib
 
 DOCUMENTATION='''
-module: piwigo_user
+module: piwigo_category
 author: Cédric Bleschet
-description: Module to declare users in piwigo
+description: Module to create category (photo album)
 options:
-  username:
-    description: User name
-    required: yes
-  password:
-    description:User Password
-    required: false
+  state: 
+    description: (default is present)
+    Required: False
+  name
+    Description: 
+    Required=True
+  parent=
+    Description: 
+    required=False
+  comment
+    Description
+    required=False   
+  visible
+    Description:
+    required=False
+  status
+    Description
+    Required: False
+  commentable
+    Description
+    Required:False
 '''
 
 EXAMPLES='''
-- name: "Insert Piwigo user"
-  pywigo_user:
-    username: "test"
+- name: "Un petit essai de creation de categorie"
+  piwigo_category:
+    name: "Categorie3"
+    url_username: "{{ my_url_username }}"
+    url_password: "{{ my_url_password }}"
+    url: "{{ my_url }}"
+    state: "present"
+
+- name: "Un petit essai de creation de categorie"
+  piwigo_category:
+    name: "ma categorie test"
+    url_username: "{{ my_url_username }}"
+    url_password: "{{ my_url_password }}"
+    url: "{{ my_url }}"
+    state: "present"
+
+- name: "Update status of a category"
+  piwigo_category:
+    name: "Categorie3"
+    comment: "Test Ansible3"
+    status: "private"
+    url_username: "{{ my_url_username }}"
+    url_password: "{{ my_url_password }}"
+    url: "{{ my_url }}"
+    state: "present"
+
+- name: "Delete a category"
+  piwigo_category:
+    name: "Categorie3"
+    url_username: "{{ my_url_username }}"
+    url_password: "{{ my_url_password }}"
+    url: "{{ my_url }}"
+    state: "absent"
 '''
 
 RETURN = '''
