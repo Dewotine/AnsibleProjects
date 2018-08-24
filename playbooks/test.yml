@@ -11,21 +11,62 @@
       user2:
         password: "password2"
         email: "essai20@gmail.com"
+      user3:
+        password: "password3"
+        email: "essai30@gmail.com"
       ratatouille:
         password: "password3"
         email: "essai40@gmail.com"
+    my_url_username: "piwigo_admin"
+    my_url_password: !vault-encrypted |
+      $ANSIBLE_VAULT;1.1;AES256
+      366234346633376533636533306636636561386232376462613534346363636465626637613766353734616436376435326261373766303963653738343061380a306131353230643839663561343737333930353339613933636563666230383730636563353663306234663961363464323037663435663435313239353030300a3235366532376164383338376435373766313964643665366436333331383837
+    my_url: "http://piwigo.bleschet.fr:8080"
+
   tasks:
+    - name: "Test of group creation without associated user"
+      piwigo_group:
+        name: "{{ item }}"
+        state: "present"
+        url_username: "{{ my_url_username }}"
+        url_password: "{{ my_url_password }}"
+        url: "{{ my_url }}"
+      with_items:
+        - "testgroupwithoutuser"
+        - "testgroup"
+        - "testgroup2"
+
     - name: "Create a list of user"
       piwigo_user:
         name: "{{ item.key }}"
         password: "{{ item.value.password }}"
         email: "{{ item.value.email }}"
         send_password_by_mail: false
-        url_username: "piwigo_admin"
-        url_password: "H€2cumzv"
-        url: "http://piwigo.bleschet.fr:8080"
+        url_username: "{{ my_url_username }}"
+        url_password: "{{ my_url_password }}"
+        url: "{{ my_url }}"
         state: "present"
       with_dict: "{{ my_piwigo_user }}"
+
+    - name: "Test of group creation with associated users"
+      piwigo_group:
+        name: "testgroupwithusers"
+        state: "present"
+        user_list:
+          - "user1"
+          - "user3"
+        url_username: "{{ my_url_username }}"
+        url_password: "{{ my_url_password }}"
+        url: "{{ my_url }}"
+
+    - name: "Test of group deletion"
+      piwigo_group:
+        name: "testgroupwithoutuser"
+        state: "absent"
+        url_username: "{{ my_url_username }}"
+        url_password: "{{ my_url_password }}"
+        url: "{{ my_url }}"
+
     - name: "Create a user with extra attributes"
       piwigo_user:
         name: "mytest"
@@ -36,68 +77,40 @@
           - testgroup2
         level: 1
         status: "admin"
-        url_username: "piwigo_admin"
-        url_password: "H€2cumzv"
-        url: "http://piwigo.bleschet.fr:8080"
+        url_username: "{{ my_url_username }}"
+        url_password: "{{ my_url_password }}"
+        url: "{{ my_url }}"
         state: "present"
     - name: "Delete a user"
       piwigo_user:
         name: "user2"
-        url_username: "piwigo_admin"
-        url_password: "H€2cumzv"
-        url: "http://piwigo.bleschet.fr:8080"
+        url_username: "{{ my_url_username }}"
+        url_password: "{{ my_url_password }}"
+        url: "{{ my_url }}"
         state: "absent"
     - name: "Modify a user"
       piwigo_user:
         name: "user1"
         email: "newessai10@gmail.com"
         state: "present"
-        url_username: "piwigo_admin"
-        url_password: "H€2cumzv"
-        url: "http://piwigo.bleschet.fr:8080"
-
-
-    - name: "Test of group creation without associated user"
-      piwigo_group:
-        name: "testgroupwithoutuser"
-        state: "present"
-        url_username: "piwigo_admin"
-        url_password: "H€2cumzv"
-        url: "http://piwigo.bleschet.fr:8080"
-
-    - name: "Test of group creation with associated users"
-      piwigo_group:
-        name: "testgroupwithusers"
-        state: "present"
-        user_list:
-          - "user1"
-          - "user3"
-        url_username: "piwigo_admin"
-        url_password: "H€2cumzv"
-        url: "http://piwigo.bleschet.fr:8080"
-
-    - name: "Test of group deletion"
-      piwigo_group:
-        name: "testgroupwithoutuser"
-        state: "absent"
-        url_username: "piwigo_admin"
-        url_password: "H€2cumzv"
-        url: "http://piwigo.bleschet.fr:8080"
+        url_username: "{{ my_url_username }}"
+        url_password: "{{ my_url_password }}"
+        url: "{{ my_url }}"
 
     - name: "Un petit essai de creation de categorie"
       piwigo_category:
         name: "Categorie3"
-        url_username: "piwigo_admin"
-        url_password: "H€2cumzv"
-        url: "http://piwigo.bleschet.fr:8080"
+        url_username: "{{ my_url_username }}"
+        url_password: "{{ my_url_password }}"
+        url: "{{ my_url }}"
         state: "present"
 
     - name: "Un petit essai de creation de categorie"
       piwigo_category:
         name: "ma categorie test"
-        url_username: "piwigo_admin"
-        url_password: "H€2cumzv"
-        url: "http://piwigo.bleschet.fr:8080"
+        url_username: "{{ my_url_username }}"
+        url_password: "{{ my_url_password }}"
+        url: "{{ my_url }}"
         state: "present"
 
     - name: "Update status of a category"
@@ -105,17 +118,17 @@
         name: "Categorie3"
         comment: "Test Ansible3"
         status: "private"
-        url_username: "piwigo_admin"
-        url_password: "H€2cumzv"
-        url: "http://piwigo.bleschet.fr:8080"
+        url_username: "{{ my_url_username }}"
+        url_password: "{{ my_url_password }}"
+        url: "{{ my_url }}"
         state: "present"
 
     - name: "Delete a category"
       piwigo_category:
         name: "Categorie3"
-        url_username: "piwigo_admin"
-        url_password: "H€2cumzv"
-        url: "http://piwigo.bleschet.fr:8080"
+        url_username: "{{ my_url_username }}"
+        url_password: "{{ my_url_password }}"
+        url: "{{ my_url }}"
         state: "absent"
 
     - name: "Test autorisation"
@@ -123,13 +136,11 @@
         cat_name:
           - "ma categorie test"
         user_name:
-          - "essai2"
-          - "testonze"
-          - "essai3"
-          - "essai1"
+          - "user3"
+          - "user1"
         group_name:
           - "testgroup"
           - "testgroup2"
-        url_username: "piwigo_admin"
-        url_password: "H€2cumzv"
-        url: "http://piwigo.bleschet.fr:8080"
+        url_username: "{{ my_url_username }}"
+        url_password: "{{ my_url_password }}"
+        url: "{{ my_url }}"
