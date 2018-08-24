@@ -1,0 +1,3 @@
+---
+dc_domain_name: "bleschet.fr"
+system_base_domain_name: "{{ dc_domain_name }}"

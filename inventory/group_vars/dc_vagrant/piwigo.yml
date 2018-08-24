@@ -1,0 +1,17 @@
+---
+dc_piwigo_url: "http://piwigo.bleschet.fr:8080"
+
+dc_piwigo_group:
+  - "testgroup1"
+  - "testgroup2"
+
+dc_piwigo_user:
+  test1:
+    password: "password"
+    email: "test1@gmail.com"
+  test2:
+    password: "password"
+    email: "test2@gmail.com"
+  test3:
+    password: "password"
+    email: "test3@gmail.com"

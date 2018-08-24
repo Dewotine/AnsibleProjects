@@ -1,0 +1,12 @@
+---
+- name: "Verify if cloud config exists"
+  stat:
+    path: /etc/cloud/cloud.cfg
+  register: cloudcfg
+
+- name: "Desactivate host configuration by AWS"
+  lineinfile:
+    dest: /etc/cloud/cloud.cfg
+    regexp: ".*etc_hosts.*"
+    state: absent
+  when: cloudcfg.stat.exists
