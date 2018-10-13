@@ -1,18 +1,19 @@
 ---
-- assert:
+- name: "Logrotate role should not be executed if no logrotare script is defined "
+  assert:
     that:
       - logrotate_scripts is defined
   tags:
     - logrotate
 
-- name: Install logrotate
+- name: "Install logrotate"
   package:
     name: logrotate
     state: present
   tags:
     - logrotate
 
-- include: single.yml
+- include: "single.yml"
   vars:
     lr_name: "{{ item.key }}"
     lr_obj: "{{ item.value }}"

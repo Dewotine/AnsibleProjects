@@ -1,5 +1,6 @@
 ---
-- assert:
+- name: "Required parameters for logrotate must be defined (number of file, period of rotation)"
+  assert:
     that:
       - lr_obj.rotate_period is defined
       - lr_obj.rotate_period in ['daily', 'weekly', 'monthly']

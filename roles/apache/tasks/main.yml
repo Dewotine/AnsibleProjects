@@ -8,7 +8,8 @@
       - apache_service_name is defined
 
 # Prerequisite for template files
-- set_fact:
+- name: "Set fact for config_bucket_dir, vhosts, apache_custom_configdir"
+  set_fact:
     config_bucket_dir: "{{ role_path }}/../../config_bucket/"
     vhosts: "{{ apache_vhosts }}"
     apache_custom_configdir: "{% if (ansible_lsb.major_release | int) >= 8 %}conf-available{% else %}conf.d{% endif %}"
