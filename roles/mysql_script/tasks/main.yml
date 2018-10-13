@@ -13,9 +13,13 @@
     src: '{{ mysql_script_script }}'
     dest: "/tmp/{{ ansible_date_time.date }}_sql_script.sql"
     mode: 0644
+  register: script_transfer
 
 - name: "Load Database"
   shell: mysql -v {{ mysql_script_db_name }} < /tmp/{{ ansible_date_time.date }}_sql_script.sql
+  when:
+    - script_transfer.failed == false
+    - script_transfer.size != 0
 
 - name: "Remove SQL statements"
   file:
