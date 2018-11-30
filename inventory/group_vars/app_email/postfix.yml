@@ -1,0 +1,7 @@
+---
+app_postfix_hostname: "cedric.bleschet.fr"
+app_postfix_domain: "bleschet.fr"
+app_postfixmailname: "cedric.bleschet.fr"
+
+# Configuration SASL
+postfix_sasl_auth_enable: true

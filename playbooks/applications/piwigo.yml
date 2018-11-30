@@ -1,5 +1,5 @@
 ---
-hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_nginx:&app_piwigo"
+- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_nginx:&app_piwigo"
   vars:
     application_name: "piwigo"
   become: true

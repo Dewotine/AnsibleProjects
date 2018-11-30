@@ -2,3 +2,7 @@
 [app_piwigo]
 vps528223.ovh.net
 piwigo
+
+[app_email]
+vps528223.ovh.net
+piwigo

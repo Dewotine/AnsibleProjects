@@ -1,0 +1,32 @@
+---
+postfix_aliases: []
+postfix_disable_vrfy_command: false
+postfix_domain:  "{{ app_postfix_domain | default(ansible_domain) }}"
+postfix_generic: []
+postfix_hostname: "{{ app_postfix_hostname | default(ansible_fqdn) }}"
+postfix_inet_interfaces: all
+postfix_inet_protocols: all
+postfix_mailname: "{{ app_postfixmailname | default(ansible_fqdn) }}"
+postfix_mailbox_size_limit:  5368709120 # 5 Go
+postfix_message_size_limit: 20480000 # 20Mo
+postfix_mydestination:
+  - "{{ postfix_hostname }}"
+  - localdomain
+  - localhost
+  - localhost.localdomain
+postfix_mynetworks:
+  - 127.0.0.0/8
+  - '[::ffff:127.0.0.0]/104'
+  - '[::1]/128'
+postfix_relayhost: false
+postfix_relayhost_port: 587
+postfix_relaytls: false
+postfix_sasl_auth_enable: "{{ app_postfix_sasl_auth_enable | default(true) }}"
+postfix_sasl_user: "{{ app_postfix_sasl_user | default('test') }}"
+postfix_sasl_password: "{{ app_postfix_sasl_password | default('test') }}"
+postfix_sasl_security_options: "{{ app_postfix_sasl_security_options | default('noanonymous') }}"
+postfix_sasl_mechanism_filter: "{{ app_postfix_sasl_mechanism_filter | default ('') }}"
+postfix_sender_canonical_maps: []
+postfix_smtpd_banner: "Mail server on {{ dc }}"
+postfix_tls_enable: true
+postfix_virtual_aliases: []

@@ -1,0 +1,39 @@
+# defaults file for postfix
+---
+postfix_aliases: []
+postfix_disable_vrfy_command: false
+postfix_domain: "{{ ansible_domain }}"
+postfix_generic: []
+postfix_install:
+  - postfix
+  - mailutils
+  - libsasl2-2
+  - sasl2-bin
+  - libsasl2-modules
+postfix_hostname: "{{ ansible_fqdn }}"
+postfix_inet_interfaces: all
+postfix_inet_protocols: all
+postfix_mailbox_size_limit: 0
+postfix_mailname: "{{ ansible_fqdn }}"
+postfix_message_size_limit: 10240000
+postfix_mydestination:
+  - "{{ postfix_hostname }}"
+  - localdomain
+  - localhost
+  - localhost.localdomain
+postfix_mynetworks:
+  - 127.0.0.0/8
+  - '[::ffff:127.0.0.0]/104'
+  - '[::1]/128'
+postfix_relayhost: false
+postfix_relayhost_port: 587
+postfix_relaytls: false
+postfix_sasl_auth_enable: true
+postfix_sasl_user: "postmaster@{{ ansible_domain }}"
+postfix_sasl_password: 'k8+haga4@#pR'
+postfix_sasl_security_options: noanonymous
+postfix_sasl_mechanism_filter: ''
+postfix_sender_canonical_maps: []
+postfix_smtpd_banner: '$myhostname ESMTP $mail_name (Ubuntu)'
+postfix_tls_enable: false
+postfix_virtual_aliases: []

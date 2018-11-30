@@ -16,3 +16,7 @@ piwigo
 [cmp_piwigo]
 vps528223.ovh.net
 piwigo
+
+[cmp_postfix]
+vps528223.ovh.net
+piwigo

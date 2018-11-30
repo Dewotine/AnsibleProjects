@@ -1,0 +1,5 @@
+---
+# Include postfix
+- include: ../system/postfix.yml
+  vars:
+    filter: "app_email"
