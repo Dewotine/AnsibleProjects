@@ -1,0 +1,5 @@
+# {{ ansible_managed }}
+# See man 5 aliases for format
+{% for alias, user in postfix_aliases.iteritems() %}
+{{alias}}:    {{user}}
+{% endfor %}

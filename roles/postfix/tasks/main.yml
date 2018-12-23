@@ -1,14 +1,6 @@
 # tasks file for postfix
 ---
-- name: facts | set
-  set_fact:
-     is_docker_guest: "{{ ansible_virtualization_role | default('host') == 'guest' and ansible_virtualization_type | default('none') == 'docker' }}"
-  tags:
-    - configuration
-    - postfix
-    - postfix-facts
-
-- name: configure debconf
+- name: "Configure debconf"
   debconf:
     name: "{{ item.name }}"
     question: "{{ item.question }}"
@@ -20,7 +12,7 @@
     - postfix
     - postfix-install
 
-- name: install package
+- name: "Install package"
   apt:
     name: "{{ postfix_install }}"
     state: "{{ apt_install_state | default('latest') }}"
@@ -31,9 +23,9 @@
     - postfix
     - postfix-install
 
-- name: configure mailname
+- name: "Configure mailname"
   template:
-    src: etc/mailname.j2
+    src: mailname.j2
     dest: /etc/mailname
     owner: root
     group: root
@@ -44,9 +36,9 @@
     - postfix
     - postfix-mailname
 
-- name: update configuration file
+- name: "Update configuration file"
   template:
-    src: etc/postfix/main.cf.j2
+    src: main.cf.j2
     dest: /etc/postfix/main.cf
     owner: root
     group: root
@@ -57,9 +49,9 @@
     - postfix
     - postfix-configuration
 
-- name: configure sasl username/password
+- name: "Configure sasl username/password"
   template:
-    src: etc/postfix/sasl_passwd.j2
+    src: sasl_passwd.j2
     dest: /etc/postfix/sasl_passwd
     owner: root
     group: root
@@ -74,45 +66,22 @@
     - postfix
     - postfix-sasl-passwd
 
-- name: configure aliases
-  lineinfile:
-    dest: /etc/aliases
-    regexp: '^{{ item.user }}:.*'
-    line: '{{ item.user }}: {{ item.alias }}'
-    owner: root
-    group: root
-    mode: 0644
-    create: true
-    state: present
+- name: "Configure aliases"
+  template:
+    src: "aliases.j2"
+    dest: "/etc/aliases"
+    owner: "root"
+    group: "root"
+    mode: "0644"
   with_items: "{{ postfix_aliases }}"
   notify:
-    - new aliases
-    - restart postfix
+    - "new aliases"
   tags:
     - configuration
     - postfix
     - postfix-aliases
 
-- name: configure virtual aliases
-  lineinfile:
-    dest: /etc/postfix/virtual
-    regexp: '^{{ item.virtual }}.*'
-    line: '{{ item.virtual }} {{ item.alias }}'
-    owner: root
-    group: root
-    mode: 0644
-    create: true
-    state: present
-  with_items: "{{ postfix_virtual_aliases }}"
-  notify:
-    - new virtual aliases
-    - restart postfix
-  tags:
-    - configuration
-    - postfix
-    - postfix-virtual-aliases
-
-- name: configure sender canonical maps
+- name: "Configure sender canonical maps"
   lineinfile:
     dest: /etc/postfix/sender_canonical_maps
     regexp: '^{{ item.sender }}.*'
@@ -131,7 +100,7 @@
     - postfix
     - postfix-sender-canonical-maps
 
-- name: configure generic table
+- name: "Configure generic table"
   lineinfile:
     dest: /etc/postfix/generic
     regexp: '^{{ item.pattern }}.*'
@@ -150,7 +119,7 @@
     - postfix
     - postfix-generic-table
 
-- name: start and enable service
+- name: "Start and enable service"
   service:
     name: postfix
     state: "{{ service_default_state | default('started') }}"

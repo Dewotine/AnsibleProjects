@@ -1,5 +1,6 @@
 ---
-postfix_aliases: []
+postfix_aliases:
+  "postmaster": "root"
 postfix_disable_vrfy_command: false
 postfix_domain:  "{{ app_postfix_domain | default(ansible_domain) }}"
 postfix_generic: []
