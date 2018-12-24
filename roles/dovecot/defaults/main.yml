@@ -1,0 +1,15 @@
+---
+dovecot_protocols:
+  - 'lmtp'
+  - 'imap'
+dovecot_mail_privileged_group: 'mail'
+dovecot_disable_plaintext_auth: 'yes'
+dovecot_auth_mechanisms:
+  - 'plain'
+  - 'login'
+dovecot_force_imaps: True
+dovecot_force_pop3s: True
+dovecot_ssl: 'required'
+dovecot_listen:
+  - '*'
+  - '::'

@@ -1,17 +1,21 @@
 ---
-[cmp_fail2ban]
+[cmp_apache]
 vps528223.ovh.net
+piwigo
 
-[cmp_nginx]
+[cmp_dovecot]
+vps528223.ovh.net
+piwigo
+
+[cmp_fail2ban]
 vps528223.ovh.net
 
 [cmp_mariadb]
 vps528223.ovh.net
 piwigo
 
-[cmp_apache]
+[cmp_nginx]
 vps528223.ovh.net
-piwigo
 
 [cmp_piwigo]
 vps528223.ovh.net
