@@ -1,3 +1,4 @@
+# {{ ansible_managed }}
 ##
 ## Log destination.
 ##
@@ -21,7 +22,7 @@
 ##
 
 # Log unsuccessful authentication attempts and the reasons why they failed.
-#auth_verbose = no
+auth_verbose = {{ dovecot_auth_verbose }}
 
 # In case of password mismatches, log the attempted password. Valid values are
 # no, plain and sha1. sha1 can be useful for detecting brute force password
@@ -31,7 +32,7 @@
 
 # Even more verbose logging for debugging purposes. Shows for example SQL
 # queries.
-#auth_debug = no
+auth_debug = {{ dovecot_auth_debug }}
 
 # In case of password mismatches, log the passwords and used scheme so the
 # problem can be debugged. Enabling this also enables auth_debug.
@@ -59,7 +60,7 @@ plugin {
 
 # Prefix for each line written to log file. % codes are in strftime(3)
 # format.
-#log_timestamp = "%b %d %H:%M:%S "
+log_timestamp = "{{ dovecot_log_timestamp }}"
 
 # Space-separated list of elements we want to log. The elements which have
 # a non-empty variable value are joined together to form a comma-separated

@@ -1,13 +1,12 @@
 ---
 - name: "Install Dovecot"
   apt:
-    name: "{{ item }}"
+    name:
+      - dovecot-core
+      - dovecot-imapd
+      - dovecot-pop3d
     state: present
     update_cache: yes
-  with_items:
-    - dovecot-core
-    - dovecot-imapd
-    - dovecot-pop3d
   notify: restart dovecot
 
 - name: "Deploy main dovecot configuration file"

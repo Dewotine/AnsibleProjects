@@ -1,15 +1,27 @@
 ---
-dovecot_protocols:
-  - 'lmtp'
-  - 'imap'
-dovecot_mail_privileged_group: 'mail'
-dovecot_disable_plaintext_auth: 'yes'
+dovecot_auth_debug: "no"
 dovecot_auth_mechanisms:
-  - 'plain'
-  - 'login'
+  - "plain"
+  - "login"
+dovecot_auth_verbose: "yes"
+dovecot_base_dir: "/var/run/dovecot"
+dovecot_disable_plaintext_auth: "yes"
+dovecot_doveadm_socket_path: "doveadm-server"
+dovecot_doveadm_worker_count: 0
 dovecot_force_imaps: True
 dovecot_force_pop3s: True
-dovecot_ssl: 'required'
+dovecot_import_environment: "TZ"
+dovecot_instance_name: "dovecot"
 dovecot_listen:
-  - '*'
-  - '::'
+  - "*"
+  - "::"
+dovecot_log_timestamp: "%Y-%m-%d %H:%M:%S "
+dovecot_login_greeting: "Greetings to the mail server"
+dovecot_mail_access_groups: "mail"
+dovecot_mail_privileged_group: "mail"
+dovecot_protocols:
+  - "lmtp"
+  - "imap"
+dovecot_shutdown_clients: "yes"
+dovecot_ssl: "required"
+dovecot_verbose_proctitle: "yes"
