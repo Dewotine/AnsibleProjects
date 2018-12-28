@@ -9,7 +9,7 @@
 - hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_mariadb:&app_piwigo"
   become: true
   vars:
-    mysql_profile: "{{ mariadb_piwigo_profile }}"
+    mysql_profile: "{{ mariadb_maindb_profile }}"
   roles:
     - mysql
 
