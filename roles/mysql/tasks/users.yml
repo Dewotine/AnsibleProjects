@@ -11,7 +11,7 @@
   with_items: "{{ mysql_users }}"
   when:
     - item.hostgroup is not defined or not item.hostgroup
-  no_log: true
+  no_log: "{{ mysql_no_log }}"
   tags:
     - mysqlusers
 
@@ -30,6 +30,6 @@
   when:
     - item.0.hostgroup is defined
     - item.0.hostgroup
-  no_log: true
+  no_log: "{{ mysql_no_log }}"
   tags:
   - mysqlusers

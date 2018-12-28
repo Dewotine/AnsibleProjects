@@ -4,6 +4,7 @@ mariadb_repo: "mariadb.mirrors.ovh.net"
 mariadb_version: '10.3'
 mariadb_apt_pin_priority: "900"
 mysql_daemon: mysql
+mysql_no_log: true
 mariadb_id: '0xF1656F24C74CD1D8'
 mariadb_keyserver: "keyserver.ubuntu.com"
 
@@ -35,7 +36,7 @@ overwrite_global_mycnf: yes
 
 # MySQL connection settings.
 mysql_port: "3306"
-mysql_bind_address: '0.0.0.0'
+mysql_bind_address: '127.0.0.1'
 mysql_datadir: /var/lib/mysql
 mysql_root_datadir: /srv/mysql
 mysql_pid_file: /var/run/mysqld/mysqld.pid
