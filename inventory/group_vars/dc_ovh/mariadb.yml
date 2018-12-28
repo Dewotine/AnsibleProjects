@@ -9,9 +9,17 @@ mariadb_piwigo_installation_users:
         663163636366613762343230356465346430633939663961383261393036666333316166396232646134316134356434323733353664663630353936636362630a396630373631383834636266386331613562326232343138623431656361363464643135323566346434313962356435303732396233613432343839396464640a3338393439626136303231616333306166383064333932636538376433316631
   priv: "piwigo%.*:ALL"
 
+mariadb_mailuser:
+  name: "mailuser"
+  host: "['localhost']"
+  hostgroup: yes
+  password: !vault-encrypted |
+        $ANSIBLE_VAULT;1.1;AES256
+        386536313937633266326262333130353335353130633262656162643733613939646436333235623836383466383165383637613466336361343362313033390a346134396635373164653064366463313362383930313863623865653033643834396363656161306632613637316439323136316238663961386635386636310a31623666343538666166383062333536373131303031313265326230373566623962663165636237373064306334663865613131326230373137383235306231
+  priv: "mailuser%.*:ALL"
 
 # Configure MariaDB database
-mariadb_piwigo_profile:
+mariadb_maindb_profile:
   key_buffer_size: "32M"
   key_cache_segments: 64
   table_open_cache: 64
@@ -30,9 +38,15 @@ mariadb_piwigo_profile:
   innodb_thread_sleep_delay: 0
   databases:
     - name: "piwigo"
+    - name: "mailserver"
   users:
     - name: "{{ mariadb_piwigo_installation_users.name }}"
       host: "{{ mariadb_piwigo_installation_users.host }}"
       hostgroup: "{{ mariadb_piwigo_installation_users.hostgroup }}"
       password: "{{ mariadb_piwigo_installation_users.password }}"
       priv: "{{ mariadb_piwigo_installation_users.priv }}"
+    - name: "{{ mariadb_mailuser.name }}"
+      host: "{{ mariadb_mailuser.host }}"
+      hostgroup: "{{ mariadb_mailuser.hostgroup }}"
+      password: "{{ mariadb_mailuser.password }}"
+      priv: "{{ mariadb_mailuser.priv }}"
