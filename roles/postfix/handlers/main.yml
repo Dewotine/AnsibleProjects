@@ -16,7 +16,7 @@
   command: postmap hash:/etc/postfix/generic
 
 - name: restart postfix
-  shell: postconf -n
+  command: postconf -n
   notify:
     - remove pid
     - restart service
