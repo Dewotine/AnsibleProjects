@@ -120,10 +120,39 @@ auth_mechanisms = {{ dovecot_auth_mechanisms | join(' ') }}
 #!include auth-deny.conf.ext
 #!include auth-master.conf.ext
 
+{% if dovecot_auth == "system" %}
 !include auth-system.conf.ext
+{% else %}
+#!include auth-system.conf.ext
+{% endif %}
+{% if dovecot_auth == "sql" %}
+!include auth-sql.conf.ext
+{% else %}
 #!include auth-sql.conf.ext
+{% endif %}
+{% if dovecot_auth == "ldap" %}
+!include auth-ldap.conf.ext
+{% else %}
 #!include auth-ldap.conf.ext
+{% endif %}
+{% if dovecot_auth == "passwdfile" %}
+!include auth-passwdfile.conf.ext
+{% else %}
 #!include auth-passwdfile.conf.ext
+{% endif %}
+{% if dovecot_auth == "checkpassword" %}
+!include auth-checkpassword.conf.ext
+{% else %}
 #!include auth-checkpassword.conf.ext
+{% endif %}
+{% if dovecot_auth == "vpopmail" %}
+!include auth-vpopmail.conf.ext
+{% else %}
 #!include auth-vpopmail.conf.ext
+{% endif %}
+{% if dovecot_auth == "static" %}
+!include auth-static.conf.ext
+{% else %}
 #!include auth-static.conf.ext
+{% endif %}
+

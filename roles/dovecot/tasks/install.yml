@@ -1,0 +1,23 @@
+- name: "Install Dovecot"
+  apt:
+    name:
+      - dovecot-core
+      - dovecot-imapd
+      - dovecot-pop3d
+    state: present
+    update_cache: yes
+  notify: restart dovecot
+
+- name: "Ensure group {{ dovecot_vmail_group }} exists"
+  group:
+    name:  "{{ dovecot_vmail_group }}"
+    state: "present"
+
+- name: "Create dovecot {{ dovecot_vmail_user }} user"
+  user:
+    name: "{{ dovecot_vmail_user }}"
+    comment: "Owner of all virtual mailboxes"
+    uid: 5000
+    group: "{{ dovecot_vmail_group }}"
+    home: "/srv/mailboxes"
+    create_home: yes

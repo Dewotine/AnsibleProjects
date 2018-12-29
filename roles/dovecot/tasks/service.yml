@@ -1,0 +1,6 @@
+---
+- name: "Start and enable dovecot"
+  service:
+    name: "dovecot"
+    state: started
+    enabled: yes

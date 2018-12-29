@@ -28,7 +28,7 @@
 #
 # <doc/wiki/MailLocation.txt>
 #
-mail_location = mbox:~/mail:INBOX=/var/mail/%u
+mail_location = {{ dovecot_mail_location }}
 
 # If you need to set multiple mailbox locations or want to change default
 # namespace settings, you can do it by defining namespace sections.
@@ -47,7 +47,7 @@ namespace inbox {
   # Hierarchy separator to use. You should use the same separator for all
   # namespaces or some clients get confused. '/' is usually a good one.
   # The default however depends on the underlying mail storage format.
-  #separator = 
+  separator = {{ dovecot_hierarchy_separator }}
 
   # Prefix required to access this namespace. This needs to be different for
   # all namespaces. For example "Public/".

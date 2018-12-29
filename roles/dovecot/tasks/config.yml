@@ -1,0 +1,42 @@
+---
+- name: "Deploy main dovecot configuration file"
+  template:
+    src: "dovecot.conf.j2"
+    dest: "/etc/dovecot/dovecot.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload dovecot
+
+- name: "Deploy dovecot configuration files"
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/dovecot/conf.d/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - 10-auth.conf
+    - 10-director.conf
+    - 10-logging.conf
+    - 10-mail.conf
+    - 10-master.conf
+    - 10-ssl.conf
+    - 10-tcpwrapper.conf
+    - 15-lda.conf
+    - 15-mailboxes.conf
+    - 20-imap.conf
+    - 20-pop3.conf
+    - 90-acl.conf
+    - 90-plugin.conf
+    - 90-quota.conf
+  notify: reload dovecot
+
+- name: "Deploy auth-{{ dovecot_auth }}.conf.ext file"
+  template:
+    src: "auth-{{ dovecot_auth }}.conf.ext.j2"
+    dest: "/etc/dovecot/conf.d/auth-{{ dovecot_auth }}.conf.ext"
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload dovecot
