@@ -3,7 +3,7 @@ postfix_aliases:
   "postmaster": "root"
 postfix_disable_vrfy_command: false
 postfix_domain:  "{{ app_postfix_domain | default(ansible_domain) }}"
-postfix_dovecot_mysql_host: 'localhost'
+postfix_dovecot_mysql_host: '127.0.0.1'
 postfix_dovecot_mysql_db_name: 'mailserver'
 postfix_dovecot_mysql_user: "{{ mariadb_mailuser.name }}"
 postfix_dovecot_mysql_password: "{{ mariadb_mailuser.password }}"
