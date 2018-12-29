@@ -1,8 +1,20 @@
 ---
+mariadb_piwigo_dbhost: "localhost"
+mariadb_piwigo_dbname: "piwigo"
+
+mariadb_dovecot_dbhost: "localhost"
+mariadb_dovecot_dbname: "mailserver"
+mariadb_dovecot_dbuser: "mailuser"
+mariadb_dovecot_dbpassword: !vault-encrypted |
+        $ANSIBLE_VAULT;1.1;AES256
+        386536313937633266326262333130353335353130633262656162643733613939646436333235623836383466383165383637613466336361343362313033390a346134396635373164653064366463313362383930313863623865653033643834396363656161306632613637316439323136316238663961386635386636310a31623666343538666166383062333536373131303031313265326230373566623962663165636237373064306334663865613131326230373137383235306231
+
+
 # Declare Mariadb Users
 mariadb_piwigo_installation_users:
   name: "piwigouser"
-  host: "['localhost']"
+  host:
+    - "{{ mariadb_piwigo_dbhost }}"
   hostgroup: yes
   password: !vault-encrypted |
         $ANSIBLE_VAULT;1.1;AES256
@@ -10,13 +22,12 @@ mariadb_piwigo_installation_users:
   priv: "piwigo%.*:ALL"
 
 mariadb_mailuser:
-  name: "mailuser"
-  host: "['localhost']"
+  name: "{{ mariadb_dovecot_dbuser }}"
+  host:
+    - "{{ mariadb_dovecot_dbhost }}"
   hostgroup: yes
-  password: !vault-encrypted |
-        $ANSIBLE_VAULT;1.1;AES256
-        386536313937633266326262333130353335353130633262656162643733613939646436333235623836383466383165383637613466336361343362313033390a346134396635373164653064366463313362383930313863623865653033643834396363656161306632613637316439323136316238663961386635386636310a31623666343538666166383062333536373131303031313265326230373566623962663165636237373064306334663865613131326230373137383235306231
-  priv: "mailserver%.*:ALL"
+  password: "{{ mariadb_dovecot_dbpassword }}"
+  priv: "{{ mariadb_dovecot_dbname }}}%.*:ALL"
 
 # Configure MariaDB database
 mariadb_maindb_profile:
