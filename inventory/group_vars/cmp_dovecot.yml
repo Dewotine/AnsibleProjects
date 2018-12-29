@@ -6,6 +6,7 @@ dovecot_auth_mechanisms:
   - "login"
 dovecot_auth_verbose: "yes"
 dovecot_base_dir: "/var/run/dovecot"
+dovecot_certificate_request: "{{ mailserver_certificate_request }}"
 dovecot_disable_plaintext_auth: "yes"
 dovecot_doveadm_socket_path: "doveadm-server"
 dovecot_doveadm_worker_count: 0
@@ -26,6 +27,7 @@ dovecot_mailbox_location_base: "/srv/mailboxes"
 dovecot_mail_privileged_group: "mail"
 dovecot_mariadb_password_query: 'SELECT email as user, password FROM virtual_users WHERE email=''%u'';'
 dovecot_postfix_smtp_auth: true
+dovecot_private_key: "{{ mailserver_private_key }}"
 dovecot_protocols:
   - "lmtp"
   - "imap"

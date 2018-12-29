@@ -10,8 +10,8 @@ ssl = {{ dovecot_ssl }}
 # root. Included doc/mkcert.sh can be used to easily generate self-signed
 # certificate, just make sure to update the domains in dovecot-openssl.cnf
 {% if dovecot_ssl %}
-ssl_cert = </etc/dovecot/dovecot.pem
-ssl_key = </etc/dovecot/private/dovecot.pem
+ssl_cert = < {{ dovecot_private_key }}
+ssl_key = < {{ dovecot_certificate_request }}
 {% else %}
 #ssl_cert = </etc/dovecot/dovecot.pem
 #ssl_key = </etc/dovecot/private/dovecot.pem
