@@ -4,6 +4,7 @@
       - dovecot-core
       - dovecot-imapd
       - dovecot-pop3d
+      - dovecot-lmtpd
     state: present
     update_cache: yes
   notify: restart dovecot
