@@ -3,6 +3,10 @@ postfix_aliases:
   "postmaster": "root"
 postfix_disable_vrfy_command: false
 postfix_domain:  "{{ app_postfix_domain | default(ansible_domain) }}"
+postfix_dovecot_mysql_host: 'localhost'
+postfix_dovecot_mysql_db_name: 'mailserver'
+postfix_dovecot_mysql_user: "{{ mariadb_mailuser.name }}"
+postfix_dovecot_mysql_password: "{{ mariadb_mailuser.password }}"
 postfix_generic: []
 postfix_hostname: "{{ app_postfix_hostname | default(ansible_fqdn) }}"
 postfix_inet_interfaces: all
@@ -19,6 +23,7 @@ postfix_mynetworks:
   - 127.0.0.0/8
   - '[::ffff:127.0.0.0]/104'
   - '[::1]/128'
+posfix_mysql_virtual: true # Activate Mariadb user account management
 postfix_relayhost: false
 postfix_relayhost_port: 587
 postfix_relaytls: false
@@ -31,3 +36,4 @@ postfix_sender_canonical_maps: []
 postfix_smtpd_banner: "Mail server on {{ dc }}"
 postfix_tls_enable: true
 postfix_virtual_aliases: []
+postfix_virtual_transport: "{{ app_postfix_virtual_transport | default('') }}"
