@@ -1,0 +1,24 @@
+---
+- apt:
+    name: python-openssl
+    state: present
+    update_cache: yes
+
+- openssl_privatekey:
+    path: /etc/dovecot/private/dovecot.pem
+    size: 4096
+    type: RSA
+    force: no
+
+- openssl_csr:
+    path: /etc/dovecot/dovecot.pem
+    privatekey_path: /etc/dovecot/private/dovecot.pem
+
+
+- name: "Deploy dovecot SSL configuration file"
+  template:
+    src: "10-ssl.conf.j2"
+    dest: "/etc/dovecot/conf.d/10-ssl.conf"
+    owner: root
+    group: root
+    mode: 0644
