@@ -79,14 +79,14 @@ relayhost =
 
 {% if postfix_tls_enable %}
 #  Mise en place du TLS
-smtp_tls_CAfile = /etc/postfix/tls/cacert.pem
 smtp_tls_security_level = may
 smtp_tls_session_cache_database = btree:${data_directory}/smtp_tls_session_cache
-smtpd_tls_security_level = may
 smtpd_tls_auth_only = yes
-smtpd_tls_key_file = /etc/postfix/tls/domaine-key.pem
-smtpd_tls_cert_file = /etc/postfix/tls/domaine-cert.pem
+smtpd_tls_key_file = {{ postfix_private_key }}
+smtpd_tls_cert_file = {{ postfix_certificate_request }}
+{% if postfix_cafile %}
 smtpd_tls_CAfile = /etc/postfix/tls/cacert.pem
+{% endif %}
 smtpd_tls_loglevel = 1
 smtpd_tls_received_header = yes
 smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_tls_session_cache

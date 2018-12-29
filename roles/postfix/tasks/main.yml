@@ -22,10 +22,15 @@
 
 - name: "Install package"
   apt:
-    name: "{{ postfix_install }}"
-    state: "{{ apt_install_state | default('latest') }}"
+    name:
+      - postfix
+      - mailutils
+      - libsasl2-2
+      - sasl2-bin
+      - libsasl2-modules
+    state: "present"
     update_cache: true
-    cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
+    cache_valid_time: "3600"
   tags:
     - configuration
     - postfix

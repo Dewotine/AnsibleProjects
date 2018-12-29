@@ -1,4 +1,10 @@
 ---
+- apt:
+    name: "postfix-mysql"
+    state: present
+    update_cache: true
+    cache_valid_time: "3600"
+
 - name: "Configure Postfix (mysql-virtual)"
   template:
     src: "{{ item }}.j2"

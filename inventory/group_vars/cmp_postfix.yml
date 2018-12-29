@@ -1,6 +1,7 @@
 ---
 postfix_aliases:
   "postmaster": "root"
+postfix_certificate_request: "{{ mailserver_certificate_request }}"
 postfix_disable_vrfy_command: false
 postfix_domain:  "{{ app_postfix_domain | default(ansible_domain) }}"
 postfix_dovecot_mysql_host: '127.0.0.1'
@@ -24,6 +25,7 @@ postfix_mynetworks:
   - '[::ffff:127.0.0.0]/104'
   - '[::1]/128'
 posfix_mysql_virtual: true # Activate Mariadb user account management
+postfix_private_key: "{{ mailserver_private_key }}"
 postfix_relayhost: false
 postfix_relayhost_port: 587
 postfix_relaytls: false
