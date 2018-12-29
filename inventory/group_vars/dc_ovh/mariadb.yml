@@ -2,7 +2,7 @@
 mariadb_piwigo_dbhost: "localhost"
 mariadb_piwigo_dbname: "piwigo"
 
-mariadb_dovecot_dbhost: "localhost"
+mariadb_dovecot_dbhost: "127.0.0.1"
 mariadb_dovecot_dbname: "mailserver"
 mariadb_dovecot_dbuser: "mailuser"
 mariadb_dovecot_dbpassword: !vault-encrypted |
@@ -27,7 +27,7 @@ mariadb_mailuser:
     - "{{ mariadb_dovecot_dbhost }}"
   hostgroup: yes
   password: "{{ mariadb_dovecot_dbpassword }}"
-  priv: "{{ mariadb_dovecot_dbname }}}%.*:ALL"
+  priv: "{{ mariadb_dovecot_dbname }}%.*:ALL"
 
 # Configure MariaDB database
 mariadb_maindb_profile:
