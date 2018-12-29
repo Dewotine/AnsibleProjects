@@ -8,4 +8,4 @@ app_postfixmailname_passwd: !vault-encrypted |
 # Configuration SASL
 postfix_sasl_auth_enable: true
 
-app_postfix_virtual_transport: "dovecot"
+app_postfix_virtual_transport: "lmtp:unix:private/dovecot-lmtp"
