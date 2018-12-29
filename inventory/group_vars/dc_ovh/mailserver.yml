@@ -1,3 +1,4 @@
 ---
 mailserver_private_key: "/etc/ssl/certs/mailserver.pem"
 mailserver_certificate_request: "/etc/ssl/certs/mailserver.csr"
+mailserver_common_name: "cedric.{{ dc_domain_name }}"

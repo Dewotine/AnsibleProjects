@@ -17,3 +17,4 @@
       openssl_csr:
         path: "{{ mailserver_certificate_request }}"
         privatekey_path: "{{ mailserver_private_key }}"
+        common_name: "{{ mailserver_common_name }}"
