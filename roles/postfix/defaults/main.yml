@@ -5,6 +5,9 @@ postfix_aliases:
 
 postfix_disable_vrfy_command: false
 postfix_domain: "{{ ansible_domain }}"
+postfix_dovecot_mysql_host: '127.0.0.1'
+postfix_dovecot_mysql_db_name: 'servermail'
+postfix_dovecot_mysql_user: 'usermail'
 postfix_generic: []
 postfix_install:
   - postfix
@@ -27,6 +30,10 @@ postfix_mynetworks:
   - 127.0.0.0/8
   - '[::ffff:127.0.0.0]/104'
   - '[::1]/128'
+postfix_mysql_alias_query: 'SELECT destination FROM virtual_aliases WHERE source=''%s'';'
+postfix_mysql_domains_query: 'SELECT 1 FROM virtual_domains WHERE name=''%s'';'
+postfix_mysql_users_query: 'SELECT 1 FROM virtual_users WHERE email=''%s'';'
+posfix_mysql_virtual: false
 postfix_relayhost: false
 postfix_relayhost_port: 587
 postfix_relaytls: false
@@ -39,3 +46,4 @@ postfix_sender_canonical_maps: []
 postfix_smtpd_banner: '$myhostname ESMTP $mail_name (Ubuntu)'
 postfix_tls_enable: false
 postfix_virtual_aliases: []
+postfix_virtual_transport:

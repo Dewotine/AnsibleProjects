@@ -89,43 +89,46 @@
     - postfix
     - postfix-aliases
 
-- name: "Configure sender canonical maps"
-  lineinfile:
-    dest: /etc/postfix/sender_canonical_maps
-    regexp: '^{{ item.sender }}.*'
-    line: '{{ item.sender }} {{ item.rewrite }}'
-    owner: root
-    group: root
-    mode: 0644
-    create: true
-    state: present
-  with_items: "{{ postfix_sender_canonical_maps }}"
-  notify:
-    - postmap sender_canonical_maps
-    - restart postfix
-  tags:
-    - configuration
-    - postfix
-    - postfix-sender-canonical-maps
+- import_tasks: mysql-virtual.yml
+  when: posfix_mysql_virtual is defined and posfix_mysql_virtual == true
 
-- name: "Configure generic table"
-  lineinfile:
-    dest: /etc/postfix/generic
-    regexp: '^{{ item.pattern }}.*'
-    line: '{{ item.pattern }} {{ item.result }}'
-    owner: root
-    group: root
-    mode: 0644
-    create: true
-    state: present
-  with_items: "{{ postfix_generic }}"
-  notify:
-    - postmap generic
-    - restart postfix
-  tags:
-    - configuration
-    - postfix
-    - postfix-generic-table
+#- name: "Configure sender canonical maps"
+#  lineinfile:
+#    dest: /etc/postfix/sender_canonical_maps
+#    regexp: '^{{ item.sender }}.*'
+#    line: '{{ item.sender }} {{ item.rewrite }}'
+#    owner: root
+#    group: root
+#    mode: 0644
+#    create: true
+#    state: present
+#  with_items: "{{ postfix_sender_canonical_maps }}"
+#  notify:
+#    - postmap sender_canonical_maps
+#    - restart postfix
+#  tags:
+#    - configuration
+#    - postfix
+#    - postfix-sender-canonical-maps
+#
+#- name: "Configure generic table"
+#  lineinfile:
+#    dest: /etc/postfix/generic
+#    regexp: '^{{ item.pattern }}.*'
+#    line: '{{ item.pattern }} {{ item.result }}'
+#    owner: root
+#    group: root
+#    mode: 0644
+#    create: true
+#    state: present
+#  with_items: "{{ postfix_generic }}"
+#  notify:
+#    - postmap generic
+#    - restart postfix
+#  tags:
+#    - configuration
+#    - postfix
+#    - postfix-generic-table
 
 - name: "Start and enable service"
   service:

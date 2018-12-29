@@ -1,0 +1,50 @@
+use "mailserver"
+
+DROP TABLE IF EXISTS `virtual_aliases`;
+DROP TABLE IF EXISTS `virtual_users`;
+DROP TABLE IF EXISTS `virtual_domains`;
+
+
+CREATE TABLE `virtual_domains` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `virtual_domains` WRITE;
+/*!40000 ALTER TABLE `virtual_domains` DISABLE KEYS */;
+/*!40000 ALTER TABLE `virtual_domains` ENABLE KEYS */;
+UNLOCK TABLES;
+
+CREATE TABLE `virtual_users` (
+  `id` int(11) NOT NULL auto_increment,
+  `domain_id` int(11) NOT NULL,
+  `password` varchar(106) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
+  FOREIGN KEY (domain_id) REFERENCES virtual_domains(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `virtual_users` WRITE;
+/*!40000 ALTER TABLE `virtual_users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `virtual_users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+CREATE TABLE `virtual_aliases` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `domain_id` INT NOT NULL,
+  `source` varchar(100) NOT NULL,
+  `destination` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (domain_id) REFERENCES virtual_domains(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+LOCK TABLES `virtual_aliases` WRITE;
+/*!40000 ALTER TABLE `virtual_aliases` DISABLE KEYS */;
+/*!40000 ALTER TABLE `virtual_aliases` ENABLE KEYS */;
+UNLOCK TABLES;
+
+INSERT INTO `mailserver`.`virtual_domains`(`id` ,`name`) VALUES ('1', "{{ app_postfix_domain }}");
+INSERT INTO `mailserver`.`virtual_users`(`id`, `domain_id`, `password` , `email`)
+VALUES ('1', '1', password("{{ app_postfixmailname_passwd }}"), "{{ app_postfixmailname }}");

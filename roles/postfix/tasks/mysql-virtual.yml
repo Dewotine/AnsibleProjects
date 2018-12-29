@@ -1,0 +1,13 @@
+---
+- name: "Configure Postfix (mysql-virtual)"
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/postfix/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - mysql-virtual-alias-maps.cf
+    - mysql-virtual-mailbox-domains.cf
+    - mysql-virtual-mailbox-maps.cf
+  notify: restart postfix
