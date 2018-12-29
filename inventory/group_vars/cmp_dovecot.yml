@@ -24,6 +24,7 @@ dovecot_mail_location: "maildir:{{ dovecot_mailbox_location }}/Maildir"
 dovecot_mailbox_location: "{{ dovecot_mailbox_location_base }}/%d/%n"
 dovecot_mailbox_location_base: "/srv/mailboxes"
 dovecot_mail_privileged_group: "mail"
+dovecot_mariadb_password_query: 'SELECT email as user, password FROM virtual_users WHERE email=''%u'';'
 dovecot_postfix_smtp_auth: true
 dovecot_protocols:
   - "lmtp"
