@@ -1,0 +1,19 @@
+---
+- hosts: "{{ filter }}:&dc_{{ dc }}"
+  become: true
+  tasks:
+    - name: "Install python-openssl"
+      apt:
+        name: python-openssl
+        state: present
+        update_cache: yes
+    - name: "Generate private key"
+      openssl_privatekey:
+        path: "{{ mailserver_private_key }}"
+        size: 4096
+        type: RSA
+        force: no
+    - name: "Generate certificate signing request"
+      openssl_csr:
+        path: "{{ mailserver_certificate_request }}"
+        privatekey_path: "{{ mailserver_private_key }}"
