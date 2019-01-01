@@ -7,14 +7,16 @@
         name: python-openssl
         state: present
         update_cache: yes
-    - name: "Generate private key"
-      openssl_privatekey:
-        path: "{{ mailserver_private_key }}"
-        size: 4096
-        type: RSA
-        force: no
-    - name: "Generate certificate signing request"
-      openssl_csr:
-        path: "{{ mailserver_certificate_request }}"
-        privatekey_path: "{{ mailserver_private_key }}"
-        common_name: "{{ mailserver_common_name }}"
+#TODO: Be able to deploy certificates for dovecot intstead using the script mkcert.sh
+#    - name: "Generate private key"
+#      openssl_privatekey:
+#        path: "{{ mailserver_private_key }}"
+#        size: 2048
+#        type: RSA
+#        force: no
+#    - name: "Generate certificate signing request"
+#      openssl_csr:
+#        path: "{{ mailserver_certificate_request }}"
+#        privatekey_path: "{{ mailserver_private_key }}"
+#        common_name: "{{ mailserver_common_name }}"
+#        email_address: "cedric@bleschet.fr"
