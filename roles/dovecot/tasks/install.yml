@@ -5,6 +5,7 @@
       - dovecot-imapd
       - dovecot-pop3d
       - dovecot-lmtpd
+      - dovecot-mysql
     state: present
     update_cache: yes
   notify: restart dovecot
