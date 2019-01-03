@@ -26,6 +26,7 @@ dovecot_mailbox_location: "{{ dovecot_mailbox_location_base }}/%d/%n"
 dovecot_mailbox_location_base: "/srv/mailboxes"
 dovecot_mail_privileged_group: "mail"
 dovecot_mariadb_password_query: 'SELECT email as user, password FROM virtual_users WHERE email=''%u'';'
+dovecot_parameters_regenerate: 0
 dovecot_postfix_smtp_auth: true
 dovecot_private_key: "{{ mailserver_private_key }}"
 dovecot_protocols:
@@ -33,6 +34,7 @@ dovecot_protocols:
   - "imap"
 dovecot_shutdown_clients: "yes"
 dovecot_ssl: "required"
+dovecot_ssl_cipher_list: "ALL:!LOW"
 dovecot_verbose_proctitle: "yes"
 dovecot_vmail_group: "vmail"
 dovecot_vmail_user: "vmail"

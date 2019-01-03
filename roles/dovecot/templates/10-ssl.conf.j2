@@ -12,6 +12,8 @@ ssl = {{ dovecot_ssl }}
 {% if dovecot_ssl %}
 ssl_cert = < {{ dovecot_certificate_request }}
 ssl_key = < {{ dovecot_private_key }}
+ssl_cipher_list = {{ dovecot_ssl_cipher_list }}
+ssl_parameters_regenerate = {{ dovecot_parameters_regenerate }}
 {% else %}
 #ssl_cert = </etc/dovecot/dovecot.pem
 #ssl_key = </etc/dovecot/private/dovecot.pem
