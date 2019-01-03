@@ -47,4 +47,4 @@ UNLOCK TABLES;
 
 INSERT INTO `mailserver`.`virtual_domains`(`id` ,`name`) VALUES ('1', "{{ app_postfix_domain }}");
 INSERT INTO `mailserver`.`virtual_users`(`id`, `domain_id`, `password` , `email`)
-VALUES ('1', '1', password("{{ app_postfixmailname_passwd }}"), "{{ app_postfixmailname }}");
+VALUES ('1', '1', ENCRYPT("{{ app_postfixmailname_passwd }}"), "{{ app_postfixmailname }}");

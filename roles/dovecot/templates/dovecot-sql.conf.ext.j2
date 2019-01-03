@@ -140,6 +140,7 @@
 # Query to get a list of all usernames.
 #iterate_query = SELECT username AS user FROM users
 driver = mysql
+default_pass_scheme = CRYPT
 connect = host={{ mariadb_dovecot_dbhost }} dbname={{ mariadb_dovecot_dbname }} user={{ mariadb_dovecot_dbuser }} password={{ mariadb_dovecot_dbpassword }}
 password_query = {{ dovecot_mariadb_password_query }}
 
