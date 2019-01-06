@@ -41,14 +41,23 @@ recipient_delimiter = +
 inet_interfaces = {{ postfix_inet_interfaces }}
 inet_protocols = {{ postfix_inet_protocols }}
 
-# SMTP helo controls
+# SMTP helo controls
 smtpd_helo_required = yes
-smtpd_helo_restrictions = permit_mynetworks
-smtpd_sender_restrictions = reject_unknown_sender_domain, reject_non_fqdn_sender
-smtpd_recipient_restrictions = reject_unknown_recipient_domain, reject_non_fqdn_recipient, permit_mynetworks, reject_unauth_destination, permit
-smtpd_client_restrictions = reject_unauth_pipelining
+{% if postfix_smtpd_helo_restrictions %}
+smtpd_helo_restrictions = {{ postfix_smtpd_helo_restrictions | join(', ') }}
+{% endif %}
 
-{% if postfix_smtpd_relay_restrictions is defined %}
+# SMTPD Controls
+{% if postfix_smtpd_sender_restrictions %}
+smtpd_sender_restrictions = {{ postfix_smtpd_sender_restrictions | join(', ') }}
+{% endif %}
+{% if postfix_smtpd_recipient_restrictions %}
+smtpd_recipient_restrictions = {{ postfix_smtpd_recipient_restrictions | join(', ') }}
+{% endif %}
+{% if postfix_smtpd_client_restrictions %}
+smtpd_client_restrictions =  {{ postfix_smtpd_client_restrictions | join(', ') }}
+{% endif %}
+{% if postfix_smtpd_relay_restrictions %}
 smtpd_relay_restrictions = {{ postfix_smtpd_relay_restrictions | join(', ') }}
 {% endif %}
 
@@ -112,7 +121,7 @@ smtpd_sasl_authenticated_header = yes
 virtual_transport = {{ postfix_virtual_transport }}
 {% endif %}
 
-{% if posfix_mysql_virtual %}
+{% if postfix_mysql_virtual %}
 # Virtual domains, users, and aliases
 virtual_mailbox_domains = mysql:/etc/postfix/mysql-virtual-mailbox-domains.cf
 virtual_mailbox_maps = mysql:/etc/postfix/mysql-virtual-mailbox-maps.cf
