@@ -15,6 +15,11 @@
 - name: postmap generic
   command: postmap hash:/etc/postfix/generic
 
+- name: reload postfix
+  systemd:
+    name: postfix
+    state: reloaded
+
 - name: restart postfix
   command: postconf -n
   notify:
