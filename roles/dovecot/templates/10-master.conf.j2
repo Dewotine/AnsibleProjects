@@ -138,3 +138,6 @@ service dict {
 service anvil {
   client_limit = 1024
 }
+
+# Outlook Express and Windows Mail works only with LOGIN mechanism, not the standard PLAIN:
+auth_mechanisms = plain login
