@@ -1,0 +1,12 @@
+---
+- name: "Activate Submission ({{ postfix_conf_submission }}))"
+  template:
+    src: "master.cf.j2"
+    dest: "/etc/postfix/master.cf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  notify:
+    - "restart postfix"
+  tags:
+    - postfix_conf_submission

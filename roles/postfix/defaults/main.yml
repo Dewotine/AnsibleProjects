@@ -6,6 +6,7 @@ postfix_aliases:
 postfix_disable_vrfy_command: false
 postfix_cafile:
 postfix_certificate_request: "/etc/postfix/tls/domaine-cert.pem"
+postfix_conf_submission: false
 postfix_domain: "{{ ansible_domain }}"
 postfix_dovecot_mysql_host: '127.0.0.1'
 postfix_dovecot_mysql_db_name: 'servermail'
@@ -35,7 +36,7 @@ postfix_mynetworks:
 postfix_mysql_alias_query: 'SELECT destination FROM virtual_aliases WHERE source=''%s'';'
 postfix_mysql_domains_query: 'SELECT 1 FROM virtual_domains WHERE name=''%s'';'
 postfix_mysql_users_query: 'SELECT 1 FROM virtual_users WHERE email=''%s'';'
-posfix_mysql_virtual: false
+posftix_mysql_virtual: false
 postfix_private_key: "/etc/postfix/tls/domaine-key.pem"
 postfix_relayhost: false
 postfix_relayhost_port: 587
@@ -47,6 +48,17 @@ postfix_sasl_security_options: noanonymous
 postfix_sasl_mechanism_filter: ''
 postfix_sender_canonical_maps: []
 postfix_smtpd_banner: '$myhostname ESMTP $mail_name (Ubuntu)'
+postfix_smtpd_client_restrictions:
+  - reject_unauth_pipelining
+postfix_smtpd_helo_restrictions:
+postfix_smtpd_relay_restrictions:
+  - permit_mynetworks
+  - permit_sasl_authenticated
+  - defer_unauth_destination
+postfix_smtpd_recipient_restrictions:
+postfix_smtpd_sender_restrictions:
+  - reject_unknown_sender_domain
+  - reject_non_fqdn_sender
 postfix_tls_enable: false
 postfix_virtual_aliases: []
 postfix_virtual_transport:

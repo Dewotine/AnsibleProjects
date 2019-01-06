@@ -95,7 +95,9 @@
     - postfix-aliases
 
 - import_tasks: mysql-virtual.yml
-  when: posfix_mysql_virtual is defined and posfix_mysql_virtual == true
+  when: postfix_mysql_virtual is defined and postfix_mysql_virtual == true
+
+- import_tasks: conf_submission.yml
 
 #- name: "Configure sender canonical maps"
 #  lineinfile:
