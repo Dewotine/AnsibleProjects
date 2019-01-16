@@ -1,4 +1,6 @@
 ---
-mailserver_private_key: "/etc/ssl/private/mailserver.pem"
-mailserver_certificate_request: "/etc/ssl/certs/mailserver.pem"
+#mailserver_private_key: "/etc/ssl/private/mailserver.pem"
+#mailserver_certificate_request: "/etc/ssl/certs/mailserver.pem"
+mailserver_private_key: "/etc/letsencrypt/live/mail.bleschet.fr/privkey.pem"
+mailserver_certificate_request: "/etc/letsencrypt/live/mail.bleschet.fr/fullchain.pem"
 mailserver_common_name: "*.{{ dc_domain_name }}"
