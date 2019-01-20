@@ -1,7 +1,7 @@
 ---
-- name: "Creates lets encrypt config folder: {{ lets_encrypt_config_folder }}"
+- name: "Creates lets encrypt config folder: {{ letsencrypt_config_folder }}"
   file:
-    name: "{{ lets_encrypt_config_folder }}"
+    name: "{{ letsencrypt_config_folder }}"
     state: "directory"
     owner: "root"
     group: "root"
@@ -12,7 +12,7 @@
 - name: "Deploy letsencrypt configuration file for domain to manage"
   template:
     src: "domain.j2"
-    dest: "{{ lets_encrypt_config_folder }}/{{ letsencrypt_domain_to_certify }}.conf"
+    dest: "{{ letsencrypt_config_folder }}/{{ letsencrypt_domain_to_certify }}.conf"
     owner: root
     group: root
     mode: 0644

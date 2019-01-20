@@ -9,16 +9,35 @@ rsa-key-size = {{ letsencrypt_key_size }}
 server = {{ letsencrypt_ca_url }}
 
 # This address will receive renewal reminders
-email = {{ lets_encrypt_mail_address }}
+email = {{ letsencrypt_mail_address }}
 
 # Turn off the ncurses UI, we want this to be run as a cronjob
-text = {{ lets_encrypt_text }}
+text = {{ letsencrypt_text }}
 
-{% if lets_encrypt_authenticator == "webroot" %}
+{% if letsencrypt_authenticator == "webroot" %}
 # authenticate by placing a file in the webroot (under .well-known/acme-challenge/) and then letting LE fetch it
-authenticator = {{ lets_encrypt_authenticator }}
-webroot-path = {{ lets_encrypt_webroot_path }}
+authenticator = {{ letsencrypt_authenticator }}
+webroot-path = {{ letsencrypt_webroot_path }}
 {% endif %}
 
 # Accept ToS
-agree-tos = {{ lets_encrypt_agree_tos }}
+agree-tos = {{ letsencrypt_agree_tos }}
+
+{% if letsencrypt_pre_hook %}
+# Create to pre-hook to reload service
+{% for command in letsencrypt_post_hook %}
+pre-hook = {{ command }}
+{% endfor %}
+{% endif  %}
+{% if letsencrypt_post_hook %}
+# Create to post-hook to reload service
+{% for command in letsencrypt_post_hook %}
+post-hook = {{ command }}
+{% endfor %}
+{% endif  %}
+{% if letsencrypt_renew_hook %}
+# Create to renew-hook to reload service
+{% for command in letsencrypt_renew_hook %}
+renew-hook = {{ command }}
+{% endfor %}
+{% endif  %}
