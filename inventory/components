@@ -24,3 +24,7 @@ piwigo
 [cmp_postfix]
 vps528223.ovh.net
 piwigo
+
+[cmp_letsencrypt]
+vps528223.ovh.net
+piwigo

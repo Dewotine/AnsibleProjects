@@ -1,0 +1,24 @@
+# {{ ansible_managed }}
+# The domain we want to get the cert for
+domains = {{ letsencrypt_domain_to_certify | default("localhost") }}
+
+# Key size
+rsa-key-size = {{ letsencrypt_key_size }}
+
+# LetsEncrypt Server
+server = {{ letsencrypt_ca_url }}
+
+# This address will receive renewal reminders
+email = {{ lets_encrypt_mail_address }}
+
+# Turn off the ncurses UI, we want this to be run as a cronjob
+text = {{ lets_encrypt_text }}
+
+{% if lets_encrypt_authenticator == "webroot" %}
+# authenticate by placing a file in the webroot (under .well-known/acme-challenge/) and then letting LE fetch it
+authenticator = {{ lets_encrypt_authenticator }}
+webroot-path = {{ lets_encrypt_webroot_path }}
+{% endif %}
+
+# Accept ToS
+agree-tos = {{ lets_encrypt_agree_tos }}

@@ -1,0 +1,7 @@
+---
+- name: "Installation of cerbot client to manage letsencrypt certicate"
+  apt:
+    name: certbot
+    state: latest
+    default_release: stretch-backports
+    update_cache: yes
