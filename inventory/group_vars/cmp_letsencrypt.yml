@@ -1,5 +1,5 @@
 ---
-letsencrypt_domains: '{{ app_email_letsencrypt_domains if filter == "app_email" else app_piwigo_letsencrypt_domains | default([]) }}'
+letsencrypt_domains: '{{ app_email_letsencrypt_domains [ default([]) }}'
 letsencrypt_key_size: 4096
 letsencrypt_ca_url: "https://acme-v02.api.letsencrypt.org/directory"
 letsencrypt_mail_address: "cedric@bleschet.fr"
@@ -8,5 +8,6 @@ letsencrypt_authenticator: "webroot"
 letsencrypt_webroot_path: "/usr/share/nginx/html"
 letsencrypt_agree_tos: True
 letsencrypt_config_folder: "/etc/letsencrypt/configs"
-letsencrypt_post_hook: '{{ app_email_letsencrypt_post_hook | default([]) if filter == "app_email" else app_piwigo_letsencrypt_post_hook | default([]) }}'
-letsencrypt_renew_hook: '{{ app_email_letsencrypt_renew_hook | default([]) if filter == "app_email" else app_piwigo_letsencrypt_renew_hook | default([]) }}'
+letsencrypt_pre_hook: '{{ app_email_letsencrypt_pre_hook | default([]) }}'
+letsencrypt_post_hook: '{{ app_email_letsencrypt_post_hook | default([]) }}'
+letsencrypt_renew_hook: '{{ app_email_letsencrypt_renew_hook | default([]) }}'

@@ -1,0 +1,12 @@
+---
+- hosts: "dc_{{ dc }}:&cmp_letsencrypt:&app_piwigo"
+  become: true
+  vars:
+    - letsencrypt_domains:
+        - "piwigo.bleschet.fr"
+    - letsencrypt_pre_hook: []
+    - letsencrypt_post_hook: []
+    - letsencrypt_renew_hook:
+      - "systemctl reload nginx.service"
+  roles:
+    - letsencrypt
