@@ -1,32 +1,33 @@
 ---
-- name: "Remove default site configuration file for nginx"
-  file:
-    path: "/etc/nginx/sites-available/default"
-    state: absent
-  notify: "restart nginx"
-
-- name: "Copy of {{ nginx_application_file }} configuration file for nginx"
+- name: "Upadate default configuration file for nginx"
   template:
-    src: "templates/piwigo.conf"
-    dest: "{{ nginx_configuration_folder }}/sites-available/{{ nginx_application_file }}"
+    src: "default_vhost.conf.j2"
+    dest: "{{ nginx_configuration_folder }}/sites-available/default.conf"
     mode: 0644
     owner: root
     group: root
-  notify: "restart nginx"
+  notify: "reload nginx"
 
-- name: "Enable configuration"
+- name: "Create the configurations for sites"
+  template:
+    src: "nginx_template.conf.j2"
+    dest: "{{ nginx_configuration_folder }}/sites-available/{{ item }}.conf"
+    mode: 0644
+    owner: root
+    group: root
+  with_items: "{{ nginx_sites_to_deploy }}"
+  notify:
+    - reload nginx
+
+- name: Create links for sites-enabled
   file:
-    dest: "{{ nginx_configuration_folder }}/sites-enabled/{{ nginx_application_file }}"
-    src:  "{{ nginx_configuration_folder }}/sites-available/{{ nginx_application_file }}"
     state: link
-  notify: "restart nginx"
+    src: "{{ nginx_configuration_folder }}/sites-available/{{ item }}.conf"
+    dest: "{{ nginx_configuration_folder }}/sites-enabled/{{ item }}.conf"
+  with_items:
+    - default
+    - "{{ nginx_sites_to_deploy }}"
+  notify:
+    - reload nginx
 
-- name: "Copy index.html"
-  template:
-    src: "templates/index.html"
-    dest: "/usr/share/nginx/html/index.html"
-    mode: 0644
-    owner: root
-    group: root
-  notify: "restart nginx"
 

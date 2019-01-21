@@ -9,5 +9,7 @@ nginx_letsencrypt_webroot: false
 nginx_repo_url: "http://{{ nginx_site }}/packages/debian/"
 nginx_server_name: "localhost"
 nginx_site: "nginx.org"
+nginx_sites_to_deploy:
+  - piwigo
 nginx_ssl: false
 nginx_webroot: "/usr/share/nginx/html"

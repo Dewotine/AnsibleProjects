@@ -1,0 +1,8 @@
+server {
+    server_name _;
+    listen 80 default_server;
+    listen 443 ssl default_server;
+    ssl_certificate {{ nginx_cert_file }};
+    ssl_certificate_key {{ nginx_key_file }};
+    return 404; # or whatever
+}
