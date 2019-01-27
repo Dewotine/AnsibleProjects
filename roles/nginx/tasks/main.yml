@@ -5,3 +5,10 @@
 
 - import_tasks: config_ssl.yml
   when: nginx_ssl
+
+- name: "Ensure nginx service is enabled and startd"
+  systemd:
+    name: "nginx"
+    state: started
+    enabled: yes
+
