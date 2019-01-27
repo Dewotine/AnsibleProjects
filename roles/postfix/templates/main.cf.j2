@@ -128,3 +128,11 @@ virtual_mailbox_domains = mysql:/etc/postfix/mysql-virtual-mailbox-domains.cf
 virtual_mailbox_maps = mysql:/etc/postfix/mysql-virtual-mailbox-maps.cf
 virtual_alias_maps = mysql:/etc/postfix/mysql-virtual-alias-maps.cf
 {% endif %}
+
+{% if postfix_opendkim %}
+# Opendkim
+smtpd_milters           = local:var/run/opendkim/opendkim.sock
+non_smtpd_milters       = $smtpd_milters
+milter_default_action   = accept
+milter_protocol         = 6
+{% endif %}

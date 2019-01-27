@@ -1,0 +1,23 @@
+# {{ ansible_managed }}
+##
+## opendkim.conf -- configuration file for OpenDKIM filter
+##
+AutoRestart             {{ opendkim_autorestart }}
+AutoRestartRate         {{ opendkim_autorestartrate }}
+Background              {{ opendkim_background }}
+Canonicalization        {{ opendkim_canonicalization }}
+ExternalIgnoreList      {{ opendkim_externalignoreList }}
+InternalHosts           {{ opendkim_internalhosts }}
+KeyTable                {{ opendkim_keytable }}
+LogWhy                  {{ opendkim_logwhy }}
+Mode                    {{ opendkim_mode }}
+OversignHeaders         {{ opendkim_oversignheaders }}
+PidFile                 {{ opendkim_pid }}
+SignatureAlgorithm      {{ opendkim_signaturealgorithm }}
+SigningTable            {{ opendkim_signingtable }}
+Socket                  {{ opendkim_socket }}
+Syslog                  {{ opendkim_syslog }}
+SyslogSuccess           {{ opendkim_syslogsuccess }}
+TemporaryDirectory      {{ opendkim_temporarydirectory }}
+UMask                   {{ opendkim_umask }}
+UserID                  {{ opendkim_user }}:{{ opendkim_group }}

@@ -37,6 +37,8 @@ postfix_mysql_alias_query: 'SELECT destination FROM virtual_aliases WHERE source
 postfix_mysql_domains_query: 'SELECT 1 FROM virtual_domains WHERE name=''%s'';'
 postfix_mysql_users_query: 'SELECT 1 FROM virtual_users WHERE email=''%s'';'
 posftix_mysql_virtual: false
+postfix_opendkim: false
+postfix_opendkim_socket: "local:var/run/opendkim/opendkim.sock"
 postfix_private_key: "/etc/postfix/tls/domaine-key.pem"
 postfix_relayhost: false
 postfix_relayhost_port: 587

@@ -1,0 +1,27 @@
+---
+- import_tasks: install.yml
+
+- import_tasks: config.yml
+
+- name: "Ensure that opendkim.service.d directory exists"
+  file:
+    path: '/etc/systemd/system/opendkim.service.d'
+    state: 'directory'
+    owner: 'root'
+    group: 'root'
+    mode: '0755'
+
+- name: "Update opendkim systemd file"
+  template:
+    src: "opendkim-service.conf.j2"
+    dest: "/etc/systemd/system/opendkim.service.d/opendkim-service.conf"
+    owner: "root"
+    group: "root"
+    mode: "0600"
+  notify: "Reload systemd configuration"
+
+- name: "Ensure opendkim service is enabled and startd"
+  systemd:
+    name: "opendkim"
+    state: started
+    enabled: yes

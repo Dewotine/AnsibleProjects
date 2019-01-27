@@ -28,3 +28,7 @@ piwigo
 [cmp_letsencrypt]
 vps528223.ovh.net
 piwigo
+
+[cmp_opendkim]
+vps528223.ovh.net
+piwigo

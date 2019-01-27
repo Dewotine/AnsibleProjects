@@ -1,0 +1,14 @@
+---
+- name: "restart opendkim"
+  systemd:
+    name: opendkim
+    state: restarted
+
+- name: "reload opendkim"
+  systemd:
+    name: opendkim
+    state: reloaded
+
+- name: "Reload systemd configuration"
+  systemd:
+    daemon_reload: yes

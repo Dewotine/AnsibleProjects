@@ -1,0 +1,56 @@
+---
+- name: "Deploy /etc/default/opendkim file"
+  template:
+    src: "default.j2"
+    dest: "/etc/default/opendkim"
+    mode: 0644
+    owner: opendkim
+    group: opendkim
+  notify: "restart opendkim"
+
+- name: "Deploy /etc/opendkim.conf"
+  template:
+    src: "opendkim.conf.j2"
+    dest: "/etc/opendkim.conf"
+    mode: 0644
+    owner: opendkim
+    group: opendkim
+  notify: "restart opendkim"
+
+- name: "Create runtime folder"
+  file:
+    path: "{{ opendkim_rundir_folder }}"
+    state: directory
+    owner: "{{ opendkim_user }}"
+    group: "{{ opendkim_group }}"
+    mode: 0750
+
+- name: "Add postfix to opendkim group"
+  user:
+    name: "{{ opendkim_postfix_user }}"
+    groups: "{{ opendkim_group }}"
+    append: yes
+  when:
+    - opendkim_postfix_user != ""
+
+- name: "Generate dkim keys"
+  command: "opendkim-genkey -D {{ opendkim_keysfolder }} -d {{ opendkim_signed_domain }} -s {{ opendkim_selector_name }}"
+  args:
+    creates: "{{ opendkim_keysfolder }}/{{ opendkim_selector_name }}.private"
+  become_user: "{{ opendkim_user }}"
+  notify: "reload opendkim"
+
+- name: "Create opendkim configuration folder"
+  file:
+    path: "{{ opendkim_conf_folder }}"
+    state: directory
+
+- name: "Deploy key management configuration files"
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ opendkim_conf_folder }}/{{ item }}"
+  with_items:
+    - KeyTable
+    - SigningTable
+    - TrustedHosts
+  notify: "reload opendkim"

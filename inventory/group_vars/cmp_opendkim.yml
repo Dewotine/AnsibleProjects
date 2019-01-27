@@ -1,0 +1,6 @@
+---
+opendkim_canonicalization: "relaxed/relaxed"
+opendkim_mail_server: "mail.bleschet.fr"
+opendkim_postfix_user: "postfix"
+opendkim_rundir_folder: "/var/spool/postfix/var/run/opendkim"
+opendkim_signed_domain: "bleschet.fr"

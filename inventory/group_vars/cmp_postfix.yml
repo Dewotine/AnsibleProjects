@@ -26,6 +26,7 @@ postfix_mynetworks:
   - '[::ffff:127.0.0.0]/104'
   - '[::1]/128'
 postfix_mysql_virtual: true # Activate Mariadb user account management
+postfix_opendkim: true
 postfix_private_key: "{{ mailserver_private_key }}"
 postfix_relayhost: false
 postfix_relayhost_port: 25
