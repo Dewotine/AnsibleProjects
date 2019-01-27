@@ -1,0 +1,10 @@
+---
+- name: "restart postgrey"
+  systemd:
+    name: postgrey
+    state: restarted
+
+- name: "reload postgrey"
+  systemd:
+    name: postgrey
+    state: reloaded

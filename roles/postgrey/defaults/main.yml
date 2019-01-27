@@ -1,0 +1,6 @@
+---
+postgrey_conf_folder: "/etc/postgrey"
+postgrey_delay: 300
+postgrey_max_age: 35
+postgrey_port: 10023
+postgrey_text: "Server overloaded"

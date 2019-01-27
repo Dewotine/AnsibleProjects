@@ -1,0 +1,7 @@
+---
+- name: "Install postgrey"
+  apt:
+    name:
+      - postgrey
+    update_cache: true
+    state: "latest"

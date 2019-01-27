@@ -1,0 +1,5 @@
+---
+- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_postgrey"
+  become: true
+  roles:
+    - postgrey
