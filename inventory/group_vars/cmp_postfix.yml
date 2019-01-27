@@ -41,6 +41,14 @@ postfix_smtpd_banner: "You're talking to me ?"
 postfix_smtpd_helo_restrictions:
   - permit_mynetworks
   - permit_sasl_authenticated
+postfix_smtpd_recipient_restrictions:
+  - permit_mynetworks
+  - permit_sasl_authenticated
+  - reject_rhsbl_helo dbl.spamhaus.org
+  - reject_rhsbl_reverse_client dbl.spamhaus.org
+  - reject_rhsbl_sender dbl.spamhaus.org
+  - reject_rbl_client zen.spamhaus.org
+  - check_policy_service inet:127.0.0.1:10023
 postfix_smtpd_relay_restrictions:
   - reject_unknown_recipient_domain
   - reject_non_fqdn_recipient
