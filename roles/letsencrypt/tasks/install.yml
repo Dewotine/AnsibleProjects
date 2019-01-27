@@ -1,5 +1,5 @@
 ---
-- name: "Installation of cerbot client to manage letsencrypt certicate"
+- name: "Installation of cerbot client to manage letsencrypt certificate"
   apt:
     name: certbot
     state: latest
