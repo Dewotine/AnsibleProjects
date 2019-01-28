@@ -1,0 +1,32 @@
+---
+- name: create group
+  group:
+    name: "{{ spamassassin_group }}"
+    state: present
+    system: yes
+
+- name: create user
+  user:
+    name: "{{ spamassassin_user }}"
+    state: present
+    group: "{{ spamassassin_group }}"
+    comment: Spamassassin user
+    system: yes
+
+- name: "Deploy /etc/default/spamassassin file"
+  template:
+    src: "default.j2"
+    dest: "/etc/default/spamassassin"
+    mode: 0644
+    owner: root
+    group: root
+  notify: "restart spamassassin"
+
+- name: "Deploy Spamassassin configuration"
+  template:
+    src: "local.cf.j2"
+    dest: "{{ spamassin_conf_folder }}/local.cf"
+    mode: 0644
+    owner: root
+    group: root
+  notify: "restart spamassassin"

@@ -36,3 +36,7 @@ piwigo
 [cmp_postgrey]
 vps528223.ovh.net
 piwigo
+
+[cmp_spamassassin]
+vps528223.ovh.net
+piwigo

@@ -1,0 +1,5 @@
+---
+- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_spamassassin"
+  become: true
+  roles:
+    - spamassassin

@@ -1,0 +1,7 @@
+---
+spamassin_conf_folder: "/etc/spamassassin"
+spamassassin_cron: 1
+spamassassin_group: spamd
+spamassassin_report_safe: 1
+spamassassin_rewrite_header_subject: "*****SPAM*****"
+spamassassin_user: spamd

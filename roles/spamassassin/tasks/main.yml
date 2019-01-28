@@ -1,0 +1,10 @@
+---
+- import_tasks: install.yml
+
+- import_tasks: config.yml
+
+- name: "Ensure spamassassin service is enabled and started"
+  systemd:
+    name: "spamassassin"
+    state: started
+    enabled: yes
