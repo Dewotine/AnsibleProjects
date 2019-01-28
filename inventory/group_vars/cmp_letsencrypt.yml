@@ -1,5 +1,5 @@
 ---
-letsencrypt_domains: '{{ app_email_letsencrypt_domains [ default([]) }}'
+letsencrypt_domains: '{{ app_email_letsencrypt_domains [ default("") }}'
 letsencrypt_key_size: 4096
 letsencrypt_ca_url: "https://acme-v02.api.letsencrypt.org/directory"
 letsencrypt_mail_address: "cedric@bleschet.fr"
