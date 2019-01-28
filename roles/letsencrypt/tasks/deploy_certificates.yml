@@ -1,0 +1,3 @@
+---
+- name: "Generates certificates with certbot command"
+  command: "certbot --config  {{ letsencrypt_config_folder }}/{{ letsencrypt_domains }}.conf certonly"

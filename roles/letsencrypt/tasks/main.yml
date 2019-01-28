@@ -1,4 +1,19 @@
 ---
+- name: "letsencrypt_domains variable must be defined"
+  assert:
+    that:
+      - letsencrypt_domains is defined
+
 - import_tasks: install.yml
 
-- include_tasks: config.yml
+- import_tasks: config.yml
+
+- name: "Check if certificates have already been generated"
+  stat:
+    path: "/etc/letsencrypt/live/{{ letsencrypt_domains }}"
+  register: certificates_folder
+
+- import_tasks: deploy_certificates.yml
+  when: certificates_folder.stat.isdir is not defined
+
+
