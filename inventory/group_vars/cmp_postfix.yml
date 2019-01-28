@@ -57,5 +57,6 @@ postfix_smtpd_relay_restrictions:
   - reject_unauth_destination
   - permit
 postfix_tls_enable: true
+postfix_use_spamassassin: true
 postfix_virtual_aliases: []
 postfix_virtual_transport: "{{ app_postfix_virtual_transport | default('') }}"

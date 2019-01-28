@@ -62,5 +62,6 @@ postfix_smtpd_sender_restrictions:
   - reject_unknown_sender_domain
   - reject_non_fqdn_sender
 postfix_tls_enable: false
+postfix_use_spamassassin: false
 postfix_virtual_aliases: []
 postfix_virtual_transport:
