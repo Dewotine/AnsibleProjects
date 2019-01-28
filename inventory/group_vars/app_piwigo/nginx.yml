@@ -1,7 +1,0 @@
----
-app_nginx_application_file: piwigo
-app_nginx_certificates_folder: "../../inventory/group_vars/app_"
-app_nginx_server_name: "{{ app_nginx_application_file }}.bleschet.fr"
-app_nginx_ssl: true
-app_nginx_cert_file: "/etc/letsencrypt/live/piwigo.bleschet.fr/fullchain.pem"
-app_nginx_key_file: "/etc/letsencrypt/live/piwigo.bleschet.fr/privkey.pem"

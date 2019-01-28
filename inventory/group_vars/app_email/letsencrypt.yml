@@ -1,5 +1,0 @@
----
-app_email_letsencrypt_renew_hook:
-  - "systemctl restart dovecot.service && systemctl restart postfix.service"
-app_email_letsencrypt_domains:
-  - mail.bleschet.fr

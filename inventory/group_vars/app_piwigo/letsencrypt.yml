@@ -1,5 +1,0 @@
----
-app_piwigo_letsencrypt_renew_hook:
-  - "systemctl reload nginx.service"
-app_piwigo_letsencrypt_domains:
-  - piwigo.bleschet.fr
