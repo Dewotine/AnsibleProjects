@@ -1,8 +1,8 @@
 ---
-- hosts: "dc_{{ dc }}:&cmp_letsencrypt:&app_piwigo"
+- hosts: "dc_{{ dc }}:&cmp_letsencrypt:&app_roundcube"
   become: true
   vars:
-    - letsencrypt_domains: "piwigo.bleschet.fr"
+    - letsencrypt_domains: "webmail.bleschet.fr"
     - letsencrypt_pre_hook: []
     - letsencrypt_post_hook: []
     - letsencrypt_renew_hook:

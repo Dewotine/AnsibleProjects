@@ -2,8 +2,7 @@
 - hosts: "dc_{{ dc }}:&cmp_letsencrypt:&app_email"
   become: true
   vars:
-    - letsencrypt_domains:
-        - "mail.bleschet.fr"
+    - letsencrypt_domains: "mail.bleschet.fr"
     - letsencrypt_pre_hook: []
     - letsencrypt_post_hook: []
     - letsencrypt_renew_hook:
