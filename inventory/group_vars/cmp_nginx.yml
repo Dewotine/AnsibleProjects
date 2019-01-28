@@ -1,9 +1,8 @@
 ---
-nginx_application_file: "{{ app_nginx_application_file }}"
-nginx_cert_file: "{{ app_nginx_cert_file }}"
-nginx_certificates_folder: "{{ app_nginx_certificates_folder }}"
+nginx_application_vhost: "default"
+nginx_cert_file: "{{ dc_nginx_cert_file }}"
 nginx_configuration_folder: "/etc/nginx"
-nginx_key_file: "{{ app_nginx_key_file }}"
-nginx_letsencrypt_webroot: true
-nginx_server_name: "{{ app_nginx_server_name }}"
-nginx_ssl: "{{ app_nginx_ssl }}"
+nginx_key_file: "{{ dc_nginx_key_file }}"
+nginx_server_name: "{{ nginx_application_vhost }}.{{ dc_domain_name }}"
+nginx_sites_to_deploy:
+  - "{{ nginx_application_vhost }}"

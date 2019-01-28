@@ -1,10 +1,12 @@
 ---
+- name: "nginx_application_vhost must be defined"
+  assert:
+    that:
+      - nginx_application_vhost is defined
+
 - import_tasks: install.yml
 
 - import_tasks: config.yml
-
-- import_tasks: config_ssl.yml
-  when: nginx_ssl
 
 - name: "Ensure nginx service is enabled and startd"
   systemd:

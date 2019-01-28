@@ -1,15 +1,10 @@
 ---
-nginx_application_file: "default"
+nginx_application_vhost: "default"
 nginx_apt_key_url: "http://nginx.org/keys/nginx_signing.key"
-nginx_cert_file: "/etc/nginx/ssl/nginx.crt"
-nginx_certificates_folder: "../../inventory/group_vars/app_"
 nginx_configuration_folder: "/etc/nginx"
-nginx_key_file: "/etc/nginx/ssl/nginx.key"
 nginx_letsencrypt_webroot: false
 nginx_repo_url: "http://{{ nginx_site }}/packages/debian/"
 nginx_server_name: "localhost"
 nginx_site: "nginx.org"
-nginx_sites_to_deploy:
-  - piwigo
-nginx_ssl: false
+nginx_sites_to_deploy: []
 nginx_webroot: "/usr/share/nginx/html"
