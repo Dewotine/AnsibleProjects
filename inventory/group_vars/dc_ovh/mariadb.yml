@@ -9,6 +9,13 @@ mariadb_dovecot_dbpassword: !vault-encrypted |
         $ANSIBLE_VAULT;1.1;AES256
         386536313937633266326262333130353335353130633262656162643733613939646436333235623836383466383165383637613466336361343362313033390a346134396635373164653064366463313362383930313863623865653033643834396363656161306632613637316439323136316238663961386635386636310a31623666343538666166383062333536373131303031313265326230373566623962663165636237373064306334663865613131326230373137383235306231
 
+mariadb_roundcube_dbhost: "127.0.0.1"
+mariadb_roundcube_dbname: "roundcubemail"
+mariadb_roundcube_dbuser: "roundcubemail"
+mariadb_roundcube_dbpassword: !vault-encrypted |
+        $ANSIBLE_VAULT;1.1;AES256
+        363836306230393236666334366139616536376134643366653665643331373863333661396365626335396461646561666130353762643262306133383863320a636337343830643634356661616534346533633763613638343563613163393535326135323634383737393263306331656437616631393434373865616162350a37303137663731313130636537303962333738353762326238643865363634623861386433313037356363396231663838343931643836653365616339343338
+
 
 # Declare Mariadb Users
 mariadb_piwigo_installation_users:
@@ -28,6 +35,14 @@ mariadb_mailuser:
   hostgroup: yes
   password: "{{ mariadb_dovecot_dbpassword }}"
   priv: "{{ mariadb_dovecot_dbname }}%.*:ALL"
+
+mariadb_roundcubeuser:
+  name: "{{ mariadb_roundcube_dbuser }}"
+  host:
+    - "{{ mariadb_roundcube_dbhost }}"
+  hostgroup: yes
+  password: "{{ mariadb_roundcube_dbpassword }}"
+  priv: "{{ mariadb_roundcube_dbname }}%.*:ALL"
 
 # Configure MariaDB database
 mariadb_maindb_profile:
@@ -50,6 +65,7 @@ mariadb_maindb_profile:
   databases:
     - name: "piwigo"
     - name: "mailserver"
+    - name: "roundcubemail"
   users:
     - name: "{{ mariadb_piwigo_installation_users.name }}"
       host: "{{ mariadb_piwigo_installation_users.host }}"
@@ -61,3 +77,8 @@ mariadb_maindb_profile:
       hostgroup: "{{ mariadb_mailuser.hostgroup }}"
       password: "{{ mariadb_mailuser.password }}"
       priv: "{{ mariadb_mailuser.priv }}"
+    - name: "{{ mariadb_roundcubeuser.name }}"
+      host: "{{ mariadb_roundcubeuser.host }}"
+      hostgroup: "{{ mariadb_roundcubeuser.hostgroup }}"
+      password: "{{ mariadb_roundcubeuser.password }}"
+      priv: "{{ mariadb_roundcubeuser.priv }}"
