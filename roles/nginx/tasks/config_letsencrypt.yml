@@ -1,0 +1,10 @@
+---
+- name: "Create directory for acme http challenge"
+  file:
+    path: "{{ nginx_webroot }}/.well-known/acme-challenge"
+    state: directory
+    mode: 0755
+
+- set_fact:
+    nginx_cert_file: "/etc/letsencrypt/live/{{ nginx_server_name }}/fullchain.pem"
+    nginx_key_file: "/etc/letsencrypt/live/{{ nginx_server_name }}/privkey.pem"

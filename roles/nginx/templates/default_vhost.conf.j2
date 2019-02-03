@@ -1,8 +1,12 @@
 server {
-    server_name _;
     listen 80 default_server;
-    listen 443 ssl default_server;
-    ssl_certificate {{ nginx_cert_file }};
-    ssl_certificate_key {{ nginx_key_file }};
-    return 404; # or whatever
+    server_name _;
+{% if nginx_use_letsencrypt %}
+    location /.well-known/acme-challenge/ {
+        allow all;
+        root {{ nginx_webroot }};
+        try_files $uri =404;
+    }
+{% endif %}
 }
+

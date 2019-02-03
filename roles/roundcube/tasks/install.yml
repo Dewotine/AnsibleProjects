@@ -1,0 +1,7 @@
+---
+- name: "Install roundcube"
+  apt:
+    name:
+      - roundcube
+    update_cache: true
+    state: "latest"

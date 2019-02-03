@@ -6,3 +6,7 @@ piwigo
 [app_email]
 vps528223.ovh.net
 piwigo
+
+[app_roundcube]
+vps528223.ovh.net
+piwigo

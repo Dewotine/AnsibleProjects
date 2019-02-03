@@ -9,6 +9,10 @@ app_apache_vhosts:
     server_name: "piwigo.bleschet.fr"
     keepalive: true
     document_root: "/var/www/html/piwigo"
+  - name: "webmail"
+    server_name: "webmail.bleschet.fr"
+    keepalive: true
+    document_root: "/var/www/html/webmail"
 #    document_root_fragment: '<IfModule dir_module>DirectoryIndex index.html index.php</IfModule>'
 
 

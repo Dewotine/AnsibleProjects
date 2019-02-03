@@ -1,0 +1,24 @@
+---
+- name: "Ensure /etc/nginx/ssl is present"
+  file:
+    path: "/etc/nginx/ssl"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: "Copy TLS key and certificates"
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/nginx/ssl/{{ item }}"
+    mode: 0644
+    owner: root
+    group: root
+  with_items:
+    - nginx.key
+    - nginx.crt
+  notify: "reload nginx"
+
+- set_fact:
+    nginx_cert_file: "/etc/nginx/ssl/nginx.crt"
+    nginx_key_file: "/etc/nginx/ssl/nginx.key"

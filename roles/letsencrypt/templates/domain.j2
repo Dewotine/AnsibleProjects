@@ -1,6 +1,6 @@
 # {{ ansible_managed }}
 # The domain we want to get the cert for
-domains = {{ letsencrypt_domain_to_certify | default("localhost") }}
+domains = {{ letsencrypt_domains | default("localhost") }}
 
 # Key size
 rsa-key-size = {{ letsencrypt_key_size }}

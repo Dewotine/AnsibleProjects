@@ -2,7 +2,7 @@ server {
     listen 80;
     listen [::]:80;
     server_name {{ nginx_server_name }};
-{% if nginx_letsencrypt_webroot %}
+{% if nginx_use_letsencrypt %}
     location /.well-known/acme-challenge {
         root {{ nginx_webroot }};
         allow all;
