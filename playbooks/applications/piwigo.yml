@@ -1,12 +1,12 @@
 ---
-- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_nginx:&app_piwigo"
-  vars:
-     nginx_application_vhost: "piwigo"
-     nginx_use_letsencrypt: true
-  become: true
-  roles:
-    - nginx
-
+#- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_nginx:&app_piwigo"
+#  vars:
+#     nginx_application_vhost: "piwigo"
+#     nginx_use_letsencrypt: true
+#  become: true
+#  roles:
+#    - nginx
+#
 #- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_mariadb:&app_piwigo"
 #  become: true
 #  vars:
@@ -27,13 +27,14 @@
 #  roles:
 #    - apache
 #
-#- hosts: "{{ filter }}:&cmp_apache:&dc_{{ dc }}:&app_piwigo"
-#  become: true
-#  vars:
-#    appname: "app_piwigo"
-#    app_src_dir: "{{ role_path }}/../../inventory/group_vars/{{ appname }}"
-#  roles:
-#    - apache_deploy
+- hosts: "{{ filter }}:&cmp_apache:&dc_{{ dc }}:&app_piwigo"
+  become: true
+  vars:
+    appname: "piwigo"
+    my_apache_profile: "{{ apache_piwigo }}"
+    app_src_dir: "{{ role_path }}/../../inventory/group_vars/app_{{ appname }}"
+  roles:
+    - apache_deploy
 #
 #- hosts: "{{ filter }}:&cmp_piwigo:&dc_{{ dc }}:&app_piwigo"
 #  become: true

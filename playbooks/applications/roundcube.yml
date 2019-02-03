@@ -1,12 +1,12 @@
 ---
-- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_nginx:&app_roundcube"
-  vars:
-    nginx_application_vhost: "webmail"
-    nginx_use_letsencrypt: true
-  become: true
-  roles:
-    - nginx
-
+#- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_nginx:&app_roundcube"
+#  vars:
+#    nginx_application_vhost: "webmail"
+#    nginx_use_letsencrypt: true
+#  become: true
+#  roles:
+#    - nginx
+#
 #- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_mariadb:&app_roundcube"
 #  become: true
 #  vars:
@@ -22,18 +22,19 @@
 #  roles:
 #    - { role: mysql_script, when: db_init is defined and db_init | bool }
 #
-#- hosts: "{{ filter }}:&cmp_apache:&dc_{{ dc }}:&app_roundcube"
-#  become: true
-#  roles:
-#    - apache
-#
-#- hosts: "{{ filter }}:&cmp_apache:&dc_{{ dc }}:&app_roundcube"
-#  become: true
-#  vars:
-#    appname: "app_roundcube"
-#    app_src_dir: "{{ role_path }}/../../inventory/group_vars/{{ appname }}"
-#  roles:
-#    - apache_deploy
+- hosts: "{{ filter }}:&cmp_apache:&dc_{{ dc }}:&app_roundcube"
+  become: true
+  roles:
+    - apache
+
+- hosts: "{{ filter }}:&cmp_apache:&dc_{{ dc }}:&app_roundcube"
+  become: true
+  vars:
+    appname: "roundcube"
+    my_apache_profile: "{{ apache_roundcube }}"
+    app_src_dir: "{{ role_path }}/../../inventory/group_vars/app_{{ appname }}"
+  roles:
+    - apache_deploy
 #
 #- hosts: "{{ filter }}:&cmp_roundcube:&dc_{{ dc }}:&app_roundcube"
 #  become: true

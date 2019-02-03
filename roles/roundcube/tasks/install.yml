@@ -1,7 +1,10 @@
 ---
 - name: "Install roundcube"
-  apt:
-    name:
-      - roundcube
-    update_cache: true
-    state: "latest"
+  unarchive:
+    src: "{{ roundcube_download_url }}/{{ roundcube_version }}/roundcubemail-{{ roundcube_version }}.tar.gz"
+    dest: "{{ roundcube_webroot }}"
+    remote_src: yes
+    owner: www-data
+    group: www-data
+    mode: 0755
+  notify: restart apache

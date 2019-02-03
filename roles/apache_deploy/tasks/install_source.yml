@@ -1,0 +1,23 @@
+---
+- name: "Unarchive {{ appname }} "
+  unarchive:
+    src: "{{ apache_src_url }}"
+    dest: "/var/www/html"
+    remote_src: yes
+    owner: www-data
+    group: www-data
+    mode: 0755
+
+- name: "Find {{ appname }} "
+  find:
+    paths: "/var/www/html"
+    patterns: "{{ appname }}"
+    file_type: directory
+    use_regex: yes
+  register: site_to_deploy
+
+- name: "Rename"
+  command: mv {{ site_to_deploy.files[0].path }} /var/www/html/{{ appname }}
+  when:
+    - site_to_deploy.matched == 1
+  notify: restart apache

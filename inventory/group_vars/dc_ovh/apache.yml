@@ -9,10 +9,10 @@ app_apache_vhosts:
     server_name: "piwigo.bleschet.fr"
     keepalive: true
     document_root: "/var/www/html/piwigo"
-  - name: "webmail"
-    server_name: "webmail.bleschet.fr"
+  - name: "roundcube"
+    server_name: "roundcube.bleschet.fr"
     keepalive: true
-    document_root: "/var/www/html/webmail"
+    document_root: "/var/www/html/roundcube"
 #    document_root_fragment: '<IfModule dir_module>DirectoryIndex index.html index.php</IfModule>'
 
 
@@ -31,8 +31,8 @@ app_php_extra_modules:
   - 'php{{ app_php_version }}-xsl'
 
 
-apache_src_url:  "http://piwigo.org/download/dlcounter.php?code=latest"
-
-apache_php_files:
-  config_templates:
-    - { src: "database.inc.php", dst: "local/config/database.inc.php" }
+#apache_src_url:  "http://piwigo.org/download/dlcounter.php?code=latest"
+#
+#apache_php_files:
+#  config_templates:
+#    - { src: "database.inc.php", dst: "local/config/database.inc.php" }

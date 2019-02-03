@@ -1,0 +1,6 @@
+---
+apache_piwigo:
+  src_url: "http://piwigo.org/download/dlcounter.php?code=latest"
+  apache_php_files:
+    config_templates:
+      - { src: "database.inc.php", dst: "local/config/database.inc.php" }

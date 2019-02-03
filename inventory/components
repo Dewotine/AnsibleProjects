@@ -40,3 +40,7 @@ piwigo
 [cmp_spamassassin]
 vps528223.ovh.net
 piwigo
+
+[cmp_roundcube]
+vps528223.ovh.net
+piwigo
