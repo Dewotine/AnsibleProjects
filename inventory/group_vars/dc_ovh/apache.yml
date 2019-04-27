@@ -1,18 +1,24 @@
 ---
-app_apache_listening_port: 8080
-app_apache_listening_ip: "127.0.0.1"
+app_apache_listening_config:
+  '127.0.0.1':
+    - 8080
+    - 8081
 
 app_apache_mpm: 'prefork'
 
 app_apache_vhosts:
   - name: "piwigo"
-    server_name: "piwigo.bleschet.fr"
-    keepalive: true
     document_root: "/var/www/html/piwigo"
-  - name: "roundcube"
-    server_name: "roundcube.bleschet.fr"
+    ip: "127.0.0.1"
     keepalive: true
+    port: "8080"
+    server_name: "piwigo.bleschet.fr"
+  - name: "roundcube"
     document_root: "/var/www/html/roundcube"
+    ip: "127.0.0.1"
+    keepalive: true
+    port: "8081"
+    server_name: "roundcube.bleschet.fr"
 #    document_root_fragment: '<IfModule dir_module>DirectoryIndex index.html index.php</IfModule>'
 
 

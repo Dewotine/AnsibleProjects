@@ -1,6 +1,6 @@
 ---
-app_apache_listening_port: 8080
-app_apache_listening_ip: "127.0.0.1"
+app_apache_listening_config:
+  "127.0.0.1": [ 8080, 8081 ]
 
 app_apache_mpm: 'prefork'
 

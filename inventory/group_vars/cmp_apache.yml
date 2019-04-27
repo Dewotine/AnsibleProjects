@@ -1,6 +1,6 @@
 ---
-apache_listening_port: "{{ app_apache_listening_port }}"
-apache_listening_ip: "{{ app_apache_listening_ip }}"
+apache_listening_config: "{{ app_apache_listening_config }}"
+apache_default_listening_port: 8080
 
 apache_default_mpm_worker_config:
   start_servers: 2
@@ -73,4 +73,4 @@ apache_php_files: "{{ my_apache_profile.apache_php_files | default([]) }}"
 
 
 
-telegraf_input_apache: yes
+telegraf_input_apache: no

@@ -1,7 +1,7 @@
 ---
 - name: "Custom configurations"
   template:
-    src: ports.conf
+    src: ports.conf.j2
     dest: "{{ apache_config_path }}/ports.conf"
     owner: root
     group: "root"

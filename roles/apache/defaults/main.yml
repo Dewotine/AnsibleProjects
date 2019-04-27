@@ -13,8 +13,9 @@ apache_service_enable: yes
 apache_server_admin: admin@example.org
 
 # Network options
-apache_listening_ip: "*"
-apache_listening_port: 80
+apache_listening_config:
+  "*": 80
+apache_default_listening_port: 80
 
 # Security options
 apache_server_tokens: 'Prod'

@@ -3,7 +3,11 @@
 # have to change the VirtualHost statement in
 # /etc/apache2/sites-enabled/000-default.conf
 
-Listen {{ apache_listening_ip }}:{{ apache_listening_port }}
+{% for listening_ip,listening_port_list in apache_listening_config.iteritems() %}
+{% for listening_port in listening_port_list %}
+Listen {{ listening_ip }}:{{ listening_port }}
+{% endfor %}
+{% endfor %}
 
 <IfModule ssl_module>
         Listen 443
