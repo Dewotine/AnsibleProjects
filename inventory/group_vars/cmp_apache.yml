@@ -62,15 +62,12 @@ apache_mpm: "{{ app_apache_mpm_config | default(apache_default_mpm_config) }}"
 apache_mpm_worker: "{{ app_apache_mpm_worker_config | default(apache_default_mpm_worker_config) }}"
 
 apache_log_formats:
-  complete: "%h %l %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\" \\\"%{User-Agent}i\\\" \\\"%{Host}i\\\" %D %I %O"
+  complete: "%h %l %u %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\" \\\"%{User-Agent}i\\\" \\\"%{Host}i\\\" %D %I %O \\\"%{X-Unique-ID}o\\\""
+  realip: "%{X-Real-IP}i %t \\\"%r\\\" %>s %b \\\"%{Referer}i\\\" \\\"%{User-Agent}i\\\" %D"
 
 apache_catchall_virtualhost: yes
 apache_catchall_virtualhost_logformat: "complete"
 apache_enable_localhost_virtualhost: yes
 
-apache_src_url: "{{ my_apache_profile.src_url | default('http://piwigo.org/download/dlcounter.php?code=latest') }}"
-apache_php_files: "{{ my_apache_profile.apache_php_files | default([]) }}"
-
-
-
-telegraf_input_apache: no
+#apache_src_url: "{{ my_apache_profile.src_url | default('http://piwigo.org/download/dlcounter.php?code=latest') }}"
+#apache_php_files: "{{ my_apache_profile.apache_php_files | default([]) }}"
