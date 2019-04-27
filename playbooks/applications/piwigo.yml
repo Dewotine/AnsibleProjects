@@ -2,6 +2,8 @@
 #- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_nginx:&app_piwigo"
 #  vars:
 #     nginx_application_vhost: "piwigo"
+#     nginx_proxy_pass_host: "127.0.0.1"
+#     nginx_proxy_pass_port: "8080"
 #     nginx_use_letsencrypt: true
 #  become: true
 #  roles:
