@@ -13,6 +13,8 @@ dovecot_doveadm_worker_count: 0
 dovecot_force_imaps: True
 dovecot_force_pop3s: True
 dovecot_hierarchy_separator: "/"
+dovecot_imap_port: 0
+dovecot_imaps_port: 993
 dovecot_import_environment: "TZ"
 dovecot_instance_name: "dovecot"
 dovecot_listen:

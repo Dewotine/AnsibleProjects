@@ -13,6 +13,8 @@ dovecot_doveadm_worker_count: 0
 dovecot_force_imaps: True
 dovecot_force_pop3s: True
 dovecot_hierarchy_separator: "/"
+dovecot_imap_port: 143
+dovecot_imaps_port: 993
 dovecot_import_environment: "TZ"
 dovecot_instance_name: "dovecot"
 dovecot_listen:
@@ -27,6 +29,8 @@ dovecot_mailbox_location_base: "/var/mail"
 dovecot_mail_privileged_group: "mail"
 dovecot_mariadb_password_query: 'SELECT email as user, password FROM virtual_users WHERE email=''%u'';'
 dovecot_parameters_regenerate: 0
+dovecot_pop3_port: 110
+dovecot_pop3s_port: 995
 dovecot_postfix_smtp_auth: false
 dovecot_private_key: "/etc/dovecot/dovecot.pem"
 dovecot_protocols:
