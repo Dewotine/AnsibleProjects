@@ -1,18 +1,11 @@
 ---
-- name: "Deploy /etc/default/postgrey file"
-  template:
-    src: "default.j2"
-    dest: "/etc/default/postgrey"
-    mode: 0644
-    owner: root
-    group: root
-  notify: "restart postgrey"
-
-- name: "Deploy PostGrey configuration"
+- name: "deploy templates congiguration files"
   template:
     src: "{{ item }}.j2"
-    dest: "{{ postgrey_conf_folder }}/{{ item }}"
+    dest: "{{ roundcube_webroot }}/config/{{ item }}"
+    owner: root
+    group: www-data
+    mode: 0644
   with_items:
-    - whitelist_clients
-    - whitelist_recipients
-  notify: "reload postgrey"
+    - config.inc.php
+    - debian-db.php
