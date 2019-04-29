@@ -6,5 +6,4 @@
     owner: root
     group: "root"
     mode: 0644
-    validate: "echo '%s' && apache2ctl configtest"
   notify: reload apache
