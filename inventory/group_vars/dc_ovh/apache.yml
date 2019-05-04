@@ -21,6 +21,8 @@ app_apache_vhosts:
     keepalive: true
     port: "8081"
     server_name: "roundcube.bleschet.fr"
+    server_aliases:
+      - "webmail.bleschet.fr"
 #    document_root_fragment: '<IfModule dir_module>DirectoryIndex index.html index.php</IfModule>'
 
 
