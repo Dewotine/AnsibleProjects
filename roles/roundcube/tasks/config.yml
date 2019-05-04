@@ -1,11 +1,24 @@
 ---
-- name: "deploy templates congiguration files"
+- name: "Configure log folder"
+  file:
+    path: "{{ roundcube_log_folder }}"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: 0755
+
+- name: "Deploy templates congiguration files"
   template:
     src: "{{ item }}.j2"
     dest: "{{ roundcube_webroot }}/config/{{ item }}"
-    owner: root
+    owner: www-data
     group: www-data
-    mode: 0644
+    mode: 0755
   with_items:
     - config.inc.php
-    - debian-db.php
+
+- name: "Delete the installer folder"
+  file:
+    path: "{{ roundcube_webroot }}/installer"
+    state: absent
+

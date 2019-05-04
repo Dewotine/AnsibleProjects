@@ -7,34 +7,30 @@
     group: www-data
     mode: 0755
 
-- name: "Create link between package installation folder and apache roundcube folder"
-  file:
-    src: "/var/www/html/roundcube"
-    dest: "/var/lib/roundcube"
-    state: link
-
 - name: "Install roundcube prerequisites packages"
   apt:
     name:
-      - dbconfig-common
       - php-net-smtp
       - php-net-socket
       - php-auth-sasl
       - php-mail-mime
       - php-net-sieve
+      - php-net-idna2
     update_cache: true
     state: "present"
 
 - name: "Install roundcube"
-  apt:
-    name:
-      - roundcube-mysql
-      - roundcube-core
-    update_cache: true
-    state: "present"
+  unarchive:
+    src: "{{ roundcube_download_url }}/{{ roundcube_version }}/roundcubemail-{{ roundcube_version }}.tar.gz"
+    dest: "{{ roundcube_webroot }}/"
+    remote_src: yes
+    owner: www-data
+    group: www-data
+    mode: 0755
+    extra_opts:
+      - '--strip-components=1'
+#  notify: restart apache
 
-- name: "Correct link for the roundcube log"
-  file:
-    src: "/var/log/roundcube"
-    dest: "/var/www/html/roundcube/logs"
-    state: link
+- name: "Install js scripts"
+  command: "{{ roundcube_webroot }}/bin/install-jsdeps.sh"
+  become_user: www-data
