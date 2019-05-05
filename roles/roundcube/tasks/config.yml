@@ -19,6 +19,10 @@
 
 - name: "Delete the installer folder"
   file:
-    path: "{{ roundcube_webroot }}/installer"
+    path: "{{ roundcube_webroot }}/{{ item }}"
     state: absent
+  with_items:
+    - installer
+    - logs
+    - temp
 

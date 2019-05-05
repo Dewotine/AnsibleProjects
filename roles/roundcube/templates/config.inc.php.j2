@@ -44,4 +44,9 @@ $config['enable_spellcheck'] = false;
 // ----------------------------------
 $config['log_dir'] = '{{ roundcube_log_folder }}';
 
-
+// ----------------------------------
+// TEMP files
+// ----------------------------------
+// use this folder to store temp files
+// must be writeable for the user who runs PHP process (Apache user if mod_php is being used)
+$config['temp_dir'] = '{{ roundcube_tmp_folder }}';
