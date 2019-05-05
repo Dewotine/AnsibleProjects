@@ -1,11 +1,20 @@
 ---
+nginx_aliases: []
 nginx_application_vhost: "default"
 nginx_apt_key_url: "http://nginx.org/keys/nginx_signing.key"
 nginx_configuration_folder: "/etc/nginx"
+nginx_domain: "localdomain"
 nginx_repo_url: "http://{{ nginx_site }}/packages/debian/"
 nginx_server_name: "localhost"
+nginx_ssl_port: 443
+nginx_ssl_protocols:
+  - "TLSv1"
+  - "TLSv1.1"
+  - "TLSv1.2"
+nginx_ssl_session_cache: "shared:SSL:20m"
+nginx_ssl_timeout: "60m"
 nginx_site: "nginx.org"
 nginx_sites_to_deploy: []
 nginx_use_letsencrypt: false
 nginx_webroot: "/usr/share/nginx/html"
-nginx_x_frame_options: "DENY"
+nginx_x_frame_options: "deny"

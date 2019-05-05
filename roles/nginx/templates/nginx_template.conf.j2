@@ -1,7 +1,7 @@
 server {
     listen 80;
     listen [::]:80;
-    server_name {{ nginx_server_name }};
+    server_name {{ nginx_server_name }}{% for nginx_alias in nginx_aliases %} {{ nginx_alias }}.{{ nginx_domain }}{% endfor %};
 {% if nginx_use_letsencrypt %}
     location /.well-known/acme-challenge {
         root {{ nginx_webroot }};
@@ -15,17 +15,17 @@ server {
 
 server {
     server_name {{ nginx_server_name }};
-    listen 443 ssl;
+    listen {{ nginx_ssl_port }} ssl;
 
     # SSL Certificates
     ssl_certificate {{ nginx_cert_file }};
     ssl_certificate_key {{ nginx_key_file }};
 
     # Enable session caching, increase session timeout
-    ssl_session_cache shared:SSL:20m;
-    ssl_session_timeout 60m;
+    ssl_session_cache {{ nginx_ssl_session_cache }};
+    ssl_session_timeout {{ nginx_ssl_timeout }};
     #Disable SSL in favor of TLS (safer)
-    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_protocols {% for protocol in nginx_ssl_protocols %}{{ protocol }} {% endfor %};
 
     add_header X-Frame-Options "{{ nginx_x_frame_options }}";
     add_header Strict-Transport-Security "max-age=60; preload";

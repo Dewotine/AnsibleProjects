@@ -2,10 +2,11 @@
 nginx_application_vhost: "default"
 nginx_cert_file: "/etc/letsencrypt/live/{{ nginx_server_name }}/fullchain.pem"
 nginx_configuration_folder: "/etc/nginx"
+nginx_domain: "{{ dc_domain_name }}"
 nginx_proxy_pass_host: "127.0.0.1"
 nginx_key_file: "/etc/letsencrypt/live/{{ nginx_server_name }}/privkey.pem"
 nginx_proxy_pass_port: "8080"
-nginx_server_name: "{{ nginx_application_vhost }}.{{ dc_domain_name }}"
+nginx_server_name: "{{ nginx_application_vhost }}.{{ nginx_domain }}"
 nginx_sites_to_deploy:
   - "{{ nginx_application_vhost }}"
-nginx_x_frame_options: "SAMEORIGIN"
+nginx_x_frame_options: "sameorigin"
