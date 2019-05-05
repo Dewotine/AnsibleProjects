@@ -16,6 +16,7 @@
     mode: 0755
   with_items:
     - config.inc.php
+  notify: reload apache
 
 - name: "Delete the installer folder"
   file:

@@ -19,7 +19,7 @@
     update_cache: true
     state: "present"
 
-- name: "Install roundcube"
+- name: "Install roundcube from {{ roundcube_download_url }} in version {{ roundcube_version }}"
   unarchive:
     src: "{{ roundcube_download_url }}/{{ roundcube_version }}/roundcubemail-{{ roundcube_version }}.tar.gz"
     dest: "{{ roundcube_webroot }}/"
@@ -29,7 +29,7 @@
     mode: 0755
     extra_opts:
       - '--strip-components=1'
-#  notify: restart apache
+   notify: reload apache
 
 - name: "Install js scripts"
   command: "{{ roundcube_webroot }}/bin/install-jsdeps.sh"
