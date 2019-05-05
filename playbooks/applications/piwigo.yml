@@ -1,34 +1,34 @@
 ---
-#- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_nginx:&app_piwigo"
-#  vars:
-#     nginx_application_vhost: "piwigo"
-#     nginx_proxy_pass_host: "127.0.0.1"
-#     nginx_proxy_pass_port: "8080"
-#     nginx_use_letsencrypt: true
-#  become: true
-#  roles:
-#    - nginx
-#
-#- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_mariadb:&app_piwigo"
-#  become: true
-#  vars:
-#    mysql_profile: "{{ mariadb_maindb_profile }}"
-#  roles:
-#    - mysql
-#
-#- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_mariadb:&app_piwigo"
-#  become: true
-#  vars:
-#    mysql_script_db_name: "piwigo"
-#    mysql_script_script: "{{ role_path }}/../../inventory/group_vars/app_{{ mysql_script_db_name }}/piwigo.sql"
-#  roles:
-#    - { role: mysql_script, when: db_init is defined and db_init | bool }
-#
-#- hosts: "{{ filter }}:&cmp_apache:&dc_{{ dc }}:&app_piwigo"
-#  become: true
-#  roles:
-#    - apache
-#
+- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_nginx:&app_piwigo"
+  vars:
+     nginx_application_vhost: "piwigo"
+     nginx_proxy_pass_host: "127.0.0.1"
+     nginx_proxy_pass_port: "8080"
+     nginx_use_letsencrypt: true
+  become: true
+  roles:
+    - nginx
+
+- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_mariadb:&app_piwigo"
+  become: true
+  vars:
+    mysql_profile: "{{ mariadb_maindb_profile }}"
+  roles:
+    - mysql
+
+- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_mariadb:&app_piwigo"
+  become: true
+  vars:
+    mysql_script_db_name: "piwigo"
+    mysql_script_script: "{{ role_path }}/../../inventory/group_vars/app_{{ mysql_script_db_name }}/piwigo.sql"
+  roles:
+    - { role: mysql_script, when: db_init is defined and db_init | bool }
+
+- hosts: "{{ filter }}:&cmp_apache:&dc_{{ dc }}:&app_piwigo"
+  become: true
+  roles:
+    - apache
+
 - hosts: "{{ filter }}:&cmp_apache:&dc_{{ dc }}:&app_piwigo"
   become: true
   vars:
@@ -37,10 +37,8 @@
     app_src_dir: "{{ role_path }}/../../inventory/group_vars/app_{{ appname }}"
   roles:
     - apache_deploy
-#
-#- hosts: "{{ filter }}:&cmp_piwigo:&dc_{{ dc }}:&app_piwigo"
-#  become: true
-#  roles:
-#    - piwigo
 
-
+- hosts: "{{ filter }}:&cmp_piwigo:&dc_{{ dc }}:&app_piwigo"
+  become: true
+  roles:
+    - piwigo
