@@ -40,7 +40,7 @@
   roles:
     - apache_deploy
 
-- hosts: "{{ filter }}:&cmp_roundcube:&dc_{{ dc }}:&app_roundcube"
+- hosts: "{{ filter }}:&dc_{{ dc }}:&app_roundcube"
   become: true
   roles:
     - roundcube
