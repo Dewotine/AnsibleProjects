@@ -9,12 +9,10 @@
 
 - name: "Install wordpress from {{ wordpress_download_url }} in version {{ wordpress_version }}"
   unarchive:
-    src: "{{ wordpress_download_url }}/{{ wordpress_version }}/wordpressmail-{{ wordpress_version }}.zip"
+    src: "https://wordpress.org/latest.tar.gz"
     dest: "{{ wordpress_webroot }}/"
     remote_src: yes
     owner: www-data
     group: www-data
     mode: 0755
-    extra_opts:
-      - '--strip-components=1'
-   notify: reload apache
+  notify: reload apache

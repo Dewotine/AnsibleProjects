@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
 	config.vm.define "piwigo" do |piwigo|
 	piwigo.vm.box = "debian/stretch64"
 	piwigo.disksize.size = '15GB'
-	piwigo.vm.network "public_network", ip: "192.168.1.200", bridge: "enp3s0"
+	piwigo.vm.network "public_network", ip: "192.168.1.200"
 	piwigo.vm.hostname = "piwigo"
 	#piwigo.vm.network "forwarded_port", guest: 8080, host: 80
 	#piwigo.vm.network "forwarded_port", guest: 443, host: 8443

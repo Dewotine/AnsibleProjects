@@ -2,4 +2,4 @@
 - name: reload apache
   systemd:
     name: apache2
-    state: reloaded
+    state: reload

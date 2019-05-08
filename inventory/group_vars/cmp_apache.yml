@@ -68,6 +68,3 @@ apache_log_formats:
 apache_catchall_virtualhost: yes
 apache_catchall_virtualhost_logformat: "complete"
 apache_enable_localhost_virtualhost: yes
-
-#apache_src_url: "{{ my_apache_profile.src_url | default('http://piwigo.org/download/dlcounter.php?code=latest') }}"
-#apache_php_files: "{{ my_apache_profile.apache_php_files | default([]) }}"

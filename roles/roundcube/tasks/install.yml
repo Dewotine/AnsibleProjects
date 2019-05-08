@@ -29,7 +29,7 @@
     mode: 0755
     extra_opts:
       - '--strip-components=1'
-   notify: reload apache
+  notify: reload apache
 
 - name: "Install js scripts"
   command: "{{ roundcube_webroot }}/bin/install-jsdeps.sh"

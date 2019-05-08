@@ -1,5 +1,0 @@
----
-apache_src_url: "http://piwigo.org/download/dlcounter.php?code=latest"
-apache_source: true
-apache_service_name: '{{ "apache2"  if ansible_distribution == "Debian" else "httpd"  }}'
-apachedeploy_config: true
