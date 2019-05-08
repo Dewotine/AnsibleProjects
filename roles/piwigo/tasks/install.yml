@@ -1,0 +1,10 @@
+---
+- name: "Install piwigo from {{ piwigo_download_url }}"
+  unarchive:
+    src: "{{ piwigo_download_url }}"
+    dest: "{{ piwigo_webroot }}/"
+    remote_src: yes
+    owner: www-data
+    group: www-data
+    mode: 0755
+  notify: reload apache

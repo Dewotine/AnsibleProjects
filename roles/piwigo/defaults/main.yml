@@ -1,1 +1,3 @@
 ---
+piwigo_download_url: "http://piwigo.org/download/dlcounter.php?code=latest"
+piwigo_webroot: "/var/www/html"
