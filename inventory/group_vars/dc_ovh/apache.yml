@@ -3,6 +3,7 @@ app_apache_listening_config:
   '127.0.0.1':
     - 8080
     - 8081
+    - 8082
 
 app_apache_mpm: 'prefork'
 
@@ -24,6 +25,13 @@ app_apache_vhosts:
     server_aliases:
       - "webmail.bleschet.fr"
 #    document_root_fragment: '<IfModule dir_module>DirectoryIndex index.html index.php</IfModule>'
+  - name: "wordpress"
+    custom_log_format: "realip"
+    document_root: "/var/www/html/wordpress"
+    ip: "127.0.0.1"
+    keepalive: true
+    port: "8082"
+    server_name: "wordpress.bleschet.fr"
 
 
 # PHP Settings
