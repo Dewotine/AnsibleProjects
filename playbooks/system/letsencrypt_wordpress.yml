@@ -1,0 +1,11 @@
+---
+- hosts: "dc_{{ dc }}:&cmp_letsencrypt:&app_wordpress"
+  become: true
+  vars:
+    - letsencrypt_domains: "wordpress.bleschet.fr"
+    - letsencrypt_pre_hook: []
+    - letsencrypt_post_hook: []
+    - letsencrypt_renew_hook:
+      - "systemctl reload nginx.service"
+  roles:
+    - letsencrypt

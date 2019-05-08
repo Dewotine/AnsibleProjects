@@ -1,0 +1,50 @@
+---
+## Create lets encrtypt certificates (DNS entry must be created first)
+#- import_playbook: ../system/letsencrypt_wordpress.yml
+#  when: letsencrypt_create is defined and letsencrypt_create | bool
+#
+#- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_nginx:&app_wordpress"
+#  vars:
+#    nginx_application_vhost: "wordpress"
+#    nginx_proxy_pass_host: "127.0.0.1"
+#    nginx_proxy_pass_port: "8082"
+#    nginx_use_letsencrypt: true
+#  become: true
+#  roles:
+#    - nginx
+
+- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_mariadb:&app_wordpress"
+  become: true
+  vars:
+    mysql_profile: "{{ mariadb_maindb_profile }}"
+  roles:
+    - mysql
+
+- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_mariadb:&app_wordpress"
+  become: true
+  vars:
+    mysql_script_db_name: "wordpress"
+    mysql_script_script: "{{ role_path }}/../../inventory/group_vars/app_{{ mysql_script_db_name }}/wordpress.sql"
+  roles:
+    - { role: mysql_script, when: db_init is defined and db_init | bool }
+
+- hosts: "{{ filter }}:&cmp_apache:&dc_{{ dc }}:&app_wordpress"
+  become: true
+  roles:
+    - apache
+
+- hosts: "{{ filter }}:&cmp_apache:&dc_{{ dc }}:&app_wordpress"
+  become: true
+  vars:
+    appname: "wordpress"
+    my_apache_profile: "{{ apache_wordpress }}"
+    app_src_dir: "{{ role_path }}/../../inventory/group_vars/app_{{ appname }}"
+  roles:
+    - apache_deploy
+
+- hosts: "{{ filter }}:&dc_{{ dc }}:&app_wordpress"
+  become: true
+  roles:
+    - wordpress
+
+

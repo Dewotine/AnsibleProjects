@@ -10,3 +10,7 @@ piwigo
 [app_roundcube]
 vps528223.ovh.net
 piwigo
+
+[app_wordpress]
+vps528223.ovh.net
+piwigo
