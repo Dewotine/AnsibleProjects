@@ -1,0 +1,4 @@
+---
+wordpress_download_url: "https://wordpress.org"
+wordpress_version: "latest"
+wordpress_webroot: "/var/www/html/wordpress"

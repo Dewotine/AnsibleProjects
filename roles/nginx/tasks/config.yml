@@ -1,5 +1,5 @@
 ---
-- name: "Upadate default configuration file for nginx"
+- name: "Update default configuration file for nginx"
   template:
     src: "default_vhost.conf.j2"
     dest: "{{ nginx_configuration_folder }}/sites-available/default.conf"
