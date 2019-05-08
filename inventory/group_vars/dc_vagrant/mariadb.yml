@@ -1,24 +1,69 @@
 ---
-# Declare Mariadb Users
-mariadb_piwigo_installation_users:
-  name: "piwigouser"
-  host: "['localhost']"
-  hostgroup: yes
-  password: !vault-encrypted |
+###
+# MariaDB connexion parameters
+###
+mariadb_piwigo_dbhost: "127.0.0.1"
+mariadb_piwigo_dbuser: "piwigouser"
+mariadb_piwigo_dbname: "piwigo"
+mariadb_piwigo_password: !vault-encrypted |
         $ANSIBLE_VAULT;1.1;AES256
         663163636366613762343230356465346430633939663961383261393036666333316166396232646134316134356434323733353664663630353936636362630a396630373631383834636266386331613562326232343138623431656361363464643135323566346434313962356435303732396233613432343839396464640a3338393439626136303231616333306166383064333932636538376433316631
-  priv: "piwigo%.*:ALL"
 
-mariadb_piwigo_installation_users:
-  name: "mailuser"
-  host: "['localhost']"
-  hostgroup: yes
-  password: !vault-encrypted |
+mariadb_dovecot_dbhost: "127.0.0.1"
+mariadb_dovecot_dbname: "mailserver"
+mariadb_dovecot_dbuser: "mailuser"
+mariadb_dovecot_dbpassword: !vault-encrypted |
         $ANSIBLE_VAULT;1.1;AES256
         386536313937633266326262333130353335353130633262656162643733613939646436333235623836383466383165383637613466336361343362313033390a346134396635373164653064366463313362383930313863623865653033643834396363656161306632613637316439323136316238663961386635386636310a31623666343538666166383062333536373131303031313265326230373566623962663165636237373064306334663865613131326230373137383235306231
-  priv: "mailuser%.*:ALL"
 
+mariadb_roundcube_dbhost: "127.0.0.1"
+mariadb_roundcube_dbname: "roundcube"
+mariadb_roundcube_dbuser: "roundcube"
+mariadb_roundcube_dbpassword: "password"
+
+mariadb_wordpress_dbhost: "127.0.0.1"
+mariadb_wordpress_dbname: "wordpress"
+mariadb_wordpress_dbuser: "wordpress"
+mariadb_wordpress_dbpassword: "password"
+
+###
+# Declare Mariadb Users
+###
+mariadb_piwigo_installation_users:
+  name: "piwigouser"
+  host:
+    - "{{ mariadb_piwigo_dbhost }}"
+  hostgroup: yes
+  password: "{{ mariadb_piwigo_password }}"
+  priv: "{{ mariadb_piwigo_dbhost }}%.*:ALL"
+
+mariadb_mailuser:
+  name: "{{ mariadb_dovecot_dbuser }}"
+  host:
+    - "{{ mariadb_dovecot_dbhost }}"
+  hostgroup: yes
+  password: "{{ mariadb_dovecot_dbpassword }}"
+  priv: "{{ mariadb_dovecot_dbname }}%.*:ALL"
+
+mariadb_roundcubeuser:
+  name: "{{ mariadb_roundcube_dbuser }}"
+  host:
+    - "{{ mariadb_roundcube_dbhost }}"
+  hostgroup: yes
+  password: "{{ mariadb_roundcube_dbpassword }}"
+  priv: "{{ mariadb_roundcube_dbname }}%.*:ALL"
+
+mariadb_wordpressuser:
+  name: "{{ mariadb_wordpress_dbuser }}"
+  host:
+    - "{{ mariadb_wordpress_dbhost }}"
+  hostgroup: yes
+  password: "{{ mariadb_wordpress_dbpassword }}"
+  priv: "{{ mariadb_wordpress_dbname }}%.*:ALL"
+
+###
 # Configure MariaDB database
+###
 mariadb_maindb_profile:
   key_buffer_size: "32M"
   key_cache_segments: 64
@@ -39,15 +84,26 @@ mariadb_maindb_profile:
   databases:
     - name: "piwigo"
     - name: "mailserver"
+    - name: "roundcube"
+    - name: "wordpress"
   users:
     - name: "{{ mariadb_piwigo_installation_users.name }}"
       host: "{{ mariadb_piwigo_installation_users.host }}"
       hostgroup: "{{ mariadb_piwigo_installation_users.hostgroup }}"
       password: "{{ mariadb_piwigo_installation_users.password }}"
       priv: "{{ mariadb_piwigo_installation_users.priv }}"
-
-    - name: "{{ mariadb_piwigo_installation_users.name }}"
-      host: "{{ mariadb_piwigo_installation_users.host }}"
-      hostgroup: "{{ mariadb_piwigo_installation_users.hostgroup }}"
-      password: "{{ mariadb_piwigo_installation_users.password }}"
-      priv: "{{ mariadb_piwigo_installation_users.priv }}"
+    - name: "{{ mariadb_mailuser.name }}"
+      host: "{{ mariadb_mailuser.host }}"
+      hostgroup: "{{ mariadb_mailuser.hostgroup }}"
+      password: "{{ mariadb_mailuser.password }}"
+      priv: "{{ mariadb_mailuser.priv }}"
+    - name: "{{ mariadb_roundcubeuser.name }}"
+      host: "{{ mariadb_roundcubeuser.host }}"
+      hostgroup: "{{ mariadb_roundcubeuser.hostgroup }}"
+      password: "{{ mariadb_roundcubeuser.password }}"
+      priv: "{{ mariadb_roundcubeuser.priv }}"
+    - name: "{{ mariadb_wordpressuser.name }}"
+      host: "{{ mariadb_wordpressuser.host }}"
+      hostgroup: "{{ mariadb_wordpressuser.hostgroup }}"
+      password: "{{ mariadb_wordpressuser.password }}"
+      priv: "{{ mariadb_wordpressuser.priv }}"

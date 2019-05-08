@@ -1,14 +1,28 @@
 ---
 app_apache_listening_config:
-  "127.0.0.1": [ 8080, 8081 ]
+  '127.0.0.1':
+    - 8080
+    - 8081
 
 app_apache_mpm: 'prefork'
 
 app_apache_vhosts:
   - name: "piwigo"
-    server_name: "piwigo.bleschet.fr"
-    keepalive: true
+    custom_log_format: "realip"
     document_root: "/var/www/html/piwigo"
+    ip: "127.0.0.1"
+    keepalive: true
+    port: "8080"
+    server_name: "piwigo.bleschet.fr"
+  - name: "roundcube"
+    custom_log_format: "realip"
+    document_root: "/var/www/html/roundcube"
+    ip: "127.0.0.1"
+    keepalive: true
+    port: "8081"
+    server_name: "roundcube.bleschet.fr"
+    server_aliases:
+      - "webmail.bleschet.fr"
 #    document_root_fragment: '<IfModule dir_module>DirectoryIndex index.html index.php</IfModule>'
 
 
@@ -27,8 +41,8 @@ app_php_extra_modules:
   - 'php{{ app_php_version }}-xsl'
 
 
-apache_src_url:  "http://piwigo.org/download/dlcounter.php?code=latest"
-
-apache_php_files:
-  config_templates:
-    - { src: "database.inc.php", dst: "local/config/database.inc.php" }
+#apache_src_url:  "http://piwigo.org/download/dlcounter.php?code=latest"
+#
+#apache_php_files:
+#  config_templates:
+#    - { src: "database.inc.php", dst: "local/config/database.inc.php" }
