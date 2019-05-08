@@ -29,15 +29,6 @@
   roles:
     - apache
 
-- hosts: "{{ filter }}:&cmp_apache:&dc_{{ dc }}:&app_piwigo"
-  become: true
-  vars:
-    appname: "piwigo"
-    my_apache_profile: "{{ apache_piwigo }}"
-    app_src_dir: "{{ role_path }}/../../inventory/group_vars/app_{{ appname }}"
-  roles:
-    - apache_deploy
-
 - hosts: "{{ filter }}:&cmp_piwigo:&dc_{{ dc }}:&app_piwigo"
   become: true
   roles:
