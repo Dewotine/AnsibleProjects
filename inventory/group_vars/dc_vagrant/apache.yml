@@ -1,6 +1,6 @@
 ---
 app_apache_listening_config:
-  '127.0.0.1':
+  '*':
     - 8080
     - 8081
     - 8082
@@ -11,14 +11,14 @@ app_apache_vhosts:
   - name: "piwigo"
     custom_log_format: "realip"
     document_root: "/var/www/html/piwigo"
-    ip: "127.0.0.1"
+    ip: "*"
     keepalive: true
     port: "8080"
     server_name: "piwigo.bleschet.fr"
   - name: "roundcube"
     custom_log_format: "realip"
     document_root: "/var/www/html/roundcube"
-    ip: "127.0.0.1"
+    ip: "*"
     keepalive: true
     port: "8081"
     server_name: "roundcube.bleschet.fr"
@@ -28,7 +28,7 @@ app_apache_vhosts:
   - name: "wordpress"
     custom_log_format: "realip"
     document_root: "/var/www/html/wordpress"
-    ip: "127.0.0.1"
+    ip: "*"
     keepalive: true
     port: "8082"
     server_name: "wordpress.bleschet.fr"
