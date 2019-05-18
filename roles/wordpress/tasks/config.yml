@@ -2,9 +2,11 @@
 - name: "Deploy templates congiguration files"
   template:
     src: "{{ item }}.j2"
-    dest: "{{ wordpress_webroot }}/config/{{ item }}"
+    dest: "{{ wordpress_webroot }}/{{ item }}"
     owner: www-data
     group: www-data
     mode: 0755
   with_items:
-    - config.inc.php
+    - wp-config.php
+
+
