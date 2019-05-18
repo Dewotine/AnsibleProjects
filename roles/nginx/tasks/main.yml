@@ -6,13 +6,15 @@
 
 - import_tasks: install.yml
 
+- import_tasks: config_nginx.yml
+
 - import_tasks: config_ssl.yml
   when: nginx_use_letsencrypt == false
 
 - import_tasks: config_letsencrypt.yml
   when: nginx_use_letsencrypt == true
 
-- import_tasks: config.yml
+- import_tasks: config_vhost.yml
 
 - name: "Ensure nginx service is enabled and started"
   systemd:
