@@ -12,5 +12,8 @@ vps528223.ovh.net
 piwigo
 
 [app_wordpress]
+piwigo
+
+[app_mediawiki]
 vps528223.ovh.net
 piwigo
