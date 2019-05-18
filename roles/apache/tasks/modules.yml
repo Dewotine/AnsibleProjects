@@ -1,12 +1,27 @@
 ---
-- import_tasks: mod_jk.yml
+- name: "Manage mpm modules activation (absent)"
+  apache2_module:
+    name: "{{ item.name }}"
+    state: "absent"
+    ignore_configcheck: True
+  with_items: "{{ apache_modules | selectattr('name', 'match', '^mpm') | list | sort(attribute='state', reverse=True) }}"
+  when: item.state == "absent"
+  notify: restart apache
 
-- name: "mod_auth_pgsql installation"
-  apt:
-    name: "{{ apache_module_names.auth_pgsql }}"
-    state: present
-  when: "item.state == 'present'"
-  with_items: "{{ apache_modules | selectattr('name', 'match', '^auth_pgsql$') | list }}"
+- name: "Manage mpm modules activation (present)"
+  apache2_module:
+    name: "{{ item.name }}"
+    state: "present"
+    ignore_configcheck: True
+  with_items: "{{ apache_modules | selectattr('name', 'match', '^mpm') | list | sort(attribute='state', reverse=True) }}"
+  when: item.state == "present"
+  notify: restart apache
+
+- name: "Manage modules activation"
+  apache2_module:
+    name: "{{ item.name }}"
+    state: "{{ item.state | default(absent) }}"
+  with_items: "{{ apache_modules | rejectattr('name', 'match', '^mpm') | list }}"
   notify: restart apache
 
 - name: "mpm_worker Configuration"
@@ -19,10 +34,12 @@
   with_items: "{{ apache_modules | selectattr('name', 'match', '^mpm_worker$') | list }}"
   notify: reload apache
 
-- import_tasks: mod_dav_svn.yml
-
-- import_tasks: mod_php.yml
-
-- name: "{{ ansible_os_family }} specific configuration"
-  include_tasks: "modules-{{ ansible_os_family }}.yml"
-
+- name: "mpm_prefork Configuration"
+  template:
+    src: "mpm_prefork.conf"
+    dest: "{{ apache_config_path }}/mods-available/mpm_prefork.conf"
+    owner: root
+    group: "{{ root_group }}"
+  when: "item.state == 'present'"
+  with_items: "{{ apache_modules | selectattr('name', 'match', '^mpm_prefork$') | list }}"
+  notify: reload apache

@@ -6,7 +6,6 @@
     owner: root
     group: "{{ root_group }}"
     mode: 0644
-    validate: "echo '%s' && apache2ctl configtest"
   notify: reload apache
 
 - name: "Enable Security Configuration"

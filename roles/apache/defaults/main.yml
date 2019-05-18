@@ -37,22 +37,16 @@ apache_mpm:
   max_request_workers: 150
   listen_backlog: 511
 
+apache_prefork_server_limit: 256
+apache_prefork_start_servers: 5
+apache_prefork_min_spare_servers: 5
+apache_prefork_max_spare_servers: 10
+apache_prefork_max_clients: 256
+apache_prefork_max_requests_per_child: 0
+
+
 # Modules
 apache_modules: []
-
-apache_jk_method: 'Busyness'
-apache_jk_workers: {}
-
-apache_mod_svn_enable: no
-
-apache_mod_php_enable: no
-apache_mod_php_version: 5
-apache_mod_php_base_modules:
-  - 'libapache2-mod-php{{ app_php_version | default(apache_mod_php_version) }}'
-  - 'php{{ app_php_version | default(apache_mod_php_version) }}'
-  - 'php{{ app_php_version | default(apache_mod_php_version) }}-cli'
-  - 'php{{ app_php_version | default(apache_mod_php_version) }}-common'
-apache_mod_php_extra_modules: '{{ app_php_extra_modules | default([]) }}'
 
 # Virtualhosts
 apache_vhosts: []
