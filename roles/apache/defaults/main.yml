@@ -25,24 +25,30 @@ apache_protect_vcs_directories: true
 apache_prevent_clickjacking: false
 
 # MPM configurations
-apache_mpm_worker:
-  start_servers: 2
-  min_spare_threads: 25
-  max_spare_threads: 75
-  thread_limit: 64
-  threads_per_child: 25
-  max_connections_per_child: 0
-apache_mpm:
-  server_limit: 16
-  max_request_workers: 150
-  listen_backlog: 511
-
-apache_prefork_server_limit: 256
-apache_prefork_start_servers: 5
+# Event
+apache_event_start_servers: 2
+apache_event_min_spare_threads: 25
+apache_event_max_spare_threads: 75
+apache_event_thread_limit: 64
+apache_event_thread_per_child: 25
+apache_event_max_request_worker: 150
+apache_event_max_connections_per_child: 0
+# Prefork
+apache_prefork_start_servers: 3
 apache_prefork_min_spare_servers: 5
 apache_prefork_max_spare_servers: 10
-apache_prefork_max_clients: 256
-apache_prefork_max_requests_per_child: 0
+apache_prefork_max_request_workers: 400
+apache_prefork_max_connexion_per_child: 0
+# Worker
+apache_mpm_worker_start_servers: 2
+apache_mpm_worker_min_spare_threads: 25
+apache_mpm_worker_max_spare_threads: 75
+apache_mpm_worker_thread_limit: 64
+apache_mpm_worker_threads_per_child: 25
+apache_mpm_worker_max_connections_per_child: 0
+apache_mpm_worker_server_limit: 16
+apache_mpm_worker_max_request_workers: 150
+apache_mpm_worker_listen_backlog: 511
 
 
 # Modules

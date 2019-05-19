@@ -26,20 +26,10 @@
 
 - name: "mpm_worker Configuration"
   template:
-    src: "mpm_worker.conf"
-    dest: "{{ apache_config_path }}/mods-available/mpm_worker.conf"
+    src: "{{ item.name }}.conf.j2"
+    dest: "{{ apache_config_path }}/mods-available/{{ item.name }}.conf"
     owner: root
     group: "{{ root_group }}"
   when: "item.state == 'present'"
-  with_items: "{{ apache_modules | selectattr('name', 'match', '^mpm_worker$') | list }}"
-  notify: reload apache
-
-- name: "mpm_prefork Configuration"
-  template:
-    src: "mpm_prefork.conf"
-    dest: "{{ apache_config_path }}/mods-available/mpm_prefork.conf"
-    owner: root
-    group: "{{ root_group }}"
-  when: "item.state == 'present'"
-  with_items: "{{ apache_modules | selectattr('name', 'match', '^mpm_prefork$') | list }}"
+  with_items: "{{ apache_modules | selectattr('name', 'match', '^mpm') | list }}"
   notify: reload apache

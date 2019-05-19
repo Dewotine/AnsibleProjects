@@ -11,13 +11,13 @@
 # MaxConnectionsPerChild: maximum number of requests a server process serves
 
 <IfModule mpm_worker_module>
-	StartServers			 {{ apache_mpm_worker.start_servers }}
-	MinSpareThreads		 {{ apache_mpm_worker.min_spare_threads }}
-	MaxSpareThreads		 {{ apache_mpm_worker.max_spare_threads }}
-	ThreadLimit			 {{ apache_mpm_worker.thread_limit }}
-	ThreadsPerChild		 {{ apache_mpm_worker.threads_per_child }}
-	MaxRequestWorkers	  {{ apache_mpm.max_request_workers }}
-	MaxConnectionsPerChild   {{ apache_mpm_worker.max_connections_per_child }}
-	ServerLimit {{ apache_mpm.server_limit }}
-	ListenBackLog {{ apache_mpm.listen_backlog }}
+	StartServers			 {{ apache_mpm_worker_start_servers }}
+	MinSpareThreads		 {{ apache_mpm_worker_min_spare_threads }}
+	MaxSpareThreads		 {{ apache_mpm_worker_max_spare_threads }}
+	ThreadLimit			 {{ apache_mpm_worker_thread_limit }}
+	ThreadsPerChild		 {{ apache_mpm_worker_threads_per_child }}
+	MaxRequestWorkers	  {{ apache_mpm_max_request_workers }}
+	MaxConnectionsPerChild   {{ apache_mpm_worker_max_connections_per_child }}
+	ServerLimit {{ apache_mpm_worker_server_limit }}
+	ListenBackLog {{ aapache_mpm_worker_listen_backlog }}
 </IfModule>
