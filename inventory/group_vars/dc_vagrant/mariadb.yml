@@ -21,10 +21,10 @@ mariadb_roundcube_dbname: "roundcube"
 mariadb_roundcube_dbuser: "roundcube"
 mariadb_roundcube_dbpassword: "password"
 
-mariadb_wordpress_dbhost: "127.0.0.1"
-mariadb_wordpress_dbname: "wordpress"
-mariadb_wordpress_dbuser: "wordpress"
-mariadb_wordpress_dbpassword: "password"
+mariadb_mediawiki_dbhost: "127.0.0.1"
+mariadb_mediawiki_dbname: "mediawiki"
+mariadb_mediawiki_dbuser: "mediawiki"
+mariadb_mediawiki_dbpassword: "password"
 
 ###
 # Declare Mariadb Users
@@ -53,13 +53,13 @@ mariadb_roundcubeuser:
   password: "{{ mariadb_roundcube_dbpassword }}"
   priv: "{{ mariadb_roundcube_dbname }}%.*:ALL"
 
-mariadb_wordpressuser:
-  name: "{{ mariadb_wordpress_dbuser }}"
+mariadb_mediawikiuser:
+  name: "{{ mariadb_mediawiki_dbuser }}"
   host:
-    - "{{ mariadb_wordpress_dbhost }}"
+    - "{{ mariadb_mediawiki_dbhost }}"
   hostgroup: yes
-  password: "{{ mariadb_wordpress_dbpassword }}"
-  priv: "{{ mariadb_wordpress_dbname }}%.*:ALL"
+  password: "{{ mariadb_mediawiki_dbpassword }}"
+  priv: "{{ mariadb_mediawiki_dbname }}%.*:ALL"
 
 ###
 # Configure MariaDB database
@@ -85,7 +85,7 @@ mariadb_maindb_profile:
     - name: "piwigo"
     - name: "mailserver"
     - name: "roundcube"
-    - name: "wordpress"
+    - name: "mediawiki"
   users:
     - name: "{{ mariadb_piwigo_installation_users.name }}"
       host: "{{ mariadb_piwigo_installation_users.host }}"
@@ -102,8 +102,8 @@ mariadb_maindb_profile:
       hostgroup: "{{ mariadb_roundcubeuser.hostgroup }}"
       password: "{{ mariadb_roundcubeuser.password }}"
       priv: "{{ mariadb_roundcubeuser.priv }}"
-    - name: "{{ mariadb_wordpressuser.name }}"
-      host: "{{ mariadb_wordpressuser.host }}"
-      hostgroup: "{{ mariadb_wordpressuser.hostgroup }}"
-      password: "{{ mariadb_wordpressuser.password }}"
-      priv: "{{ mariadb_wordpressuser.priv }}"
+    - name: "{{ mariadb_mediawikiuser.name }}"
+      host: "{{ mariadb_mediawikiuser.host }}"
+      hostgroup: "{{ mariadb_mediawikiuser.hostgroup }}"
+      password: "{{ mariadb_mediawikiuser.password }}"
+      priv: "{{ mariadb_mediawikiuser.priv }}"

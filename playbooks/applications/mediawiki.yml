@@ -1,0 +1,39 @@
+---
+## Create lets encrtypt certificates (DNS entry must be created first)
+#- import_playbook: ../system/letsencrypt_mediawiki.yml
+#  when: letsencrypt_create is defined and letsencrypt_create | bool
+#
+#- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_nginx:&app_mediawiki"
+#  vars:
+#    nginx_application_vhost: "mediawiki"
+#    nginx_proxy_pass_host: "127.0.0.1"
+#    nginx_proxy_pass_port: "8082"
+#    nginx_use_letsencrypt: true
+#  become: true
+#  roles:
+#    - nginx
+#
+#- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_mariadb:&app_mediawiki"
+#  become: true
+#  vars:
+#    mysql_profile: "{{ mariadb_maindb_profile }}"
+#  roles:
+#    - mysql
+#
+#- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_mariadb:&app_mediawiki"
+#  become: true
+#  vars:
+#    mysql_script_db_name: "mediawiki"
+#    mysql_script_script: "{{ role_path }}/../../inventory/group_vars/app_{{ mysql_script_db_name }}/mediawiki.sql"
+#  roles:
+#    - { role: mysql_script, when: db_init is defined and db_init | bool }
+
+- hosts: "{{ filter }}:&cmp_apache:&dc_{{ dc }}:&app_mediawiki"
+  become: true
+  roles:
+    - apache
+
+#- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_php:&app_mediawiki"
+#  become: true
+#  roles:
+#    - php

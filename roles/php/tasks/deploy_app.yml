@@ -1,0 +1,19 @@
+---
+- name: "Install {{ php_app }} from {{ php_app_download_url }} in version {{ app_php_app_version }}"
+  unarchive:
+    src: "{{ php_app_download_url }}"
+    dest: "{{ php_app_webroot }}/{{ php_app }}"
+    remote_src: yes
+    owner: www-data
+    group: www-data
+    mode: 0755
+    extra_opts:
+      - '--strip-components=1'
+  notify: reload apache
+
+- name: "Ensure ressources into {{ php_app_webroot }}/{{ php_app }} belong to apache"
+  file:
+    path: "{{ php_app_webroot }}/{{ php_app }}"
+    owner: www-data
+    group: www-data
+    recurse: true

@@ -1,0 +1,21 @@
+---
+apache_mod_php_enable: no
+
+app_php_version: "7.0"
+
+app_php_extra_modules:
+  - 'php-apcu'
+  - 'php{{ app_php_version }}-intl'
+  - 'php{{ app_php_version }}-mbstring'
+  - 'php{{ app_php_version }}-mysql'
+  - 'php{{ app_php_version }}-xml'
+
+app_php_app: "mediawiki"
+#https://releases.wikimedia.org/mediawiki/1.32/mediawiki-1.32.1.tar.gz
+app_php_app_download_url: "https://releases.wikimedia.org/{{ app_php_app }}/{{ app_php_app_version }}/{{ app_php_app }}-{{ app_php_app_version }}.1.tar.gz"
+app_php_app_version: "1.32"
+
+
+app_php_app_config_files:
+  - { src: "LocalSettings.php.j2", dst: "LocalSettings.php" }
+

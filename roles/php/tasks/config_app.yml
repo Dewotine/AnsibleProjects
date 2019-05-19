@@ -1,0 +1,14 @@
+---
+# Prerequisite for template files
+- name: "Set fact for config_bucket_dir, vhosts, apache_custom_configdir"
+  set_fact:
+    inventory_dir: "{{ role_path }}/../../inventory/group_vars"
+
+- name: "Deploy template configs"
+  template:
+    src: "{{ inventory_dir }}/app_{{ php_app }}/{{ item.src }}"
+    dest: "{{ php_app_webroot }}/{{ php_app }}/{{ item.dst }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ app_php_app_config_files }}"

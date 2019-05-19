@@ -1,0 +1,21 @@
+---
+- name: "Verify role parameters"
+  assert:
+    that:
+      - php_app is defined
+      - php_app_download_url is defined
+      - php_app_version is defined
+  tags:
+    - always
+
+- import_tasks: install.yml
+  tags: install
+
+- import_tasks: config_php.yml
+  tags: config_php.yml
+
+- import_tasks: deploy_app.yml
+  tags: deploy_app
+
+- import_tasks: config_app.yml
+  tags: config_app.yml

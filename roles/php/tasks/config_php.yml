@@ -1,0 +1,21 @@
+---
+- name: "Deploy php.ini file in {{ php_base_installation_folder }}"
+  template:
+    src: "php.ini.j2"
+    dest: "{{ php_base_installation_folder }}/php.ini"
+    mode: 0644
+    owner: root
+    group: root
+  notify:
+    - restart apache
+
+- name: "Deploy apc.ini file in {{ php_conf_extenstion_folder }}"
+  template:
+    src: "apcu.ini.j2"
+    dest: "{{ php_conf_extenstion_folder }}/apcu.ini"
+    mode: 0644
+    owner: root
+    group: root
+  when: "'php-apcu' in php_modules"
+  notify:
+    - restart apache
