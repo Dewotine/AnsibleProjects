@@ -7,11 +7,11 @@
 # MaxRequestWorkers: maximum number of worker threads
 # MaxConnectionsPerChild: maximum number of requests a server process serves
 <IfModule mpm_event_module>
-        StartServers            {{ apache_event_start_servers }}
-        MinSpareThreads         {{ apache_event_min_spare_threads }}
-        MaxSpareThreads         {{ apache_event_max_spare_threads }}
-        ThreadLimit             {{ apache_event_thread_limit }}
-        ThreadsPerChild         {{ apache_event_thread_per_child }}
-        MaxRequestWorkers       {{ apache_event_max_request_worker }}
-        MaxConnectionsPerChild  {{ apache_event_max_connections_per_child }}
+        StartServers            {{ apache_event.start_servers }}
+        MinSpareThreads         {{ apache_event.min_spare_threads }}
+        MaxSpareThreads         {{ apache_event.max_spare_threads }}
+        ThreadLimit             {{ apache_event.thread_limit }}
+        ThreadsPerChild         {{ apache_event.thread_per_child }}
+        MaxRequestWorkers       {{ apache_event.max_request_worker }}
+        MaxConnectionsPerChild  {{ apache_event.max_connections_per_child }}
 </IfModule>

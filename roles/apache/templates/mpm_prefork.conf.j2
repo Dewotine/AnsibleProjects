@@ -7,9 +7,9 @@
 # MaxConnectionsPerChild: maximum number of requests a server process serves
 
 <IfModule mpm_prefork_module>
-	StartServers        {{ apache_prefork_start_servers }}
-	MinSpareServers      {{ apache_prefork_min_spare_servers }}
-	MaxSpareServers     {{ apache_prefork_max_spare_servers }}
-	MaxRequestWorkers   {{ apache_prefork_max_request_workers }}
-	MaxConnectionsPerChild  {{ apache_prefork_max_connexion_per_child }}
+	StartServers        {{ apache_prefork.start_servers }}
+	MinSpareServers      {{ apache_prefork.min_spare_servers }}
+	MaxSpareServers     {{ apache_prefork.max_spare_servers }}
+	MaxRequestWorkers   {{ apache_prefork.max_request_workers }}
+	MaxConnectionsPerChild  {{ apache_prefork.max_connexion_per_child }}
 </IfModule>

@@ -1,5 +1,5 @@
 ---
-apache_listening_config: "{{ app_apache_listening_config }}"
+apache_listening_config: "{{ dc_apache_listening_config }}"
 apache_default_listening_port: 8080
 
 apache_default_mpm_worker_config:
@@ -15,8 +15,7 @@ apache_default_mpm_config:
   max_request_workers: 150
   listen_backlog: 511
 
-apache_default_mpm: 'worker'
-apache_mpm_module: "{{ app_apache_mpm | default(apache_default_mpm) }}"
+apache_mpm_module: "{{ dc_apache_mpm | default('worker') }}"
 
 apache_manage_service: yes
 apache_service_enable: yes
@@ -54,11 +53,11 @@ apache_modules:
   - {name: setenvif,        state: present}
   - {name: status,          state: present}
 
-apache_vhosts: "{{ app_apache_vhosts | default([]) }}"
+apache_vhosts: "{{ dc_apache_vhosts | default([]) }}"
 apache_certificates: "{{ app_apache_certificates | default([]) }}"
 apache_private_keys: "{{ app_apache_private_keys | default([]) }}"
 
-apache_mpm: "{{ app_apache_mpm_config | default(apache_default_mpm_config) }}"
+apache_mpm: "{{ dc_apache_mpm_config | default(apache_default_mpm_config) }}"
 apache_mpm_worker: "{{ app_apache_mpm_worker_config | default(apache_default_mpm_worker_config) }}"
 
 apache_log_formats:
