@@ -1,10 +1,10 @@
 ---
 - name: reload apache
-  service:
+  systemd:
     name: "{{ php_apache_service_name }}"
     state: reloaded
 
 - name: restart apache
-  service:
+  systemd:
     name: "{{ php_apache_service_name }}"
     state: restarted
