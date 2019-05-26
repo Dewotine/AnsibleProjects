@@ -38,3 +38,6 @@
     comment: "{{ item.value.comment }}"
     status: "{{ item.value.status }}"
   with_dict: "{{ piwigo_category }}"
+
+
+# TODO : Remove install.php file
