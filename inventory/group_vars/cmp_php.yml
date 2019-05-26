@@ -1,0 +1,24 @@
+---
+# Configuration de l'application PHP
+php_app: "{{ app_php_app }}"
+php_app_config_files:  "{{ app_php_app_config_files | default([]) }}"
+php_app_download_url: "{{ app_php_app_download_url  }}"
+php_app_version: "{{ app_php_version }}"
+php_app_webroot: "/var/www/html"
+
+# Configuration PHP
+php_disable_functions: [ "pcntl_alarm", "pcntl_fork", "pcntl_waitpid", "pcntl_wait", "pcntl_wifexited", "pcntl_wifstopped",
+"pcntl_wifsignaled", "pcntl_wifcontinued", "pcntl_wexitstatus", "pcntl_wtermsig", "pcntl_wstopsig", "pcntl_signal",
+"pcntl_signal_dispatch", "pcntl_get_last_error", "pcntl_strerror", "pcntl_sigprocmask", "pcntl_sigwaitinfo",
+"pcntl_sigtimedwait", "pcntl_exec", "pcntl_getpriority", "pcntl_setpriority", "exec", "passthru", "shell_exec", "system",
+"proc_open", "popen", "curl_exec", "curl_multi_exec", "parse_ini_file", "show_source" ]
+
+php_expose_php: "Off"
+php_extra_modules: []
+php_modules: "{{ php_extra_modules + (app_php_extra_modules | default([])) }}"
+php_open_basedir: "/var/www/html"
+php_version: "{{ app_php_version | default('7.0') }}"
+
+
+
+
