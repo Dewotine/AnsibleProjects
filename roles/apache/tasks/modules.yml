@@ -2,19 +2,9 @@
 - name: "Manage mpm modules activation (absent)"
   apache2_module:
     name: "{{ item.name }}"
-    state: "absent"
+    state: "{{ item.state | default(absent) }}"
     ignore_configcheck: True
-  with_items: "{{ apache_modules | selectattr('name', 'match', '^mpm') | list | sort(attribute='state', reverse=True) }}"
-  when: item.state == "absent"
-  notify: restart apache
-
-- name: "Manage mpm modules activation (present)"
-  apache2_module:
-    name: "{{ item.name }}"
-    state: "present"
-    ignore_configcheck: True
-  with_items: "{{ apache_modules | selectattr('name', 'match', '^mpm') | list | sort(attribute='state', reverse=True) }}"
-  when: item.state == "present"
+  with_items: "{{ apache_modules | selectattr('name', 'match', '^mpm') | list | sort(attribute='state') }}"
   notify: restart apache
 
 - name: "Manage modules activation"

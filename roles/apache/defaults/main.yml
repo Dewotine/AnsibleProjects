@@ -39,7 +39,7 @@ apache_prefork:
   start_servers: 3
   min_spare_servers: 5
   max_spare_servers: 10
-  max_request_workers: 400
+  max_request_workers: 100
   max_connexion_per_child: 0
 # Worker
 apache_mpm_worker:

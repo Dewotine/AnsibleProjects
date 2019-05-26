@@ -46,7 +46,7 @@
 
 # Service
 - name: "Service state management"
-  service:
+  systemd:
     name: "{{ apache_service_name }}"
     state: started
     enabled: "{{ apache_service_enable }}"
