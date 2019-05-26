@@ -1,13 +1,13 @@
 ---
-app_apache_listening_config:
+dc_apache_listening_config:
   '127.0.0.1':
     - 8080
     - 8081
     - 8082
 
-app_apache_mpm: 'prefork'
+dc_apache_mpm: 'prefork'
 
-app_apache_vhosts:
+dc_apache_vhosts:
   - name: "piwigo"
     custom_log_format: "realip"
     document_root: "/var/www/html/piwigo"
@@ -25,28 +25,28 @@ app_apache_vhosts:
     server_aliases:
       - "webmail.bleschet.fr"
 #    document_root_fragment: '<IfModule dir_module>DirectoryIndex index.html index.php</IfModule>'
-  - name: "wordpress"
+  - name: "mediawiki"
     custom_log_format: "realip"
-    document_root: "/var/www/html/wordpress"
+    document_root: "/var/www/html/mediawiki"
     ip: "127.0.0.1"
     keepalive: true
     port: "8082"
-    server_name: "wordpress.bleschet.fr"
+    server_name: "mediawiki.bleschet.fr"
 
 
-# PHP Settings
-apache_mod_php_enable: yes
-
-app_php_version: 7.0
-app_php_extra_modules:
-  - 'php{{ app_php_version }}-mysql'
-  - 'php{{ app_php_version }}-curl'
-  - 'php{{ app_php_version }}-gd'
-  - 'php{{ app_php_version }}-gmp'
-  - 'php{{ app_php_version }}-imagick'
-  - 'php{{ app_php_version }}-intl'
-  - 'php{{ app_php_version }}-mcrypt'
-  - 'php{{ app_php_version }}-xsl'
+## PHP Settings
+#apache_mod_php_enable: yes
+#
+#app_php_version: 7.0
+#app_php_extra_modules:
+#  - 'php{{ app_php_version }}-mysql'
+#  - 'php{{ app_php_version }}-curl'
+#  - 'php{{ app_php_version }}-gd'
+#  - 'php{{ app_php_version }}-gmp'
+#  - 'php{{ app_php_version }}-imagick'
+#  - 'php{{ app_php_version }}-intl'
+#  - 'php{{ app_php_version }}-mcrypt'
+#  - 'php{{ app_php_version }}-xsl'
 
 
 #apache_src_url:  "http://piwigo.org/download/dlcounter.php?code=latest"
