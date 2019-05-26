@@ -1,6 +1,6 @@
 ---
 apache_listening_config: "{{ dc_apache_listening_config }}"
-apache_default_listening_port: 8080
+apache_default_listening_port: 80
 
 apache_default_mpm_worker_config:
   start_servers: 2
@@ -8,7 +8,9 @@ apache_default_mpm_worker_config:
   max_spare_threads: 75
   thread_limit: 64
   threads_per_child: 25
+  max_request_workers: 150
   max_connections_per_child: 0
+
 
 apache_default_mpm_config:
   server_limit: 8
