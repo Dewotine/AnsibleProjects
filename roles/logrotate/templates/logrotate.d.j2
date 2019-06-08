@@ -8,7 +8,7 @@
     {{ option }}
 {% endif %}{% endfor %}{% endif %}
 {% if lr_obj.scripts is defined %}
-{% for name, script in lr_obj.scripts.iteritems() %}
+{% for name, script in lr_obj.scripts.items() %}
     {{ name }}
       {{ script }}
     endscript

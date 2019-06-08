@@ -9,6 +9,7 @@
 - name: "Install logrotate"
   package:
     name: logrotate
+    force_apt_get: yes
     state: present
   tags:
     - logrotate

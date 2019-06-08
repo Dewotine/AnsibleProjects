@@ -3,7 +3,7 @@
 # have to change the VirtualHost statement in
 # /etc/apache2/sites-enabled/000-default.conf
 
-{% for listening_ip,listening_port_list in apache_listening_config.iteritems() %}
+{% for listening_ip,listening_port_list in apache_listening_config.items() %}
 {% for listening_port in listening_port_list %}
 Listen {{ listening_ip }}:{{ listening_port }}
 {% endfor %}

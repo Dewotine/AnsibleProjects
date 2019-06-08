@@ -34,7 +34,7 @@
     owner: root
     group: "{{ root_group }}"
     mode: 0644
-  when: apache_catchall_virtualhost
+  when: apache_catchall_virtualhost|bool
   notify: reload apache
 
 - name: "Enable default vhost"
@@ -42,7 +42,7 @@
     src: "{{ apache_config_path }}/sites-available/000-default.conf"
     dest: "{{ apache_config_path }}/sites-enabled/000-default.conf"
     state: link
-  when: apache_catchall_virtualhost
+  when: apache_catchall_virtualhost|bool
   notify: reload apache
 
 - name: "Localhost vhost"
@@ -52,7 +52,7 @@
     owner: root
     group: "{{ root_group }}"
     mode: 0644
-  when: apache_enable_localhost_virtualhost
+  when: apache_enable_localhost_virtualhost|bool
   notify: reload apache
 
 - name: "Enable localhost vhost"
@@ -60,5 +60,5 @@
     src: "{{ apache_config_path }}/sites-available/localhost.conf"
     dest: "{{ apache_config_path }}/sites-enabled/localhost.conf"
     state: link
-  when: apache_enable_localhost_virtualhost
+  when: apache_enable_localhost_virtualhost|bool
   notify: reload apache

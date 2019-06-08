@@ -16,7 +16,7 @@
   template:
     src: mariadb.j2
     dest: /etc/apt/preferences.d/mariadb
-  when: mariadb_apt_pin_priority
+  when: mariadb_apt_pin_priority is defined
 
 - name: "Update apt cache if MySQL is not yet installed."
   apt:
@@ -26,7 +26,8 @@
 - name: "Ensure MariaDB packages are installed"
   apt:
     name:
-    - mariadb-client-{{ mariadb_version }}
-    - mariadb-server-{{ mariadb_version }}
+      - mariadb-client-{{ mariadb_version }}
+      - mariadb-server-{{ mariadb_version }}
     state: present
+    force_apt_get: yes
   register: deb_mariadb_install_packages

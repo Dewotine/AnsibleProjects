@@ -15,6 +15,7 @@
 - name: Ensure MySQL Python libraries are installed.
   apt:
     name: python-mysqldb
+    force_apt_get: yes
     state: present
 
 # Because Debian starts MySQL as part of the install process, we need to stop
@@ -42,7 +43,7 @@
     group: root
     mode: 0644
   when:
-    - mysql_multi_instances
+    - mysql_multi_instances|bool
   register: mysql_template_unit_modified
 
 - name: "Reload systemd"
@@ -50,7 +51,7 @@
     name: "mysql@.service"
     daemon_reload: yes
   when:
-    - mysql_multi_instances
+    - mysql_multi_instances|bool
     - mysql_template_unit_modified is changed
 
 - name: "Mask classical instance when in multi-instance mode"
@@ -63,4 +64,4 @@
     - "mysql.service"
     - "mariadb.service"
   when:
-    - mysql_multi_instances
+    - mysql_multi_instances|bool

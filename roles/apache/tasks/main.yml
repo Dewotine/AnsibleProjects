@@ -50,4 +50,4 @@
     name: "{{ apache_service_name }}"
     state: started
     enabled: "{{ apache_service_enable }}"
-  when: apache_manage_service
+  when: apache_manage_service|bool
