@@ -35,7 +35,8 @@ php_realpath_cache_size: "32K"
 php_file_uploads: "On"
 php_upload_max_filesize: "20M"
 php_max_file_uploads: "20"
-php_open_basedir: "/var/www"
+php_open_basedir:
+  - "/var/www"
 php_sql_safe_mode: "Off"
 
 php_post_max_size: "32M"
