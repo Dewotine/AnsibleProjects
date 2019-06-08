@@ -43,7 +43,7 @@ if __name__ == '__main__':
     if role_defaults is not None:
         print ("""| Variable | Type | Description | Default |
 | --- | --- | --- | --- |""")
-        for k, v in six.iteritems(role_defaults):
+        for k, v in six.items(role_defaults):
             vp = v
             # Lower case v when it's a bool
             if type(v).__name__ == "bool":
