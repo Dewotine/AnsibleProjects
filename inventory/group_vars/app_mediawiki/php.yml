@@ -18,4 +18,5 @@ app_php_app_version: "1.32"
 
 app_php_app_config_files:
   - { src: "LocalSettings.php.j2", dst: "LocalSettings.php" }
+  - { src: "tux_135.jpeg", dst: "resources/assets/tux_135.jpeg" }
 
