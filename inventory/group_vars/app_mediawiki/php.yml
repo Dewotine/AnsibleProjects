@@ -1,8 +1,7 @@
 ---
+# PHP Configuration of mediawiki
 apache_mod_php_enable: no
-
 app_php_version: "7.0"
-
 app_php_extra_modules:
   - 'php-apcu'
   - 'php{{ app_php_version }}-intl'
@@ -10,13 +9,22 @@ app_php_extra_modules:
   - 'php{{ app_php_version }}-mysql'
   - 'php{{ app_php_version }}-xml'
 
+# MediaWiki Configuration
 app_php_app: "mediawiki"
 #https://releases.wikimedia.org/mediawiki/1.32/mediawiki-1.32.1.tar.gz
 app_php_app_download_url: "https://releases.wikimedia.org/{{ app_php_app }}/{{ app_php_app_version }}/{{ app_php_app }}-{{ app_php_app_version }}.1.tar.gz"
 app_php_app_version: "1.32"
-
-
 app_php_app_config_files:
   - { src: "LocalSettings.php.j2", dst: "LocalSettings.php" }
-  - { src: "tux_135.jpeg", dst: "resources/assets/tux_135.jpeg" }
+app_php_app_extra_files:
+  - { src: "tux_135.png", dst: "resources/assets/tux_135.png" }
 
+app_php_app_dbtype: "mysql"
+app_php_app_dbserver: "127.0.0.1"
+app_php_app_dbname: "mediawiki"
+app_php_app_dbuser: "mediawiki"
+app_php_app_password: "password"
+
+# Personnalisation
+app_php_app_logo: "resources/assets/tux_135.png"
+app_php_app_default_skin: 'vector'

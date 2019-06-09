@@ -8,7 +8,16 @@
   template:
     src: "{{ inventory_dir }}/app_{{ php_app }}/{{ item.src }}"
     dest: "{{ php_app_webroot }}/{{ php_app }}/{{ item.dst }}"
-    owner: root
-    group: root
+    owner: www-data
+    group: www-data
+    mode: 0440
+  with_items: "{{ php_app_config_files }}"
+
+- name: "Deploy extra files"
+  copy:
+    src: "{{ inventory_dir }}/app_{{ php_app }}/{{ item.src }}"
+    dest: "{{ php_app_webroot }}/{{ php_app }}/{{ item.dst }}"
+    owner: www-data
+    group: www-data
     mode: 0644
-  with_items: "{{ app_php_app_config_files }}"
+  with_items: "{{ php_app_extra_files }}"
