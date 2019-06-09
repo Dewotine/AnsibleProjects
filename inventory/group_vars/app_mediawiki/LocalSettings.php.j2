@@ -69,7 +69,9 @@ $wgMemCachedServers = [];
 
 ## To enable image uploads, make sure the 'images' directory
 ## is writable, then set this to true:
-$wgEnableUploads = false;
+$wgEnableUploads = {{ app_php_app_enable_uploads | default(false) }};
+$wgUseImageResize = {{ app_php_app_image_resize | default(false) }};
+$wgMaxUploadSize = {{ app_php_app_upload_size | default(250 * 1024) }};
 #$wgUseImageMagick = true;
 #$wgImageMagickConvertCommand = "/usr/bin/convert";
 
@@ -129,7 +131,7 @@ wfLoadSkin( 'MonoBook' );
 wfLoadSkin( 'Timeless' );
 wfLoadSkin( 'Vector' );
 
-
-# End of automatically generated settings.
-# Add more configuration options below.
-
+# Extension
+wfLoadExtension( 'WikiEditor' );
+#wfLoadExtension( 'MobileFrontend' );
+#$wgMFAutodetectMobileView = true;

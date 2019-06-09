@@ -21,3 +21,6 @@
     group: www-data
     mode: 0644
   with_items: "{{ php_app_extra_files }}"
+
+#- name: "Deploy application extensions"
+#  with_items: "{{ php_app_extensions }}"

@@ -28,3 +28,10 @@ app_php_app_password: "password"
 # Personnalisation
 app_php_app_logo: "resources/assets/tux_135.png"
 app_php_app_default_skin: 'vector'
+app_php_app_enable_uploads: true
+app_php_app_image_resize: true
+app_php_app_upload_size: 250 * 1024 # Size is defined in bytes => 250 * 1024 = 250ko
+
+app_php_app_extensions:
+  - "MobileFrontend"
+  - "WikiEditor"

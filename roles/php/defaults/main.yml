@@ -3,6 +3,7 @@ php_apache_service_name: "apache2"
 php_base_installation_folder: "/etc/php/{{ php_version }}/apache2"
 php_conf_extenstion_folder: /etc/php/{{ php_version }}/mods-available
 php_app_config_files: []
+php_app_extensions: []
 php_app_extra_files: []
 
 # Default PHP version to install on Debian-based OSes.
