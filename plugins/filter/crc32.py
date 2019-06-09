@@ -3,7 +3,7 @@ import binascii
 
 
 def crc32(s):
-    return binascii.crc32(s) & 0xffffffff
+    return binascii.crc32(s.encode()) & 0xffffffff
 
 
 class FilterModule(object):
