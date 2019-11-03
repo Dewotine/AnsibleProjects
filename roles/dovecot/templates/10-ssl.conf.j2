@@ -13,7 +13,6 @@ ssl = {{ dovecot_ssl }}
 ssl_cert = < {{ dovecot_certificate_request }}
 ssl_key = < {{ dovecot_private_key }}
 ssl_cipher_list = {{ dovecot_ssl_cipher_list }}
-ssl_parameters_regenerate = {{ dovecot_parameters_regenerate }}
 {% else %}
 #ssl_cert = </etc/dovecot/dovecot.pem
 #ssl_key = </etc/dovecot/private/dovecot.pem
@@ -49,17 +48,17 @@ ssl_parameters_regenerate = {{ dovecot_parameters_regenerate }}
 # auth_ssl_username_from_cert=yes.
 #ssl_cert_username_field = commonName
 
-# DH parameters length to use.
-#ssl_dh_parameters_length = 1024
+# DH parameter path
+ssl_dh=<{{ dovecot_ssl_dh_path }}
 
 # SSL protocols to use
-#ssl_protocols = !SSLv3
+ssl_min_protocol = TLSv1.2
 
 # SSL ciphers to use
-#ssl_cipher_list = ALL:!LOW:!SSLv2:!EXP:!aNULL
+ssl_cipher_list = ALL:!kRSA:!SRP:!kDHd:!DSS:!aNULL:!eNULL:!EXPORT:!DES:!3DES:!MD5:!PSK:!RC4:!ADH:!LOW@STRENGTH
 
 # Prefer the server's order of ciphers over client's.
-#ssl_prefer_server_ciphers = no
+ssl_prefer_server_ciphers = yes
 
 # SSL crypto device to use, for valid values run "openssl engine"
 #ssl_crypto_device =
