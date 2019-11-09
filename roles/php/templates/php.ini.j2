@@ -1,25 +1,23 @@
 ;
 ; {{ ansible_managed }}
 ;
-
 [PHP]
 ;;;;;;;;;;;;;;;;;;;;
 ; Language Options ;
 ;;;;;;;;;;;;;;;;;;;;
 engine = On
 short_open_tag = {{ php_short_open_tag }}
-asp_tags = Off
 precision = 14
 output_buffering = {{ php_output_buffering }}
 
 zlib.output_compression = On
 zlib.output_compression_level = -1
-zlib.output_handler = ""
-
+zlib.output_handler =
 
 implicit_flush = Off
 unserialize_callback_func =
-serialize_precision = 17
+serialize_precision = -1
+;open_basedir = {{ php_open_basedir|join(":") }}
 disable_functions = {{ php_disable_functions|join(",") }}
 disable_classes =
 
@@ -35,6 +33,7 @@ expose_php = {{ php_expose_php }}
 ;;;;;;;;;;;;;;;;;;;
 max_execution_time = {{ php_max_execution_time }}
 max_input_time = {{ php_max_input_time }}
+;max_input_nesting_level = 64
 max_input_vars = {{ php_max_input_vars }}
 memory_limit = {{ php_memory_limit }}
 
@@ -75,8 +74,7 @@ user_dir =
 
 enable_dl = Off
 
-realpath_cache_size = {{ php_realpath_cache_size }}
-open_basedir = {{ php_open_basedir|join(":") }}
+;realpath_cache_size = {{ php_realpath_cache_size }}
 
 ;;;;;;;;;;;;;;;;
 ; File Uploads ;
@@ -91,7 +89,7 @@ max_file_uploads = {{ php_max_file_uploads }}
 allow_url_fopen = {{ php_allow_url_fopen }}
 allow_url_include = {{ php_allow_url_include }}
 
-default_socket_timeout = 60
+default_socket_timeout = 90
 
 ;;;;;;;;;;;;;;;;;;;
 ; Module Settings ;
@@ -102,22 +100,38 @@ cli_server.color = On
 [Date]
 date.timezone = {{ php_date_timezone }}
 
+
 [Pdo_mysql]
-pdo_mysql.cache_size = 2000
+; Default socket name for local MySQL connects.  If empty, uses the built-in
+; MySQL defaults.
 pdo_mysql.default_socket=
 
+[Phar]
+; http://php.net/phar.readonly
+;phar.readonly = On
+
+; http://php.net/phar.require-hash
+;phar.require_hash = On
+
+;phar.cache_list =
+
 [mail function]
-; For Win32 only.
-SMTP = localhost
 smtp_port = 25
 
 ; For Unix only.  You may supply arguments as well (default: "sendmail -t -i").
+; http://php.net/sendmail-path
 sendmail_path = {{ php_sendmail_path }}
 
+; Force the addition of the specified parameters to be passed as extra parameters
+; to the sendmail binary. These parameters will always replace the value of
+; the 5th parameter to mail().
+;mail.force_extra_parameters =
+
+; Add X-PHP-Originating-Script: that will include uid of the script followed by the filename
 mail.add_x_header = On
 
 [SQL]
-sql.safe_mode = {{ php_sql_safe_mode }}
+;sql.safe_mode = {{ php_sql_safe_mode }}
 
 [ODBC]
 odbc.allow_persistent = On
@@ -127,25 +141,18 @@ odbc.max_links = -1
 odbc.defaultlrl = 4096
 odbc.defaultbinmode = 1
 
-[MySQL]
-mysql.allow_local_infile = On
-mysql.allow_persistent = On
-mysql.cache_size = 2000
-mysql.max_persistent = -1
-mysql.max_links = -1
-mysql.default_port =
-mysql.default_socket =
-mysql.default_host =
-mysql.default_user =
-mysql.default_password =
-mysql.connect_timeout = 60
-mysql.trace_mode = Off
+[Interbase]
+ibase.allow_persistent = 1.
+ibase.max_persistent = -1
+ibase.max_links = -1
+ibase.timestampformat = "%Y-%m-%d %H:%M:%S"
+ibase.dateformat = "%Y-%m-%d"
+ibase.timeformat = "%H:%M:%S"
 
 [MySQLi]
 mysqli.max_persistent = -1
 mysqli.allow_persistent = On
 mysqli.max_links = -1
-mysqli.cache_size = 2000
 mysqli.default_port = 3306
 mysqli.default_socket =
 mysqli.default_host =
@@ -171,44 +178,43 @@ bcmath.scale = 0
 [Session]
 session.save_handler = {{ php_session_save_handler }}
 session.save_path = {{ php_session_save_path }}
+session.use_strict_mode = 0
 session.use_cookies = 1
 session.use_only_cookies = 1
 session.name = PHPSESSID
 session.auto_start = 0
-
 session.cookie_lifetime = {{ php_session_cookie_lifetime }}
 session.cookie_path = /
 session.cookie_domain =
 session.cookie_httponly =
-
+session.cookie_samesite =
 session.serialize_handler = php
-
 session.gc_probability = {{ php_session_gc_probability }}
 session.gc_divisor = {{ php_session_gc_divisor }}
 session.gc_maxlifetime = {{ php_session_gc_maxlifetime }}
-
-session.bug_compat_42 = Off
-session.bug_compat_warn = Off
 session.referer_check =
-
 session.cache_limiter = nocache
 session.cache_expire = 180
-
 session.use_trans_sid = 0
+session.sid_length = 26
+session.trans_sid_tags = "a=href,area=href,frame=src,form="
+session.sid_bits_per_character = 5
 
-session.hash_function = 0
-session.hash_bits_per_character = 5
-
-url_rewriter.tags = "a=href,area=href,frame=src,input=src,form=fakeentry"
+[Assertion]
+zend.assertions = -1
 
 [Tidy]
 tidy.clean_output = Off
 
 [soap]
+
 soap.wsdl_cache_enabled=1
 soap.wsdl_cache_dir="/tmp"
 soap.wsdl_cache_ttl=86400
 soap.wsdl_cache_limit = 5
+
+[sysvshm]
+;sysvshm.init_mem = 10000
 
 [ldap]
 ldap.max_links = -1
