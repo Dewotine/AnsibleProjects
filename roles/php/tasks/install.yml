@@ -9,6 +9,7 @@
 
 - name: "Install extra packages"
   apt:
-    name:  "{{ php_modules }}"
+    name: "{{ lookup('vars', 'app_php_' + php_app  + '_extra_modules') }}"
     force_apt_get: yes
     state: present
+

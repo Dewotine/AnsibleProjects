@@ -1,19 +1,49 @@
 ---
-- name: "Install {{ php_app }} from {{ php_app_download_url }} in version {{ app_php_app_version }}"
+- name: "Register current version"
+  shell: "grep {{ php_app }} {{ php_app_versions_file }} |cut -d'=' -f2"
+  register: version_grep_result
+  failed_when: version_grep_result.rc not in [0, 2]
+
+- debug: var=version_grep_result.stdout
+
+- name: "Delete previous {{ php_app_webroot }}/{{ php_app }} folder"
+  file:
+    path: "{{ php_app_webroot }}/{{ php_app }}"
+    state: absent
+  no_log: true
+  when :
+    - version_grep_result.rc == 2 or version_grep_result.stdout != php_app_version
+
+- name: "Create {{ php_app_webroot }}/{{ php_app }} folder"
+  file:
+    path: "{{ php_app_webroot }}/{{ php_app }}"
+    state: directory
+    owner: "{{ php_apache_user }}"
+    group: "{{ php_apache_group }}"
+
+- name: "Install {{ php_app }} from {{ lookup('vars', 'app_php_' + php_app  + '_app_download_url') }} in version {{ php_app_version }}"
   unarchive:
-    src: "{{ php_app_download_url }}"
+    src: "{{ lookup('vars', 'app_php_' + php_app  + '_app_download_url') }}"
     dest: "{{ php_app_webroot }}/{{ php_app }}"
     remote_src: yes
-    owner: www-data
-    group: www-data
+    owner: "{{ php_apache_user }}"
+    group: "{{ php_apache_group }}"
     mode: 0755
     extra_opts:
       - '--strip-components=1'
   notify: reload apache
 
-- name: "Ensure ressources into {{ php_app_webroot }}/{{ php_app }} belong to apache"
+- name: "Ensure resources into {{ php_app_webroot }}/{{ php_app }} belong to apache"
   file:
     path: "{{ php_app_webroot }}/{{ php_app }}"
-    owner: www-data
-    group: www-data
+    owner: "{{ php_apache_user }}"
+    group: "{{ php_apache_group }}"
     recurse: true
+
+- name: "Register application version"
+  lineinfile:
+    dest: "{{ php_app_versions_file }}"
+    regexp: "^{{ php_app }}="
+    line: "{{ php_app }}={{ php_app_version }}"
+    state: present
+    create: yes

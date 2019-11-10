@@ -4,23 +4,42 @@
   set_fact:
     inventory_dir: "{{ role_path }}/../../inventory/group_vars"
 
+- name: "Configure log folder"
+  file:
+    path: "{{ php_app_log_folder }}"
+    state: directory
+    owner: "{{ php_apache_user }}"
+    group: "{{ php_apache_group }}"
+    mode: 0755
+
 - name: "Deploy template configs"
   template:
     src: "{{ inventory_dir }}/app_{{ php_app }}/{{ item.src }}"
     dest: "{{ php_app_webroot }}/{{ php_app }}/{{ item.dst }}"
-    owner: www-data
-    group: www-data
-    mode: 0440
-  with_items: "{{ php_app_config_files }}"
+    owner: "{{ php_apache_user }}"
+    group: "{{ php_apache_group }}"
+    mode: 0755
+  loop: "{{ php_app_config_files }}"
 
 - name: "Deploy extra files"
   copy:
     src: "{{ inventory_dir }}/app_{{ php_app }}/{{ item.src }}"
     dest: "{{ php_app_webroot }}/{{ php_app }}/{{ item.dst }}"
-    owner: www-data
-    group: www-data
+    owner: "{{ php_apache_user }}"
+    group: "{{ php_apache_group }}"
     mode: 0644
-  with_items: "{{ php_app_extra_files }}"
+  loop: "{{ php_app_extra_files }}"
+
+- name: "Executes extra scripts"
+  command: "{{ php_app_webroot }}/{{ php_app }}/bin/install-jsdeps.sh"
+  become_user: www-data
+  loop: "{{ lookup('vars', 'app_php_' + php_app  + '_extra_scripts') }}"
+
+- name: "Delete the installer folder"
+  file:
+    path: "{{ php_app_webroot }}/{{ php_app }}/{{ item }}"
+    state: absent
+  loop: "{{ lookup('vars', 'app_php_' + php_app  + '_cleanup_files_or_folder') }}"
 
 #- name: "Deploy application extensions"
 #  with_items: "{{ php_app_extensions }}"

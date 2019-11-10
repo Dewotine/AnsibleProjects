@@ -2,9 +2,9 @@
 php_apache_service_name: "apache2"
 php_base_installation_folder: "/etc/php/{{ php_version }}/apache2"
 php_conf_extenstion_folder: /etc/php/{{ php_version }}/mods-available
-php_app_config_files: []
-php_app_extensions: []
-php_app_extra_files: []
+php_apache_user: "www-data"
+php_apache_group: "www-data"
+
 
 # Default PHP version to install on Debian-based OSes.
 php_version: "7.3"
@@ -66,6 +66,11 @@ php_display_startup_errors: "Off"
 
 # Applications
 php_app: ""
+php_app_config_files: []
 php_app_download_url: ""
+php_app_extensions: []
+php_app_extra_files: []
+php_app_log_folder: "/var/log/apache2"
 php_app_version: ""
 php_app_webroot: "/var/www/html"
+php_app_versions_file: "/root/versions.txt"
