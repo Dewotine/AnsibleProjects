@@ -3,5 +3,4 @@
   apt:
     name: certbot
     state: latest
-    default_release: stretch-backports
     update_cache: yes

@@ -1,4 +1,12 @@
 ---
+# Create lets encrtypt certificates (DNS entry must be created first)
+- import_playbook: ../system/letsencrypt.yml
+  vars:
+    letsencrypt_app: "webmail"
+  when:
+    - letsencrypt_create is defined
+    - letsencrypt_create | bool
+
 - hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_nginx:&app_roundcube"
   vars:
     nginx_aliases:

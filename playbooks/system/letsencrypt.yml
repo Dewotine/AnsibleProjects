@@ -1,8 +1,8 @@
 ---
-- hosts: "dc_{{ dc }}:&cmp_letsencrypt:&app_wordpress"
+- hosts: "dc_{{ dc }}:&cmp_letsencrypt:&app_{{ letsencrypt_app }}"
   become: true
   vars:
-    - letsencrypt_domains: "wordpress.bleschet.fr"
+    - letsencrypt_domains: "{{ letsencrypt_app }}.bleschet.fr"
     - letsencrypt_pre_hook: []
     - letsencrypt_post_hook: []
     - letsencrypt_renew_hook:
