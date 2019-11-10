@@ -7,7 +7,8 @@ php_app_extensions: []
 php_app_extra_files: []
 
 # Default PHP version to install on Debian-based OSes.
-php_version: "7.0"
+php_version: "7.3"
+php_engine: "On"
 
 
 # OpCache settings.
@@ -41,7 +42,6 @@ php_upload_max_filesize: "20M"
 php_max_file_uploads: "20"
 php_open_basedir:
   - "/var/www"
-php_sql_safe_mode: "Off"
 
 php_post_max_size: "32M"
 php_date_timezone: "Europe/Paris"

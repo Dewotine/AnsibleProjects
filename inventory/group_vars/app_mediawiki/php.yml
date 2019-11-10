@@ -1,7 +1,7 @@
 ---
 # PHP Configuration of mediawiki
 apache_mod_php_enable: no
-app_php_version: "7.0"
+app_php_version: "7.3"
 app_php_extra_modules:
   - 'php-apcu'
   - 'php{{ app_php_version }}-intl'

@@ -18,9 +18,10 @@ php_expose_php: "Off"
 php_extra_modules: []
 php_modules: "{{ php_extra_modules + (app_php_extra_modules | default([])) }}"
 php_open_basedir:
-  - "/var/www/html"
   - "/tmp"
-php_version: "{{ app_php_version | default('7.0') }}"
+  - "/usr/share/php"
+  - "/var/www/html"
+php_version: "{{ app_php_version | default('7.3') }}"
 
 
 

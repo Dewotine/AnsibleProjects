@@ -5,7 +5,7 @@
 ;;;;;;;;;;;;;;;;;;;;
 ; Language Options ;
 ;;;;;;;;;;;;;;;;;;;;
-engine = On
+engine = {{ php_engine }}
 short_open_tag = {{ php_short_open_tag }}
 precision = 14
 output_buffering = {{ php_output_buffering }}
@@ -17,7 +17,6 @@ zlib.output_handler =
 implicit_flush = Off
 unserialize_callback_func =
 serialize_precision = -1
-;open_basedir = {{ php_open_basedir|join(":") }}
 disable_functions = {{ php_disable_functions|join(",") }}
 disable_classes =
 
@@ -74,6 +73,7 @@ user_dir =
 
 enable_dl = Off
 
+open_basedir = {{ php_open_basedir|join(":") }}
 ;realpath_cache_size = {{ php_realpath_cache_size }}
 
 ;;;;;;;;;;;;;;;;
@@ -100,38 +100,13 @@ cli_server.color = On
 [Date]
 date.timezone = {{ php_date_timezone }}
 
-
 [Pdo_mysql]
-; Default socket name for local MySQL connects.  If empty, uses the built-in
-; MySQL defaults.
 pdo_mysql.default_socket=
-
-[Phar]
-; http://php.net/phar.readonly
-;phar.readonly = On
-
-; http://php.net/phar.require-hash
-;phar.require_hash = On
-
-;phar.cache_list =
 
 [mail function]
 smtp_port = 25
-
-; For Unix only.  You may supply arguments as well (default: "sendmail -t -i").
-; http://php.net/sendmail-path
 sendmail_path = {{ php_sendmail_path }}
-
-; Force the addition of the specified parameters to be passed as extra parameters
-; to the sendmail binary. These parameters will always replace the value of
-; the 5th parameter to mail().
-;mail.force_extra_parameters =
-
-; Add X-PHP-Originating-Script: that will include uid of the script followed by the filename
 mail.add_x_header = On
-
-[SQL]
-;sql.safe_mode = {{ php_sql_safe_mode }}
 
 [ODBC]
 odbc.allow_persistent = On
@@ -207,7 +182,6 @@ zend.assertions = -1
 tidy.clean_output = Off
 
 [soap]
-
 soap.wsdl_cache_enabled=1
 soap.wsdl_cache_dir="/tmp"
 soap.wsdl_cache_ttl=86400
