@@ -6,6 +6,7 @@ php_app_download_url: "{{ app_php_app_download_url  }}"
 php_app_extra_files:  "{{ app_php_app_extra_files | default([]) }}"
 php_app_version: "{{ app_php_version }}"
 php_app_webroot: "/var/www/html"
+php_app_versions_file: "/root/versions.txt"
 
 # Configuration PHP
 php_disable_functions: [ "pcntl_alarm", "pcntl_fork", "pcntl_waitpid", "pcntl_wait", "pcntl_wifexited", "pcntl_wifstopped",
@@ -16,13 +17,12 @@ php_disable_functions: [ "pcntl_alarm", "pcntl_fork", "pcntl_waitpid", "pcntl_wa
 
 php_expose_php: "Off"
 php_extra_modules: []
+php_log_folder: "/var/log/apache2/{{ php_app | default('') }}"
 php_modules: "{{ php_extra_modules + (app_php_extra_modules | default([])) }}"
 php_open_basedir:
-  - "/tmp"
-  - "/usr/share/php"
-  - "/var/www/html"
-php_version: "{{ app_php_version | default('7.3') }}"
-
-
-
+  - "{{ php_app_webroot }}"
+  - "{{ php_tmp_folder }}"
+  - "/usr/share/php" # PEAR module
+  - "/var/log/apache2"
+php_tmp_folder: "/tmp"
 
