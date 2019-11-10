@@ -52,10 +52,10 @@ $wgEmailAuthentication = true;
 
 ## Database settings
 $wgDBtype = "{{ app_php_mediawiki_dbtype | default('mysql') }}";
-$wgDBserver = "{{ app_php_mediawiki_dbserver | default('127.0.0.1')}}";
-$wgDBname = "{{ app_php_mediawiki_dbname | default('mediawiki') }}";
-$wgDBuser = "{{ app_php_mediawiki_dbuser | default('mediawiki') }}";
-$wgDBpassword = "{{ app_php_mediawiki_db_password | default('password') }}";
+$wgDBserver = "{{ mariadb_mediawiki_dbhost | default('127.0.0.1')}}";
+$wgDBname = "{{ mariadb_mediawiki_dbname | default('mediawiki') }}";
+$wgDBuser = "{{ mariadb_mediawiki_dbuser | default('mediawiki') }}";
+$wgDBpassword = "{{ mariadb_mediawiki_dbpassword | default('password') }}";
 
 # MySQL specific settings
 $wgDBprefix = "";
