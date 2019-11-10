@@ -19,12 +19,23 @@ mariadb_dovecot_dbpassword: !vault-encrypted |
 mariadb_roundcube_dbhost: "127.0.0.1"
 mariadb_roundcube_dbname: "roundcube"
 mariadb_roundcube_dbuser: "roundcube"
-mariadb_roundcube_dbpassword: "password"
+mariadb_roundcube_dbpassword: !vault-encrypted |
+  $ANSIBLE_VAULT;1.1;AES256
+  343863313134393030373961333632356636616532313134343966333834333066643235386235636531316632393961336134353365393636633164333266330a313234303961613361373538346239373839353561383434353064333365306336656537373431343635303864373161366530333232363538343766663566370a35643833313536383165376238636663326261633631316530343865343165633561623361393836653734643162366134313938333138366535376531613532
 
 mariadb_wordpress_dbhost: "127.0.0.1"
 mariadb_wordpress_dbname: "wordpress"
 mariadb_wordpress_dbuser: "wordpress"
-mariadb_wordpress_dbpassword: "password"
+mariadb_wordpress_dbpassword: !vault-encrypted |
+  $ANSIBLE_VAULT;1.1;AES256
+  343130633536643933306366356131623961393966326438353663326134333665633830333130623765636362613633383965613538393662306630623037390a303530653330653632646265356535643637613933636134613439376534346364393564396661643737313933353065353530303438393431633137646630630a34636533336439613332343338383438316133336665643234386631366630613734323763633665303065653263363339313532303530633937663937353430
+
+mariadb_mediawiki_dbhost: "127.0.0.1"
+mariadb_mediawiki_dbname: "mediawiki"
+mariadb_mediawiki_dbuser: "mediawiki"
+mariadb_mediawiki_dbpassword: !vault-encrypted |
+  $ANSIBLE_VAULT;1.1;AES256
+  313166316566373233663431323131613037656632343961383964303030616461616139313232616231613534313939643566346439363039633837663339610a653330356636393464393337653065323462613935316663633365663037663237633339333035386434396338323564626235623361633136373363383636300a61333164653830353437626433373830313566393233373135316530396130616262633637363165653133366632343239623131376262353534633065303565
 
 ###
 # Declare Mariadb Users
@@ -62,6 +73,14 @@ mariadb_wordpressuser:
   hostgroup: yes
   password: "{{ mariadb_wordpress_dbpassword }}"
   priv: "{{ mariadb_wordpress_dbname }}%.*:ALL"
+
+mariadb_mediawikiuser:
+  name: "{{ mariadb_mediawiki_dbuser }}"
+  host:
+    - "{{ mariadb_mediawiki_dbhost }}"
+  hostgroup: yes
+  password: "{{ mariadb_mediawiki_dbpassword }}"
+  priv: "{{ mariadb_mediawiki_dbname }}%.*:ALL"
 
 ###
 # Configure MariaDB database
@@ -109,3 +128,8 @@ mariadb_maindb_profile:
       hostgroup: "{{ mariadb_wordpressuser.hostgroup }}"
       password: "{{ mariadb_wordpressuser.password }}"
       priv: "{{ mariadb_wordpressuser.priv }}"
+    - name: "{{ mariadb_mediawikiuser.name }}"
+      host: "{{ mariadb_mediawikiuser.host }}"
+      hostgroup: "{{ mariadb_mediawikiuser.hostgroup }}"
+      password: "{{ mariadb_mediawikiuser.password }}"
+      priv: "{{ mariadb_mediawikiuser.priv }}"
