@@ -7,7 +7,7 @@
     update_cache: yes
     cache_valid_time: 3600
 
-- name: "Install PHP packages"
+- name: "Install extra packages"
   apt:
     name:  "{{ php_modules }}"
     force_apt_get: yes
