@@ -29,17 +29,3 @@
     group: "{{ php_apache_group }}"
     mode: 0644
   loop: "{{ php_app_extra_files }}"
-
-- name: "Executes extra scripts"
-  command: "{{ php_app_webroot }}/{{ php_app }}/bin/install-jsdeps.sh"
-  become_user: www-data
-  loop: "{{ lookup('vars', 'app_php_' + php_app  + '_extra_scripts') }}"
-
-- name: "Delete the installer folder"
-  file:
-    path: "{{ php_app_webroot }}/{{ php_app }}/{{ item }}"
-    state: absent
-  loop: "{{ lookup('vars', 'app_php_' + php_app  + '_cleanup_files_or_folder') }}"
-
-#- name: "Deploy application extensions"
-#  with_items: "{{ php_app_extensions }}"

@@ -3,7 +3,6 @@
   assert:
     that:
       - php_app is defined
-      - php_app_download_url is defined
       - php_app_version is defined
   tags:
     - always
@@ -14,7 +13,14 @@
 - import_tasks: config_php.yml
   tags: config_php.yml
 
+- name: "Register current version"
+  shell: "grep {{ php_app }} {{ php_app_versions_file }} |cut -d'=' -f2"
+  register: version_grep_result
+  failed_when: version_grep_result.rc not in [0, 2]
+
 - import_tasks: deploy_app.yml
+  when:
+    - version_grep_result.rc == 2 or version_grep_result.stdout != php_app_version
   tags: deploy_app
 
 - import_tasks: config_app.yml

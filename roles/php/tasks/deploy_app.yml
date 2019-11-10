@@ -1,18 +1,9 @@
 ---
-- name: "Register current version"
-  shell: "grep {{ php_app }} {{ php_app_versions_file }} |cut -d'=' -f2"
-  register: version_grep_result
-  failed_when: version_grep_result.rc not in [0, 2]
-
-- debug: var=version_grep_result.stdout
-
 - name: "Delete previous {{ php_app_webroot }}/{{ php_app }} folder"
   file:
     path: "{{ php_app_webroot }}/{{ php_app }}"
     state: absent
   no_log: true
-  when :
-    - version_grep_result.rc == 2 or version_grep_result.stdout != php_app_version
 
 - name: "Create {{ php_app_webroot }}/{{ php_app }} folder"
   file:
@@ -21,9 +12,9 @@
     owner: "{{ php_apache_user }}"
     group: "{{ php_apache_group }}"
 
-- name: "Install {{ php_app }} from {{ lookup('vars', 'app_php_' + php_app  + '_app_download_url') }} in version {{ php_app_version }}"
+- name: "Install {{ php_app }} in version {{ php_app_version }}"
   unarchive:
-    src: "{{ lookup('vars', 'app_php_' + php_app  + '_app_download_url') }}"
+    src: "{{ lookup('vars', 'app_php_' + php_app  + '_download_url') }}"
     dest: "{{ php_app_webroot }}/{{ php_app }}"
     remote_src: yes
     owner: "{{ php_apache_user }}"
@@ -39,6 +30,17 @@
     owner: "{{ php_apache_user }}"
     group: "{{ php_apache_group }}"
     recurse: true
+
+- name: "Executes extra scripts"
+  command: "{{ php_app_webroot }}/{{ php_app }}/bin/install-jsdeps.sh"
+  become_user: www-data
+  loop: "{{ lookup('vars', 'app_php_' + php_app  + '_extra_scripts') }}"
+
+- name: "Delete the installer folder"
+  file:
+    path: "{{ php_app_webroot }}/{{ php_app }}/{{ item }}"
+    state: absent
+  loop: "{{ lookup('vars', 'app_php_' + php_app  + '_cleanup_files_or_folder') }}"
 
 - name: "Register application version"
   lineinfile:
