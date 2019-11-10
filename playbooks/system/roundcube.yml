@@ -1,5 +1,0 @@
----
-- hosts: "{{ filter }}:&dc_{{ dc }}:&cmp_roundcube"
-  become: true
-  roles:
-    - roundcube
