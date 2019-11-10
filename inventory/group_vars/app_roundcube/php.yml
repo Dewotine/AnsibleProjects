@@ -13,13 +13,13 @@ app_php_roundcube_cleanup_files_or_folder:
   - installer
   - logs
   - temp
-app_php_roundcube_app_db_host: localhost
-app_php_roundcube_app_db_user: roundcube
-app_php_roundcube_app_db_password: password
-app_php_roundcube_app_db_name: roundcube
-app_php_roundcube_app_des_key: "[IzK5xoZv1dJyjseVx9fVv72"
-app_php_roundcube_app_download_url: https://github.com/roundcube/roundcubemail/releases/download/{{ php_app_version }}/roundcubemail-{{ php_app_version }}.tar.gz
+app_php_roundcube_db_host: localhost
+app_php_roundcube_db_user: roundcube
+app_php_roundcube_db_password: password
+app_php_roundcube_db_name: roundcube
+app_php_roundcube_des_key: "[IzK5xoZv1dJyjseVx9fVv72"
+app_php_roundcube_download_url: https://github.com/roundcube/roundcubemail/releases/download/{{ php_app_version }}/roundcubemail-{{ php_app_version }}.tar.gz
 app_php_roundcube_extra_scripts:
   - "bin/install-jsdeps.sh"
-app_php_roundcube_app_imap: 'ssl://mail.bleschet.fr'
-app_php_roundcube_app_smtp_port: 587
+app_php_roundcube_imap: 'ssl://mail.bleschet.fr'
+app_php_roundcube_smtp_port: 587
