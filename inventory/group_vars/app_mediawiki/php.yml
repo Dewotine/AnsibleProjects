@@ -1,37 +1,30 @@
 ---
-# PHP Configuration of mediawiki
-apache_mod_php_enable: no
-app_php_version: "7.3"
-app_php_extra_modules:
+# PHP Prerequisite mediawiki
+app_php_mediawiki_extra_modules:
   - 'php-apcu'
-  - 'php{{ app_php_version }}-intl'
-  - 'php{{ app_php_version }}-mbstring'
-  - 'php{{ app_php_version }}-mysql'
-  - 'php{{ app_php_version }}-xml'
+  - 'php{{ php_version }}-intl'
+  - 'php{{ php_version }}-mbstring'
+  - 'php{{ php_version }}-mysql'
+  - 'php{{ php_version }}-xml'
 
 # MediaWiki Configuration
-app_php_app: "mediawiki"
+app_php_mediawiki_cleanup_files_or_folder: []
 #https://releases.wikimedia.org/mediawiki/1.32/mediawiki-1.32.1.tar.gz
-app_php_app_download_url: "https://releases.wikimedia.org/{{ app_php_app }}/{{ app_php_app_version }}/{{ app_php_app }}-{{ app_php_app_version }}.1.tar.gz"
-app_php_app_version: "1.32"
-app_php_app_config_files:
-  - { src: "LocalSettings.php.j2", dst: "LocalSettings.php" }
-app_php_app_extra_files:
-  - { src: "tux_135.png", dst: "resources/assets/tux_135.png" }
-
-app_php_app_dbtype: "mysql"
-app_php_app_dbserver: "127.0.0.1"
-app_php_app_dbname: "mediawiki"
-app_php_app_dbuser: "mediawiki"
-app_php_app_password: "password"
+app_php_mediawiki_download_url: "https://releases.wikimedia.org/{{ php_app }}/{{ php_app_version | regex_replace('([0-9]+[.][0-9]+)[.].*', '\\1') }}/{{ php_app }}-{{ php_app_version }}.tar.gz"
+app_php_mediawiki_dbtype: "mysql"
+app_php_mediawiki_dbserver: "127.0.0.1"
+app_php_mediawiki_dbname: "mediawiki"
+app_php_mediawiki_dbuser: "mediawiki"
+app_php_mediawiki_db_password: "password"
+app_php_mediawiki_extra_scripts: []
 
 # Personnalisation
-app_php_app_logo: "resources/assets/tux_135.png"
-app_php_app_default_skin: 'vector'
-app_php_app_enable_uploads: true
-app_php_app_image_resize: true
-app_php_app_upload_size: 250 * 1024 # Size is defined in bytes => 250 * 1024 = 250ko
+app_php_mediawiki_logo: "resources/assets/tux_135.png"
+app_php_mediawiki_default_skin: 'vector'
+app_php_mediawiki_enable_uploads: true
+app_php_mediawiki_image_resize: true
+app_php_mediawiki_upload_size: 250 * 1024 # Size is defined in bytes => 250 * 1024 = 250ko
 
-app_php_app_extensions:
+app_php_mediawiki_extensions:
   - "MobileFrontend"
   - "WikiEditor"
