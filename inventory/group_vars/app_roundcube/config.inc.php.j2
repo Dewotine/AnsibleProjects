@@ -1,0 +1,75 @@
+<?php
+/* {{ ansible_managed }} */
+
+/* Local configuration for app_php_app Webmail */
+
+// ----------------------------------
+// SQL DATABASE
+// ----------------------------------
+$config['db_dsnw'] = 'mysql://{{ app_php_roundcube_app_db_user }}:{{ app_php_roundcube_app_db_password }}@{{ app_php_roundcube_app_db_host }}/{{ app_php_roundcube_app_db_name }}';
+
+
+// ----------------------------------
+// IMAP Configuration
+// ----------------------------------
+$config['default_host'] = 'ssl://mail.bleschet.fr';
+
+// ----------------------------------
+// SMTP Configuration
+// ----------------------------------
+$config['smtp_server'] = 'tls://%h';
+// SMTP port (default is 25; use 587 for STARTTLS or 465 for the
+// deprecated SSL over SMTP (aka SMTPS))
+$config['smtp_port'] = {{ app_php_roundcube_app_smtp_port }};
+
+// SMTP username (if required) if you use %u as the username Roundcube
+// will use the current username for login
+$config['smtp_user'] = '%u';
+
+// SMTP password (if required) if you use %p as the password Roundcube
+// will use the current user's password for login
+$config['smtp_pass'] = '%p';
+
+// provide an URL where a user can get support for this Roundcube installation
+// PLEASE DO NOT LINK TO THE ROUNDCUBE.NET WEBSITE HERE!
+$config['support_url'] = '';
+
+// Name your service. This is displayed on the login screen and in the window title
+$config['product_name'] = 'Roundcube Webmail à moi';
+
+// This key is used to encrypt the users imap password which is stored
+// in the session record (and the client cookie if remember password is enabled).
+$config['des_key'] = '{{ app_php_roundcube_app_des_key }}';
+
+// Automatically add this domain to user names for login
+$config['username_domain'] = 'bleschet.fr';
+
+// List of active plugins (in plugins/ directory)
+$config['plugins'] = array();
+
+// the default locale setting (leave empty for auto-detection)
+// RFC1766 formatted language name like en_US, de_DE, de_CH, fr_FR, pt_BR
+$config['language'] = 'fr_FR';
+
+// Disable spellchecking
+// Debian: spellshecking needs additional packages to be installed, or calling external APIs
+//         see defaults.inc.php for additional informations
+$config['enable_spellcheck'] = false;
+
+// ----------------------------------
+// LOGGING/DEBUGGING
+// ----------------------------------
+$config['log_dir'] = '{{ php_log_folder }}';
+
+// ----------------------------------
+// TEMP files
+// ----------------------------------
+// use this folder to store temp files
+// must be writeable for the user who runs PHP process (Apache user if mod_php is being used)
+$config['temp_dir'] = '{{ php_tmp_folder }}';
+
+// ----------------------------------
+// TEMP files
+// ----------------------------------
+// skin name: folder from skins/
+$config['skin'] = 'elastic';

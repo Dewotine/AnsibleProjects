@@ -31,18 +31,14 @@
   roles:
     - apache
 
-- hosts: "{{ filter }}:&cmp_apache:&dc_{{ dc }}:&app_roundcube"
+- hosts: "{{ filter }}:&cmp_php:&dc_{{ dc }}:&app_roundcube"
   become: true
   vars:
-    appname: "roundcube"
-    my_apache_profile: "{{ apache_roundcube }}"
-    app_src_dir: "{{ role_path }}/../../inventory/group_vars/app_{{ appname }}"
+    php_app: "roundcube"
+    php_app_version: "1.4.0"
+    php_version: "7.3"
+    php_app_config_files:
+      - { src: "config.inc.php.j2", dst: "config/config.inc.php" }
+    php_app_extra_files: []
   roles:
-    - apache_deploy
-
-- hosts: "{{ filter }}:&dc_{{ dc }}:&app_roundcube"
-  become: true
-  roles:
-    - roundcube
-
-
+    - php
