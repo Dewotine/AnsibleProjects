@@ -8,7 +8,7 @@
 Vagrant.configure("2") do |config|
 	config.ssh.insert_key = false
 	config.vm.define "piwigo" do |piwigo|
-	piwigo.vm.box = "debian/stretch64"
+	piwigo.vm.box = "generic/debian10"
 	piwigo.disksize.size = '15GB'
 	piwigo.vm.network "public_network", ip: "192.168.1.200"
 	piwigo.vm.hostname = "piwigo"

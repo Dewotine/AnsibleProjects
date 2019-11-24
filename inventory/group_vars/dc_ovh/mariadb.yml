@@ -107,6 +107,7 @@ mariadb_maindb_profile:
     - name: "mailserver"
     - name: "roundcube"
     - name: "wordpress"
+    - name: "mediawiki"
   users:
     - name: "{{ mariadb_piwigo_installation_users.name }}"
       host: "{{ mariadb_piwigo_installation_users.host }}"
